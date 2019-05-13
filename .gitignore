@@ -1,4 +1,5 @@
 management/Projektdefinition/
+management/Bericht/
 management/**/*.aux
 management/**/*.toc
 management/**/*.log
