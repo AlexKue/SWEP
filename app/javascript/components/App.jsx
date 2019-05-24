@@ -1,9 +1,14 @@
 import React from 'react';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+import RedirectRoot from './RedirectRoot.jsx';
 
 export default class App extends React.Component {
   render() {
     return (
-      <h1>Hello, World!</h1>
+      <Router>
+        <Route exact path="/" component={RedirectRoot} />
+      </Router>
     );
   }
 };
