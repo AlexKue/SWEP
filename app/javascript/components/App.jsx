@@ -4,7 +4,7 @@ import { Grid } from "semantic-ui-react";
 
 import RedirectRoot from './RedirectRoot.jsx';
 import Login from './Login.jsx';
-
+import Register from './Register.jsx';
 
 export default class App extends React.Component {
 
@@ -17,6 +17,7 @@ export default class App extends React.Component {
         <Grid style={{width: "100%", height: "100%"}}>
           <Grid.Column>
             <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
           </Grid.Column>
         </Grid>
       </Router>

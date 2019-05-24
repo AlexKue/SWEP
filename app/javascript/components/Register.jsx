@@ -10,9 +10,9 @@ import {
 
 import FormWrapper from './FormWrapper.jsx';
 
-export default class Login extends React.Component {
+export default class Register extends React.Component {
   render() {
-    console.log("Render called in Login");
+    console.log("Render called in Register");
     return (
       <FormWrapper>
         <Form.Field>
@@ -22,14 +22,15 @@ export default class Login extends React.Component {
           <Input icon="key" iconPosition="left" placeholder="Passwort" type="password" />
         </Form.Field>
         <Form.Field>
+          <Input icon="key" iconPosition="left" placeholder="Passwort wiederholen" type="password" />
+        </Form.Field>
+        <Form.Field>
           <Grid columns={2}>
             <Grid.Column>
-              <Button content="Einloggen" primary/>
+              <Link to="/login"><Button content="Zur&uuml;ck" id="backButton" labelPosition="left" icon="left arrow"/></Link>
             </Grid.Column>
             <Grid.Column>
-              <Link to="/register">
-                <Button content="Registrieren" icon="right arrow" labelPosition="right" id="registerButton" />
-              </Link>
+              <Button content="Abschicken" id="sendButton" primary/>
             </Grid.Column>
           </Grid>
         </Form.Field>
