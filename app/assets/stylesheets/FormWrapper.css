@@ -1,0 +1,11 @@
+#FormWrapperOuter {
+  height: 100%;
+}
+
+#FormWrapperInner {
+  max-width: 600px;
+  margin: auto;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid rgb(239, 240, 240);
+}
