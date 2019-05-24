@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Grid } from "semantic-ui-react";
 
 import RedirectRoot from './RedirectRoot.jsx';
-import Login from './Login.jsx';
-import Register from './Register.jsx';
+import Login from './LoginRegister/Login.jsx';
+import Register from './LoginRegister/Register.jsx';
 
 export default class App extends React.Component {
 
@@ -16,7 +16,7 @@ export default class App extends React.Component {
         <Route exact path="/" component={RedirectRoot} />
         <Grid style={{width: "100%", height: "100%"}}>
           <Grid.Column>
-            <Route path="/login" component={Login} />
+            <Route path="/login" component={Login}/>
             <Route path="/register" component={Register} />
           </Grid.Column>
         </Grid>
