@@ -10,9 +10,11 @@ class User < ApplicationRecord
                       uniqueness: { case_sensitive: false },
                       format: { with: VALID_EMAIL_REGEX }
                       
-
-
-
-
+  private
+  
+    # Downcase emails
+    def downcase_email
+      self.email = email.downcase
+    end
 
 end
