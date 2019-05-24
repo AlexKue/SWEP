@@ -2,7 +2,10 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
     def setup
-        @user = User.new(name: "Max Mustermann", email: "Mustermann@example.com")
+        @user = User.new(name: "Max Mustermann",
+                        email: "Mustermann@example.com",
+                        password: "password",
+                        password_confirmation: "password")
     end
 
     test "should be valid" do
@@ -38,10 +41,20 @@ class UserTest < ActiveSupport::TestCase
     end
 
     test "should allow valid emails" do
-        emails = ["ExAmPlE@MaIL.dE", "alexander-michael.kuehnle@test-mail.de", "A_LE-X+XD@ab.c.de"]
+        emails = ["ExAmPlE@MaIL.de", "alexander-michael.kuehnle@test-mail.de", "A_LE-X+XD@ab.c.de"]
         emails.each do |mail|
             @user.email = mail
             assert @user.valid?
         end
+    end
+
+    test "should not allow blank passwords" do
+        @user.password = " " * 8
+        assert_not @user.valid?
+    end
+
+    test "should not allow too short passwords" do
+        @user.password = "abc"
+        assert_not @user.valid?
     end
 end
