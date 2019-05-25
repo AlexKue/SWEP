@@ -18,7 +18,6 @@ class Api::UsersController < ApplicationController
     def create
         @user = User.new(user_params)
         if @user.save
-            # Successfull Handling response
             render json: @user, status: :created
         else
             render json: @user.errors, status: :unproccessable_entity
@@ -37,6 +36,6 @@ class Api::UsersController < ApplicationController
 
     private
         def user_params
-            params.require(:user).permit(:name, :email, :password, :password_confimation)
+            params.require(:user).permit(:name, :email, :password, :password_confirmation)
         end
 end
