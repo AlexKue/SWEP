@@ -22,4 +22,10 @@ class User < ApplicationRecord
       self.email = email.downcase
     end
 
+    # Calculate digest (for use in fixtures)
+    def User.digest(string)
+      cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
+                                                    BCrypt::Engine.cost
+      BCrypt::Password.create(string, cost: cost)
+    end
 end
