@@ -2,8 +2,8 @@ class Api::SessionsController < ApplicationController
     
     # POST /api/auth
     def create
-        user = User.find_by(sessions[:user][:email].downcase)
-        if user && user.authenticate(sessions[:user][:password])
+        user = User.find_by(email: params[:session][:email].downcase)
+        if user && user.authenticate(params[:session][:password])
             log_in user
         end
     end
