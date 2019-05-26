@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   
   namespace :api, defaults: { format: 'json'} do
     resources :users, except: [:new, :edit]
-    get       "/auth",    to: "sessions#create"
-    delete    "/logout",  to: "sessions#destroy"
+    post       "/auth",    to: "sessions#create"
+    delete     "/logout",  to: "sessions#destroy"
   end
 end
