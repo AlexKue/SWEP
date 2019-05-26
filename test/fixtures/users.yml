@@ -1,12 +1,12 @@
 Alex:
   name: "Alexander-Michael Kühnle"
   email: "test@example.com"
-  password_digest: <%= User.digest(password) %>
+  password_digest: <%= User.digest("password") %>
 Mark:
   name: "Mark Umnus"
   email: "umnus@example.com"
-  password_digest: <%= User.digest(password) %>
+  password_digest: <%= User.digest("password") %>
 Matthias:
   name: "Matthias Michael Döpmann"
   email: "wurst@example.com"
-  password_digest: <%= User.digest(password) %>
+  password_digest: <%= User.digest("password") %>
