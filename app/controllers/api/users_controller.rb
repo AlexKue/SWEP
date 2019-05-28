@@ -27,7 +27,10 @@ class Api::UsersController < ApplicationController
 
     # DELETE /api/users/:id
     def destroy
-        # TODO
+        if user = User.find_by(id: params[:id])
+            user.destroy
+        end
+        head :no_content
     end 
 
     # PATCH /api/users/:id
