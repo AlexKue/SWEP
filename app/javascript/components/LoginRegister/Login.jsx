@@ -45,7 +45,7 @@ export default class Login extends React.Component {
           <Grid columns={2}>
             { this.renderMessage() }
             <Grid.Column>
-              <Button content="Einloggen" primary/>
+              <Button content="Einloggen" primary as={Link} to="/home"/>
             </Grid.Column>
             <Grid.Column>
               <Link to="/register">

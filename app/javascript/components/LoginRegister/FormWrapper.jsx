@@ -11,7 +11,7 @@ export default class FormWrapper extends React.Component {
       <Grid centered verticalAlign="middle" id="FormWrapperOuter">
         <Grid.Column width={12}>
           <Form id="FormWrapperInner">
-            {this.props.children}
+            { this.props.children }
           </Form>
         </Grid.Column>
       </Grid>
