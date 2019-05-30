@@ -6,7 +6,7 @@ import Register from './Register/Register.jsx';
 export default class App extends React.Component {
   render() {
     return (
-      <Login />
+      <h1>Hello, World!</h1>
     );
   }
 };
