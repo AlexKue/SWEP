@@ -1,16 +1,14 @@
 import axios from "axios";
 
 export default class API {
-  constructor() {
-    super();
 
-    this.service = axios.create({
-      baseURL: "http://localhost:3000/api/",
-      responseType: "json"
-    })
-  }
+  static service = axios.create({
+    baseURL: "http://localhost:3000/api/",
+    responseType: "json"
+  });
 
-  loginUser(email, password) {
+  static loginUser(email, password) {
+
     this.service.post("auth", {
       session: {
         email: email,
