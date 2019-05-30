@@ -24,8 +24,17 @@ export default class API {
       return false;
     });
   }
+  static logoutUser() {
+    console.log("logoutUser called");
+    this.service.delete("logout")
+      .then(response => {
+        console.log(response);
+      }).catch(error => {
+        console.log(error);
+      });
+  }
   static registerUser(name, email, password, password_confirmation) {
-    console.log("Register user called");
+    console.log("registerUser called");
 
     this.service.post("users", {
       user: {
@@ -44,7 +53,7 @@ export default class API {
     })
   }
   static getUserList(offset = 0, limit = 30) {
-    console.log("registerUser called");
+    console.log("getUserList called");
 
     this.service.get("users", {
       offset: offset,
