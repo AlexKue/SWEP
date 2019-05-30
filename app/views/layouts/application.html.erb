@@ -9,6 +9,8 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <!-- application.html.erb in Head tag below turbolinks -->
     <%= javascript_pack_tag 'application' %>
+    <!-- add authenticity token to app-->
+    <%= javascript_tag "window._token = '#{form_authenticity_token}'" %>
   </head>
 
   <body>

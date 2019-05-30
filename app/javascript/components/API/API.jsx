@@ -13,7 +13,8 @@ export default class API {
       session: {
         email: email,
         password: password
-      }
+      },
+      authenticity_token: window._token
     }).then(response => {
       console.log(response);
     }).catch(error => {
