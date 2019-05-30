@@ -5,7 +5,8 @@ export default class API {
     super();
 
     this.service = axios.create({
-      baseURL: "http://localhost:3000/api/"
+      baseURL: "http://localhost:3000/api/",
+      responseType: "json"
     })
   }
 
