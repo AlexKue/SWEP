@@ -4,8 +4,7 @@ export default class API {
 
   static service = axios.create({
     baseURL: "http://localhost:3000/api/",
-    responseType: "json",
-    withCredentials: true
+    responseType: "json"
   });
   static loginUser(email, password) {
     console.log("loginUser called");
