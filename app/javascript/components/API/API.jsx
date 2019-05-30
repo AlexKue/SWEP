@@ -6,7 +6,6 @@ export default class API {
     baseURL: "http://localhost:3000/api/",
     responseType: "json"
   });
-
   static loginUser(email, password) {
     console.log("loginUser called");
 
@@ -26,7 +25,11 @@ export default class API {
   }
   static logoutUser() {
     console.log("logoutUser called");
-    this.service.delete("logout")
+    this.service.delete("logout", {
+      data: {
+        authenticity_token: window._token
+      }
+    })
       .then(response => {
         console.log(response);
       }).catch(error => {
@@ -57,7 +60,8 @@ export default class API {
 
     this.service.get("users", {
       offset: offset,
-      limit: limit
+      limit: limit,
+      authenticity_token: window._token
     }).then(response => {
       console.log(response);
     }).catch(error => {
