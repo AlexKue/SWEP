@@ -17,8 +17,26 @@ export default class API {
       authenticity_token: window._token
     }).then(response => {
       console.log(response);
+      return "200";
     }).catch(error => {
       console.log(error);
+      return "401";
     });
+  }
+
+  static registerUser(name, email, password, password_confirmation) {
+
+    this.service.post("users", {
+      user: {
+        name: name,
+        email: email,
+        password: password,
+        password_confirmation: password_confirmation
+      }
+    }).then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.log(error);
+    })
   }
 }
