@@ -24,7 +24,6 @@ export default class API {
       return false;
     });
   }
-
   static registerUser(name, email, password, password_confirmation) {
     console.log("Register user called");
 
@@ -42,6 +41,18 @@ export default class API {
     }).catch(error => {
       console.log(error);
       return false;
+    })
+  }
+  static getUserList(offset = 0, limit = 30) {
+    console.log("registerUser called");
+
+    this.service.get("users", {
+      offset: offset,
+      limit: limit
+    }).then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.log(error);
     })
   }
 }
