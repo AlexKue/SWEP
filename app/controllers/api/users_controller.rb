@@ -1,5 +1,7 @@
 class Api::UsersController < ApplicationController
 
+    before_action :logged_in_user, only: [:index]
+
     # GET /api/users/:id
     def show
         @user = User.find(user_params)
@@ -12,7 +14,7 @@ class Api::UsersController < ApplicationController
         limit = params[:limit].nil? ? 30 : params[:limit].to_i
         
         @users = User.offset(offset).limit(limit)
-        render @users, status: :ok
+        render json: @users, status: :ok
     end
 
     # POST /api/users
@@ -42,5 +44,9 @@ class Api::UsersController < ApplicationController
     private
         def user_params
             params.require(:user).permit(:name, :email, :password, :password_confirmation)
+        end
+
+        def logged_in_user
+            head :unauthorized unless logged_in? 
         end
 end
