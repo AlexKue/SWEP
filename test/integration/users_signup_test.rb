@@ -12,7 +12,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
           password: "password",
           password_confirmation: "wrong"
         }
-      }      
+      }
+      assert_response :unprocessable_entity      
     end 
   end
   
@@ -27,6 +28,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
           password_confirmation: "password"
         }
       }
+      assert_response :created
     end
   end
 
