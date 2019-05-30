@@ -8,8 +8,9 @@ class Api::UsersController < ApplicationController
 
     # GET /api/users
     def index
-        offset = 0 unless params[:offset].is_a INTEGER
-        limit = 30 unless params[:limit].is_a INTEGER
+        offset = params[:offset].to_i
+        limit = params[:limit].nil? ? 30 : params[:limit].to_i
+        
         @users = User.offset(offset).limit(limit)
         render @users, status: :ok
     end
