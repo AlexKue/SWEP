@@ -8,6 +8,7 @@ export default class API {
   });
 
   static loginUser(email, password) {
+    console.log("loginUser called");
 
     this.service.post("auth", {
       session: {
@@ -17,14 +18,15 @@ export default class API {
       authenticity_token: window._token
     }).then(response => {
       console.log(response);
-      return "200";
+      return true;
     }).catch(error => {
       console.log(error);
-      return "401";
+      return false;
     });
   }
 
   static registerUser(name, email, password, password_confirmation) {
+    console.log("Register user called");
 
     this.service.post("users", {
       user: {
@@ -32,11 +34,14 @@ export default class API {
         email: email,
         password: password,
         password_confirmation: password_confirmation
-      }
+      },
+      authenticity_token: window._token
     }).then(response => {
       console.log(response);
+      return true;
     }).catch(error => {
       console.log(error);
+      return false;
     })
   }
 }
