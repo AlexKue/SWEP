@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import APIHelper from './APIHelper.jsx';
+
 export default class API {
 
   static service = axios.create({
