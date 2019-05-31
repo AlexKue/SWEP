@@ -96,6 +96,8 @@ export default class Login extends React.Component {
             <Grid.Column>
               <Button id="registerbutton"
                 as={Link} to="/register"
+                icon="right arrow"
+                labelPosition="right"
                 secondary>Registrieren</Button>
             </Grid.Column>
           </Grid>

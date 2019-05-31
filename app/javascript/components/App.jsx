@@ -15,6 +15,7 @@ export default class App extends React.Component {
       <React.Fragment>
         <Route path="/(login|)" component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/test" component={Test} />
       </React.Fragment>
     );
   }
