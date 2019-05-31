@@ -46,6 +46,7 @@ export default class Login extends React.Component {
     });
   }
   loginUser() {
+    // TODO: Set button loading (may need refactor)
     API.loginUser(this.state.userID, this.state.userPass)
     .then(response => {
       this.props.history.push("/main"); //TODO: Add proper route
