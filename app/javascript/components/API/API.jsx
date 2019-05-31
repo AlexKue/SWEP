@@ -55,7 +55,7 @@ export default class API {
       }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
-      }).cach(error => {
+      }).catch(error => {
         /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
         reject(error);
       });

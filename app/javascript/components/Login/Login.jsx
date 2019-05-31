@@ -13,8 +13,8 @@ import API from '../API/API.jsx';
 
 export default class Login extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       errorNameInput: false,
@@ -67,7 +67,7 @@ export default class Login extends React.Component {
           <Form.Field>
             <Input
               icon="user"
-              placeholder="Nutzername / E-Mail"
+              placeholder="E-Mail Adresse"
               iconPosition="left"
               onChange={ this.updateUserID }
               error={ this.state.errorNameInput }/>
@@ -81,7 +81,7 @@ export default class Login extends React.Component {
               error={ this.state.errorPasswordInput }/>
           </Form.Field>
           <Message
-            id="errormessage"
+            id="errormessageLogin"
             header="Login Fehler"
             content={ this.state.errorMessage }
             error/>

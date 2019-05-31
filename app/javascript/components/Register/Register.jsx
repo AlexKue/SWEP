@@ -1,48 +1,138 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
-  Form,
+  Grid,
   Button,
   Input,
-  Grid
-} from "semantic-ui-react"
+  Form,
+  Message
+} from "semantic-ui-react";
 
 import API from '../API/API.jsx';
 
 export default class Register extends React.Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      userNick: "",
+      userMail: "",
+      userPass: "",
+      userPassConf: "",
+      showErrorMessage: false,
+      errorMessage: "",
+      showSuccessMessage: false,
+      successMessage: ""
+    }
+
+    this.toggleRegisterButton = this.toggleRegisterButton.bind(this);
+    this.updateUserNick = this.updateUserNick.bind(this);
+    this.updateUserMail = this.updateUserMail.bind(this);
+    this.updateUserPass = this.updateUserPass.bind(this);
+    this.updateUserPassConf = this.updateUserPassConf.bind(this);
+    this.registerUser = this.registerUser.bind(this);
+  }
+
+
+  toggleRegisterButton() {
+    return (
+      this.state.userNick == "" ||
+      this.state.userMail == "" ||
+      this.state.userPass == "" ||
+      this.state.userPassConf == "" ||
+      (this.state.userPass != this.state.userPassConf)
+    );
+  }
+  updateUserNick(event) {
+    this.setState({
+      userNick: event.target.value
+    });
+  }
+  updateUserMail(event) {
+    this.setState({
+      userMail: event.target.value
+    });
+  }
+  updateUserPass(event) {
+    this.setState({
+      userPass: event.target.value
+    });
+  }
+  updateUserPassConf(event) {
+    this.setState({
+      userPassConf: event.target.value
+    });
+  }
+  registerUser() {
+    API.registerUser(
+      this.state.userNick,
+      this.state.userMail,
+      this.state.userPass,
+      this.state.userPassConf
+    ).then(response => {
+      this.setState({
+        showErrorMessage: false,
+        showSuccessMessage: true,
+        successMessage: "Registrierung erfolgreich."
+      })
+    }).catch(error => {
+      this.setState({
+        showSuccessMessage: false,
+        showErrorMessage: true,
+        errorMessage: error.toString()
+      })
+    })
+  }
+
   render() {
 
     return (
-      <Form id="registerform">
+      <Form id="registerform"
+        error={ this.state.showErrorMessage }
+        success={ this.state.showSuccessMessage }>
         <Form.Field>
           <Input
             icon="user"
             placeholder="Nickname"
-            iconPosition="left" />
+            iconPosition="left"
+            onChange={ this.updateUserNick } />
         </Form.Field>
         <Form.Field>
           <Input
             icon="at"
             placeholder="E-Mail Adresse"
-            iconPosition="left" />
+            iconPosition="left"
+            onChange={ this.updateUserMail } />
         </Form.Field>
         <Form.Field>
           <Input
             icon="key"
             placeholder="Passwort"
             iconPosition="left"
-            type="password"/>
+            type="password"
+            onChange={ this.updateUserPass }/>
         </Form.Field>
         <Form.Field>
           <Input
             icon="key"
             placeholder="Passwort wiederholen"
             iconPosition="left"
-            type="password" />
+            type="password"
+            onChange={ this.updateUserPassConf }/>
         </Form.Field>
+        <Message id="errormessageRegister"
+          header="Registrierung Fehler"
+          content={ this.state.errorMessage }
+          error/>
+        <Message id="successmessageRegister"
+          header="Registrierung erfolgreich"
+          content={ this.state.successMessage }
+          success/>
         <Grid columns={2}>
           <Grid.Column>
             <Button
+              as={Link} to="/login"
               icon="left arrow"
               labelPosition="left"
               content="Zurück"
@@ -53,6 +143,8 @@ export default class Register extends React.Component {
               id="registerbutton"
               type="submit"
               content="Registrieren"
+              disabled={ this.toggleRegisterButton() }
+              onClick={ this.registerUser }
               primary/>
           </Grid.Column>
         </Grid>
