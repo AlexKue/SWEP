@@ -1,5 +1,9 @@
-import React from "react"
-import API from "./API/API.jsx";
+import React from "react";
+import {
+  Message
+} from "semantic-ui-react";
+
+import API from './API/API.jsx';
 
 /*
   This component is just for test purposes. It will be pushed to the git but
