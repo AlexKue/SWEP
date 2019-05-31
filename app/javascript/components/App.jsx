@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { Route } from "react-router-dom";
 
 import Login from './Login/Login.jsx';
 import Register from './Register/Register.jsx';
@@ -12,8 +13,7 @@ export default class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <h1>Hello, App!</h1>
-        <TestComponent />
+        <Route path="/(login|)" component={Login} />
       </React.Fragment>
     );
   }
