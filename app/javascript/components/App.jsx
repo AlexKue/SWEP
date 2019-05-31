@@ -3,6 +3,7 @@ import React from 'react';
 import Login from './Login/Login.jsx';
 import Register from './Register/Register.jsx';
 import UserList from './UserList/UserList.jsx';
+import TestComponent from './TestComponent.jsx';
 
 import API from './API/API.jsx';
 
@@ -12,6 +13,7 @@ export default class App extends React.Component {
     return (
       <React.Fragment>
         <h1>Hello, App!</h1>
+        <TestComponent />
       </React.Fragment>
     );
   }
