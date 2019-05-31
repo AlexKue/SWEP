@@ -1,7 +1,7 @@
 #loginform {
   max-width: 600px;
 }
-#registerbutton {
+#toRegisterButton {
   float: right;
 }
 #errormessageLogin {
