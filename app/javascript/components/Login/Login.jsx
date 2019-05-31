@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Redirect, Link } from "react-router-dom";
-
 import {
   Grid,
   Button,
@@ -9,6 +8,7 @@ import {
   Message
 } from "semantic-ui-react";
 
+import FormWrapper from '../FormWrapper/FormWrapper.jsx';
 import API from '../API/API.jsx';
 
 export default class Login extends React.Component {
@@ -62,7 +62,7 @@ export default class Login extends React.Component {
   render() {
 
     return (
-      <React.Fragment>
+      <FormWrapper>
         <Form id="loginform" error={ this.state.showErrorMessage }>
           <Form.Field>
             <Input
@@ -100,7 +100,7 @@ export default class Login extends React.Component {
             </Grid.Column>
           </Grid>
         </Form>
-      </React.Fragment>
+      </FormWrapper>
     );
   }
 }

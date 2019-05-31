@@ -8,6 +8,7 @@ import {
   Message
 } from "semantic-ui-react";
 
+import FormWrapper from '../FormWrapper/FormWrapper.jsx';
 import API from '../API/API.jsx';
 
 export default class Register extends React.Component {
@@ -88,67 +89,69 @@ export default class Register extends React.Component {
   render() {
 
     return (
-      <Form id="registerform"
-        error={ this.state.showErrorMessage }
-        success={ this.state.showSuccessMessage }>
-        <Form.Field>
-          <Input
-            icon="user"
-            placeholder="Nickname"
-            iconPosition="left"
-            onChange={ this.updateUserNick } />
-        </Form.Field>
-        <Form.Field>
-          <Input
-            icon="at"
-            placeholder="E-Mail Adresse"
-            iconPosition="left"
-            onChange={ this.updateUserMail } />
-        </Form.Field>
-        <Form.Field>
-          <Input
-            icon="key"
-            placeholder="Passwort"
-            iconPosition="left"
-            type="password"
-            onChange={ this.updateUserPass }/>
-        </Form.Field>
-        <Form.Field>
-          <Input
-            icon="key"
-            placeholder="Passwort wiederholen"
-            iconPosition="left"
-            type="password"
-            onChange={ this.updateUserPassConf }/>
-        </Form.Field>
-        <Message id="errormessageRegister"
-          header="Registrierung Fehler"
-          content={ this.state.errorMessage }
-          error/>
-        <Message id="successmessageRegister"
-          header="Registrierung erfolgreich"
-          content={ this.state.successMessage }
-          success/>
-        <Grid columns={2}>
-          <Grid.Column>
-            <Button
-              as={Link} to="/login"
-              icon="left arrow"
-              labelPosition="left"
-              content="Zurück"
-              secondary/>
-          </Grid.Column>
-          <Grid.Column>
-            <Button
-              id="registerbutton"
-              type="submit"
-              content="Registrieren"
-              disabled={ this.toggleRegisterButton() }
-              onClick={ this.registerUser }
-              primary/>
-          </Grid.Column>
-        </Grid>
-      </Form>
+      <FormWrapper>
+        <Form id="registerform"
+          error={ this.state.showErrorMessage }
+          success={ this.state.showSuccessMessage }>
+          <Form.Field>
+            <Input
+              icon="user"
+              placeholder="Nickname"
+              iconPosition="left"
+              onChange={ this.updateUserNick } />
+          </Form.Field>
+          <Form.Field>
+            <Input
+              icon="at"
+              placeholder="E-Mail Adresse"
+              iconPosition="left"
+              onChange={ this.updateUserMail } />
+          </Form.Field>
+          <Form.Field>
+            <Input
+              icon="key"
+              placeholder="Passwort"
+              iconPosition="left"
+              type="password"
+              onChange={ this.updateUserPass }/>
+          </Form.Field>
+          <Form.Field>
+            <Input
+              icon="key"
+              placeholder="Passwort wiederholen"
+              iconPosition="left"
+              type="password"
+              onChange={ this.updateUserPassConf }/>
+          </Form.Field>
+          <Message id="errormessageRegister"
+            header="Registrierung Fehler"
+            content={ this.state.errorMessage }
+            error/>
+          <Message id="successmessageRegister"
+            header="Registrierung erfolgreich"
+            content={ this.state.successMessage }
+            success/>
+          <Grid columns={2}>
+            <Grid.Column>
+              <Button
+                as={Link} to="/login"
+                icon="left arrow"
+                labelPosition="left"
+                content="Zurück"
+                secondary/>
+            </Grid.Column>
+            <Grid.Column>
+              <Button
+                id="registerbutton"
+                type="submit"
+                content="Registrieren"
+                disabled={ this.toggleRegisterButton() }
+                onClick={ this.registerUser }
+                primary/>
+            </Grid.Column>
+          </Grid>
+        </Form>
+      </FormWrapper>
     );
   }
 }
