@@ -55,6 +55,7 @@ class UserTest < ActiveSupport::TestCase
 
     test "should not allow too short passwords" do
         @user.password = "abc"
+        @user.password_confirmation = "abc" 
         assert_not @user.valid?
     end
 end
