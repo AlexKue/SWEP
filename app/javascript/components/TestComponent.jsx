@@ -23,11 +23,13 @@ export default class TestComponent extends React.Component {
     this.updateName = this.updateName.bind(this);
     this.updateMail = this.updateMail.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
+    this.updatePasswordConf = this.updatePasswordConf.bind(this);
 
     this.state = {
       name: "",
       email: "",
       password: "",
+      passwordConf: "",
       errorList: ""
     }
   }
@@ -60,7 +62,7 @@ export default class TestComponent extends React.Component {
   }
 
   registertest() {
-    API.registerUser(this.state.name, this.state.email, this.state.password, this.state.password)
+    API.registerUser(this.state.name, this.state.email, this.state.password, this.state.passwordConf)
     .then(response => {
       console.log(response);
     }).catch(error => {
@@ -91,12 +93,20 @@ export default class TestComponent extends React.Component {
     });
   }
 
+  updatePasswordConf(event) {
+    console.log(event);
+    this.setState({
+      passwordConf: event.target.value
+    });
+  }
+
   render() {
     return (
       <React.Fragment>
         <input onChange={this.updateName} placeholder="Username" value={this.state.name} />
         <input onChange={this.updateMail} placeholder="E-Mail" value={this.state.email} />
         <input onChange={this.updatePassword} placeholder="Password" value={this.state.password} type="password" />
+        <input onChange={this.updatePasswordConf} placeholder="Password" value={this.state.passwordConf} type="password" />
         <button onClick={this.logintest}>Login</button>
         <button onClick={this.userlisttest}>UserList</button>
         <button onClick={this.logouttest}>Logout</button>
