@@ -6,6 +6,7 @@ import {
   Button,
   Input,
   Form,
+  Message
 } from "semantic-ui-react";
 
 import API from '../API/API.jsx';
@@ -21,6 +22,8 @@ export default class Login extends React.Component {
       userID: "",
       userPass: "",
       loading: false,
+      showErrorMessage: false,
+      errorMessage: ""
     }
 
     this.toggleLoginButton = this.toggleLoginButton.bind(this);
@@ -43,13 +46,23 @@ export default class Login extends React.Component {
     });
   }
   loginUser() {
+    API.loginUser(this.state.userID, this.state.userPass)
+    .then(response => {
+      this.props.history.push("/main"); //TODO: Add proper route
+    }).catch(error => {
+      console.log(error);
+      this.setState({
+        showErrorMessage: true,
+        errorMessage: "Fehler: Irgendetwas ist schiefgelaufen" //TODO: Add proper error message
+      })
+    })
   }
 
   render() {
 
     return (
       <React.Fragment>
-        <Form id="loginform">
+        <Form id="loginform" error={ this.state.showErrorMessage }>
           <Form.Field>
             <Input
               icon="user"
@@ -66,6 +79,11 @@ export default class Login extends React.Component {
               onChange={ this.updateUserPass }
               error={ this.state.errorPasswordInput }/>
           </Form.Field>
+          <Message
+            id="errormessage"
+            header="Login Fehler"
+            content={ this.state.errorMessage }
+            error/>
           <Grid columns={2}>
             <Grid.Column>
               <Button type="submit"

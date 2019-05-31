@@ -4,3 +4,6 @@
 #registerbutton {
   float: right;
 }
+#errormessage {
+  margin: 10px;
+}
