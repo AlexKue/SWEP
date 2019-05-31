@@ -65,7 +65,7 @@ export default class TestComponent extends React.Component {
       console.log(response);
     }).catch(error => {
       this.setState({
-        errorList: <Message>error</Message> /* necessary to simulate register form*/
+        errorList: <Message>{error}</Message> /* necessary to simulate register form*/
       });
     });
   }
