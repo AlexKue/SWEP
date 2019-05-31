@@ -23,7 +23,8 @@ export default class TestComponent extends React.Component {
     this.state = {
       name: "",
       email: "",
-      password: ""
+      password: "",
+      errorList: ""
     }
   }
 
@@ -59,7 +60,9 @@ export default class TestComponent extends React.Component {
     .then(response => {
       console.log(response);
     }).catch(error => {
-      console.log(error);
+      this.setState({
+        errorList: <Message>error</Message> /* necessary to simulate register form*/
+      });
     });
   }
 
@@ -94,6 +97,7 @@ export default class TestComponent extends React.Component {
         <button onClick={this.userlisttest}>UserList</button>
         <button onClick={this.logouttest}>Logout</button>
         <button onClick={this.registertest}>Register</button>
+        <div>{ this.state.errorList }</div>
       </React.Fragment>
     );
   }

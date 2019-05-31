@@ -81,7 +81,7 @@ export default class Register extends React.Component {
       this.setState({
         showSuccessMessage: false,
         showErrorMessage: true,
-        errorMessage: error.toString()
+        errorMessage: error
       })
     })
   }

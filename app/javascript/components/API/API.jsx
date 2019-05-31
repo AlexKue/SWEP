@@ -58,8 +58,7 @@ export default class API {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
-        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
-        reject(error);
+        reject(APIHelper.makeRegisterErrorList(error));
       });
     });
   }
