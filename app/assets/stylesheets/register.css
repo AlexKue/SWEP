@@ -4,6 +4,3 @@
 #registerbutton {
   float: right;
 }
-#successmessageRegister, #errormessageRegister {
-  margin: 10px;
-}

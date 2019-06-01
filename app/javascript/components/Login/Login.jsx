@@ -54,7 +54,7 @@ export default class Login extends React.Component {
       console.log(error);
       this.setState({
         showErrorMessage: true,
-        errorMessage: "Fehler: Irgendetwas ist schiefgelaufen" //TODO: Add proper error message
+        errorMessage: "Die Kombination aus E-Mail und Passwort wurde nicht gefunden."
       })
     })
   }
@@ -81,7 +81,6 @@ export default class Login extends React.Component {
               error={ this.state.errorPasswordInput }/>
           </Form.Field>
           <Message
-            id="errormessageLogin"
             header="Login Fehler"
             content={ this.state.errorMessage }
             error/>

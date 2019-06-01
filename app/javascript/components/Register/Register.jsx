@@ -123,11 +123,11 @@ export default class Register extends React.Component {
               type="password"
               onChange={ this.updateUserPassConf }/>
           </Form.Field>
-          <Message id="errormessageRegister"
+          <Message
             header="Registrierung Fehler"
             content={ this.state.errorMessage }
             error/>
-          <Message id="successmessageRegister"
+          <Message
             header="Registrierung erfolgreich"
             content={ this.state.successMessage }
             success/>
