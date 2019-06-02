@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Redirect, Link } from "react-router-dom";
+import { Route, Redirect, Link, withRouter } from "react-router-dom";
 import {
   Grid,
   Button,
@@ -11,7 +11,7 @@ import {
 import FormWrapper from '../FormWrapper/FormWrapper.jsx';
 import API from '../API/API.jsx';
 
-export default class Login extends React.Component {
+class Login extends React.Component {
 
   constructor(props) {
     super(props);
@@ -52,6 +52,7 @@ export default class Login extends React.Component {
     API.loginUser(this.state.userID, this.state.userPass)
     .then(response => {
       this.props.history.push("/main"); //TODO: Add proper route
+      //console.log("test");
     }).catch(error => {
       console.log(error);
       this.setState({
@@ -109,3 +110,5 @@ export default class Login extends React.Component {
     );
   }
 }
+
+export default Login = withRouter(Login);

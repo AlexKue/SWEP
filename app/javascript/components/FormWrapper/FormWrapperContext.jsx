@@ -8,8 +8,8 @@ export class FormWrapperContextProvider extends React.Component {
     super();
 
     this.state = {
-      userID: "test@example.com",
-      userPass: "test123",
+      userID: "",
+      userPass: "",
       updateUserID: this.updateUserID.bind(this),
       updateUserPass: this.updateUserPass.bind(this)
     }

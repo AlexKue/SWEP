@@ -18,9 +18,9 @@ export default class Register extends React.Component {
 
     this.state = {
       userNick: "",
-      userMail: "",
-      userPass: "",
-      userPassConf: "",
+      userMail: this.props.userID,
+      userPass: this.props.userPass,
+      userPassConf: this.props.userPass,
       showErrorMessage: false,
       errorMessage: "",
       showSuccessMessage: false,
@@ -51,11 +51,13 @@ export default class Register extends React.Component {
     });
   }
   updateUserMail(event) {
+    this.props.updateUserID(event.target.value);
     this.setState({
       userMail: event.target.value
     });
   }
   updateUserPass(event) {
+    this.props.updateUserPass(event.target.value);
     this.setState({
       userPass: event.target.value
     });
@@ -87,7 +89,6 @@ export default class Register extends React.Component {
   }
 
   render() {
-
     return (
       <FormWrapper>
         <Form id="registerform"
@@ -105,7 +106,8 @@ export default class Register extends React.Component {
               icon="at"
               placeholder="E-Mail Adresse"
               iconPosition="left"
-              onChange={ this.updateUserMail } />
+              onChange={ this.updateUserMail }
+              value={ this.state.userMail }/>
           </Form.Field>
           <Form.Field>
             <Input
@@ -113,7 +115,8 @@ export default class Register extends React.Component {
               placeholder="Passwort"
               iconPosition="left"
               type="password"
-              onChange={ this.updateUserPass }/>
+              onChange={ this.updateUserPass }
+              value={ this.state.userPass }/>
           </Form.Field>
           <Form.Field>
             <Input
@@ -121,7 +124,8 @@ export default class Register extends React.Component {
               placeholder="Passwort wiederholen"
               iconPosition="left"
               type="password"
-              onChange={ this.updateUserPassConf }/>
+              onChange={ this.updateUserPassConf }
+              value={ this.state.userPassConf }/>
           </Form.Field>
           <Message
             header="Registrierung Fehler"

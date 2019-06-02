@@ -2,7 +2,7 @@ import React from "react";
 import { Route } from "react-router-dom";
 
 import LoginHOC from './Login/LoginHOC.jsx';
-import Register from './Register/Register.jsx';
+import RegisterHOC from './Register/RegisterHOC.jsx';
 import UserList from './UserList/UserList.jsx';
 import TestComponent from './TestComponent.jsx';
 import { FormWrapperContextProvider } from './FormWrapper/FormWrapperContext.jsx';
@@ -16,7 +16,7 @@ export default class App extends React.Component {
       <React.Fragment>
         <FormWrapperContextProvider>
           <Route path="/(login|)" component={LoginHOC} />
-          <Route path="/register" component={Register} />
+          <Route path="/register" component={RegisterHOC} />
         </FormWrapperContextProvider>
         <Route path="/test" component={TestComponent} />
       </React.Fragment>
