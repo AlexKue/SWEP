@@ -1,0 +1,68 @@
+\chapter{Protokolle}
+
+\section*{01. Mai 2019}
+\paragraph{Ziele}
+\begin{itemize}
+  \item[\check] zu verwendende Technologien bestimmt
+  \item[\check] grundlegenden Zeitplan entworfen
+\end{itemize}
+
+\section*{08. Mai 2019}
+\paragraph{Ziele}
+\begin{itemize}
+  \item[\check] Programmbibliotheken installiert und eingerichtet
+  \item[\check] Liefergegenstände spezifiert
+  \item[\check] Zeitplan daran angepasst
+  \item[\check] Zuständigkeiten geklärt
+\end{itemize}
+
+\paragraph{Verlauf}
+\begin{itemize}
+  \item Dozenzen = Admins
+  \item Spielwiese approved
+  \item Timeout bei Anfrage setzen
+  \item nach Einloggen Aufgabenliste (möglicherweise nach Kategorien geordnet) anzeigen $\rightarrow$ mit Häkchen dran
+  \item Leaderboard
+  \item Programm als 1-Page-Anwendung
+\end{itemize}
+
+\section*{15. Mai 2019}
+\paragraph{Ziele}
+\begin{itemize}
+  \item[\check] Datenmodell ausgearbeitet
+  \item[\check] GUI-Skizze auf Papier erstellt
+\end{itemize}
+\paragraph{Verlauf}
+\begin{itemize}
+  \item Menü oben oder an der Seite des GUIs
+  \item Speichern der letzten Query pro Aufgabe, aber nur explizit mit einem Knopf
+  \item Kein \glqq{}Sind Sie sich sicher, dass Sie die Seite ohne Speichern verlassen wollen?\grqq{}-Pop-up
+  \item Ergebnis von eingereichten Lösungen $\in \{\texttt{richtig}, \texttt{falsch}, \texttt{unsicher}\}$
+  \item Einsehen der Ergebnisse durch Betreuer, der bei \texttt{unsicher} selbst entscheiden kann
+  \item Hinterlegen der DB-Schemen TPC-H und Uni mit Daten; Ausführen der Anfragen darauf
+  \item Hinterlegen eines \glqq{}versteckten\grqq{} Datensatzes zur zusätzlichen Validierung der Querys
+  \item Abstufen der Priorität von Scoreboard, Abzeichen und Rücksetzen des Passworts
+  \item Speichern von mehreren Musterquerys pro Aufgabe als Dozent
+  \item Überprüfen der Querys z. B. mit Postgres \texttt{EXPLAIN}
+  \item Berechnen der Punkte eines Benutzers (nicht speichern) für bessere Konsistenz
+  \item Rechtemanagement auf Anwendungsebene statt DB-Ebene
+\end{itemize}
+
+\section*{22. Mai 2019}
+\paragraph{Ziele}
+\begin{itemize}
+  \item Prototypen erstellt
+  \begin{itemize}
+    \item Aufgabe auswählen
+    \item Query eintragen
+    \item Ergebnis wird angezeigt zusammen mit "Richtig!"
+  \end{itemize}
+  \item Vortrag ausgearbeitet
+  \begin{itemize}
+    \item Aufgabenstellung
+    \item Vorgehen/Vision
+    \item Stand
+    \item Zukunftspläne
+    \item Vortragsfolien erstellt
+  \end{itemize}
+\end{itemize}

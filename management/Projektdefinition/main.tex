@@ -1,0 +1,40 @@
+% arara: pdflatex
+% arara: pdflatex
+
+\documentclass[headlinesep,numbers=noenddot]{scrreprt}
+
+\input{preamble}
+\input{names}
+
+\pagestyle{headings}
+
+\author{\authornames}
+\title{Projektdefinition \projectname}
+\subtitle{Web-Applikation zum Üben und automatisierten Korrigieren von SQL}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\include{components/introduction}
+
+\cleardoublepage
+\chapter{Planung}
+
+\input{components/requirements}
+\input{components/schedule}
+
+
+\cleardoublepage
+\chapter{Umsetzung}
+
+\input{components/technologies}
+\input{components/delivery_items}
+\input{components/data_model}
+
+\cleardoublepage
+\appendix
+\input{components/protocols}
+\end{document}

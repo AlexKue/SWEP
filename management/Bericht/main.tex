@@ -1,0 +1,35 @@
+% arara: pdflatex
+% arara: pdflatex
+
+\documentclass[utf8,18pt]{beamer}
+
+\input{preamble}
+\input{names}
+
+\usetheme{Boadilla}
+\usecolortheme[named=\primarycolor]{structure}
+\setbeamercolor{background canvas}{bg=\secondarycolor!10}
+
+\author[Döpmann, Kühnle, Umnus]{\authornames}
+\title{\projectname}
+\subtitle{Web-Applikation zum Üben von SQL}
+\date{29.~Mai~2019}
+
+\begin{document}
+
+\begin{frame}[plain,label=titleframe]
+  \maketitle
+\end{frame}
+
+
+\begin{frame}
+  \tableofcontents
+\end{frame}
+
+\input{components/challenge}
+\input{components/approach}
+\input{components/foresight}
+
+\againframe{titleframe}
+
+\end{document}

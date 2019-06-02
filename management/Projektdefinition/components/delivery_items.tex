@@ -1,0 +1,17 @@
+\section{Liefergegenstände}\label{sec:deliveryitems}
+
+In Tabelle \ref{tab:deliveryitems} auf Seite \pageref{tab:deliveryitems} sind all jene Liefergegenstände aufgeführt, die vom Betreuer bestätigt wurden.
+DIe IDs in dieser Tabelle gehören zu entsprechenden Issues auf GitHub.
+
+\newcommand\luainput[1]{\begin{luacode}for line in io.lines("{#1}") do print(line) end \end{luacode}}
+
+\begin{table}
+
+\caption{Liefergegenstände}\label{tab:deliveryitems}
+
+\begin{tabularx}{\textwidth}{llX}
+\luainput{components/di_user_management}
+\luainput{components/di_interface}
+\luainput{components/di_excercises}
+\end{tabularx}
+\end{table}
