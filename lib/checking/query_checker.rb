@@ -10,4 +10,8 @@ class QueryChecker
     end
   end
 
+  def the_truth
+    true
+  end
+
 end
