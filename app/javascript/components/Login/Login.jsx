@@ -19,8 +19,8 @@ export default class Login extends React.Component {
     this.state = {
       errorNameInput: false,
       errorPasswordInput: false,
-      userID: "",
-      userPass: "",
+      userID: this.props.userID,
+      userPass: this.props.userPass,
       loading: false,
       showErrorMessage: false,
       errorMessage: ""
@@ -36,14 +36,16 @@ export default class Login extends React.Component {
     return (this.state.userID == "" || this.state.userPass == "");
   }
   updateUserID(event) {
+    this.props.updateUserID(event.target.value);
     this.setState({
       userID: event.target.value
     });
   }
   updateUserPass(event) {
+    this.props.updateUserPass(event.target.value);
     this.setState({
       userPass: event.target.value
-    });
+    })
   }
   loginUser() {
     // TODO: Set button loading (may need refactor)
@@ -60,7 +62,6 @@ export default class Login extends React.Component {
   }
 
   render() {
-
     return (
       <FormWrapper>
         <Form id="loginform" error={ this.state.showErrorMessage }>
@@ -70,7 +71,8 @@ export default class Login extends React.Component {
               placeholder="E-Mail Adresse"
               iconPosition="left"
               onChange={ this.updateUserID }
-              error={ this.state.errorNameInput }/>
+              error={ this.state.errorNameInput }
+              value={ this.state.userID }/>
           </Form.Field>
           <Form.Field>
             <Input icon="key"
@@ -78,7 +80,8 @@ export default class Login extends React.Component {
               iconPosition="left"
               type="password"
               onChange={ this.updateUserPass }
-              error={ this.state.errorPasswordInput }/>
+              error={ this.state.errorPasswordInput }
+              value={ this.state.userPass }/>
           </Form.Field>
           <Message
             header="Login Fehler"
