@@ -1,6 +1,6 @@
 import React from "react";
 
-import API from "../API/API.jsx";
+import API from "../../API/API.jsx";
 
 
 export default class UserList extends React.Component {

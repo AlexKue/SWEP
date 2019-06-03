@@ -9,7 +9,7 @@ import {
 } from "semantic-ui-react";
 
 import FormWrapper from '../FormWrapper/FormWrapper.jsx';
-import API from '../API/API.jsx';
+import API from '../../API/API.jsx';
 
 class Login extends React.Component {
 
@@ -51,8 +51,8 @@ class Login extends React.Component {
     // TODO: Set button loading (may need refactor)
     API.loginUser(this.state.userID, this.state.userPass)
     .then(response => {
-      this.props.history.push("/main"); //TODO: Add proper route
-      //console.log("test");
+      this.props.setUserLoggedIn(true);
+      // redirect became obsolete since we're updating the App component
     }).catch(error => {
       console.log(error);
       this.setState({

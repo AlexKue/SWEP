@@ -9,7 +9,7 @@ import {
 } from "semantic-ui-react";
 
 import FormWrapper from '../FormWrapper/FormWrapper.jsx';
-import API from '../API/API.jsx';
+import API from '../../API/API.jsx';
 
 export default class Register extends React.Component {
 

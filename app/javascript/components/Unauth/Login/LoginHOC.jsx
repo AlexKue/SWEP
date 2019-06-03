@@ -10,7 +10,8 @@ export default class LoginHOC extends React.Component {
         {(value) =>
           <Login
             userID={ value.userID } updateUserID={ value.updateUserID }
-            userPass={ value.userPass } updateUserPass={ value.updateUserPass }/>
+            userPass={ value.userPass } updateUserPass={ value.updateUserPass }
+            setUserLoggedIn={ this.props.setUserLoggedIn }/>
         }
       </FormWrapperContextConsumer>
     );
