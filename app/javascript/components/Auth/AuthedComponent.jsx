@@ -1,5 +1,7 @@
 import React from "react";
-import { withRouter } from "react-router-dom"
+import { withRouter } from "react-router-dom";
+
+import MenuBar from './MenuComponent/MenuBar.jsx';
 
 class AuthedComponent extends React.Component {
 
@@ -13,7 +15,7 @@ class AuthedComponent extends React.Component {
 
   render() {
     return (
-      <h1>Willkommen, { this.state.userNick }!</h1>
+      <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
     );
   }
 }

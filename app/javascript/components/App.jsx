@@ -39,7 +39,7 @@ class App extends React.Component {
   render() {
     if (this.state.isLoggedIn) {
       return (
-        <AuthedComponent />
+        <AuthedComponent setUserLoggedOut={ this.setUserLoggedOut }/>
       );
     } else {
       return (
