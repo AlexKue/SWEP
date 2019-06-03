@@ -1,21 +1,22 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 
 import LoginHOC from './Unauth/Login/LoginHOC.jsx';
 import RegisterHOC from './Unauth/Register/RegisterHOC.jsx';
 import UserList from './Auth/UserList/UserList.jsx';
 import TestComponent from './TestComponent.jsx';
 import { FormWrapperContextProvider } from './Unauth/FormWrapper/FormWrapperContext.jsx';
+import AuthedComponent from './Auth/AuthedComponent.jsx';
 
 import API from './API/API.jsx';
 
-export default class App extends React.Component {
+class App extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      isLoggedIn: sessionStorage.getItem("isLoggedIn")
+      isLoggedIn: sessionStorage.getItem("isLoggedIn") // TODO: refactor with window._isLoggedIn
     }
 
     this.setUserLoggedIn = this.setUserLoggedIn.bind(this);
@@ -23,13 +24,13 @@ export default class App extends React.Component {
   }
 
   setUserLoggedIn() {
-    sessionStorage.setItem("isLoggedIn", true);
+    sessionStorage.setItem("isLoggedIn", true); // TODO: refactor with window._isLoggedIn
     this.setState({
       isLoggedIn: true
     });
   }
   setUserLoggedOut() {
-    sessionStorage.clear();
+    sessionStorage.clear(); // TODO: refactor with window._isLoggedIn
     this.setState({
       isLoggedIn: false
     })
@@ -38,7 +39,7 @@ export default class App extends React.Component {
   render() {
     if (this.state.isLoggedIn) {
       return (
-        <h1>Du bist eingeloggt!</h1>
+        <AuthedComponent />
       );
     } else {
       return (
@@ -55,3 +56,5 @@ export default class App extends React.Component {
     }
   }
 }
+
+export default withRouter(App);
