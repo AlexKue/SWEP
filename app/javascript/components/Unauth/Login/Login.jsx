@@ -52,12 +52,6 @@ class Login extends React.Component {
     API.loginUser(this.state.userID, this.state.userPass)
     .then(response => {
       this.props.setUserLoggedIn(true);
-      this.props.history.push("/");
-      /*
-        Redirect didn't become obsolete, as you could come from "/login", so it
-        would look weird to see the "/login" in the addressbar while being at
-        the Authed main view
-      */
     }).catch(error => {
       console.log(error);
       this.setState({

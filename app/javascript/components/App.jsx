@@ -36,6 +36,12 @@ class App extends React.Component {
     })
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.isLoggedIn != prevState.isLoggedIn) {
+      this.props.history.push("/");
+    }
+  }
+
   render() {
     if (this.state.isLoggedIn) {
       return (
