@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :exercise_solvers
+  has_many :exercises, through: :exercise_solvers
   before_save :downcase_email
   validates :name,  presence: true,
                     length: { maximum: 50}
