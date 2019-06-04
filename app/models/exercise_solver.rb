@@ -1,0 +1,2 @@
+class ExerciseSolver < ApplicationRecord
+end
