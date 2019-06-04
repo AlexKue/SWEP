@@ -4,7 +4,7 @@ class Api::UsersController < ApplicationController
 
     # GET /api/users/:id
     def show
-        @user = User.find(user_params)
+        @user = User.find(params[:id])
         render json: @user, status: :ok
     end
 
