@@ -10,12 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_24_210753) do
+ActiveRecord::Schema.define(version: 2019_06_04_103005) do
+
+  create_table "exercise_solvers", force: :cascade do |t|
+    t.integer "student_id"
+    t.integer "exercise_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id"], name: "index_exercise_solvers_on_exercise_id"
+    t.index ["student_id"], name: "index_exercise_solvers_on_student_id"
+    t.index [nil], name: "index_exercise_solvers_on_follower_id_and_follower_id", unique: true
+  end
+
+  create_table "exercises", force: :cascade do |t|
+    t.float "points"
+    t.text "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
-    t.string "role"
+    t.integer "role", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "password_digest"

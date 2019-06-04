@@ -8,6 +8,6 @@ class CreateExerciseSolvers < ActiveRecord::Migration[5.2]
     end
     add_index :exercise_solvers, :student_id
     add_index :exercise_solvers, :exercise_id
-    add_index :exercise_solvers, [:follower_id, :follower_id, unique: true]
+    add_index :exercise_solvers, [:follower_id, :follower_id], unique: true
   end
 end
