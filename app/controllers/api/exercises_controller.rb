@@ -24,6 +24,11 @@ class Api::ExercisesController < ApplicationController
     def update
     end
 
+    private
+        def exercise_params
+            params.require(:exercise).permit(:text, :points)
+        end
+
     
 
 end
