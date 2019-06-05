@@ -19,6 +19,10 @@ class Api::ExercisesController < ApplicationController
     end
 
     def destroy
+        if @exercise = Exercise.find_by(id: params[:id])
+            @exercise.destroy
+        end
+        head :no_content
     end
 
     def update
