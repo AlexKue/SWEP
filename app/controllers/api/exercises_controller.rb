@@ -9,6 +9,13 @@ class Api::ExercisesController < ApplicationController
     end
 
     def create
+        @exercise = Exercise.new(exercise_params)
+        if @exercise.save
+            render json: @exercise, status: :created
+        else
+            render json: @exercise.errors, status: :unprocessable_entity
+
+        end
     end
 
     def destroy
@@ -16,5 +23,7 @@ class Api::ExercisesController < ApplicationController
 
     def update
     end
+
+    
 
 end
