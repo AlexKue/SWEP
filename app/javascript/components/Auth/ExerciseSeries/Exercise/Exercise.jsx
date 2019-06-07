@@ -4,7 +4,8 @@ import {
     Form,
     Header
 } from "semantic-ui-react";
-import Textarea  from "react-textarea-autosize";
+import CodeMirror from "react-codemirror";
+require("codemirror/mode/sql/sql");
 
 export default class Exercise extends React.Component {
     constructor(props) {
@@ -13,15 +14,19 @@ export default class Exercise extends React.Component {
         this.state = {
             title: props.title,
             description: props.description,
-            storedQuery: props.query
+            storedQuery: props.query,
+            codeMirrorOptions: {
+                lineNumbers: true,
+                mode: "sql"
+            }
         }
 
         this.updateQuery = this.updateQuery.bind(this);
     }
 
-    updateQuery(event) {
+    updateQuery(content) {
         this.setState({
-            storedQuery: event.target.value
+            storedQuery: content
         });
     }
 
@@ -36,11 +41,10 @@ export default class Exercise extends React.Component {
                 </Grid.Row>
                 <Grid.Row>
                     <Grid.Column>
-                        <Form>
-                            <Textarea 
-                                value={ this.state.storedQuery }
-                                onChange={ this.updateQuery }/>
-                        </Form>
+                        <CodeMirror
+                            value={ this.state.storedQuery }
+                            options={ this.state.codeMirrorOptions }
+                            onChange={ this.updateQuery }/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
