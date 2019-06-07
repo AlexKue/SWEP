@@ -8,4 +8,6 @@
 /* Override CodeMirror Class to achieve autoheight */
 .CodeMirror {
     height: auto;
+    margin-bottom: 10px;
+    border: 1px solid #e3e3e3;
 }

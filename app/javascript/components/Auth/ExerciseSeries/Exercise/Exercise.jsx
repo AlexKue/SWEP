@@ -1,9 +1,11 @@
 import React from "react";
 import {
     Grid,
-    Form,
-    Header
+    Header,
+    Button
 } from "semantic-ui-react";
+
+// Import Statements for CodeMirror and SQL Syntax Highlighting
 import CodeMirror from "react-codemirror";
 require("codemirror/mode/sql/sql");
 
@@ -18,16 +20,25 @@ export default class Exercise extends React.Component {
             codeMirrorOptions: {
                 lineNumbers: true,
                 mode: "sql"
-            }
+            },
+            queryLoading: false,
+            queryResult: <h1>Hier k&ouml;nnte ihr Result stehen.</h1>
         }
 
         this.updateQuery = this.updateQuery.bind(this);
+        this.sendQuery = this.sendQuery.bind(this);
     }
 
     updateQuery(content) {
         this.setState({
             storedQuery: content
         });
+    }
+    sendQuery() {
+        this.setState({
+            queryLoading: true
+        });
+        // Implement logic for sending, receiving and updating
     }
 
     render() {
@@ -45,6 +56,15 @@ export default class Exercise extends React.Component {
                             value={ this.state.storedQuery }
                             options={ this.state.codeMirrorOptions }
                             onChange={ this.updateQuery }/>
+                        <Button 
+                            content="Abschicken"
+                            onClick={ this.sendQuery }
+                            loading={ this.state.queryLoading }/>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column>
+                        { this.state.queryResult }
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
