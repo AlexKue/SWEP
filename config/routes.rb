@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   root 'main#index'
   
   namespace :api, defaults: { format: 'json'} do
-    resources :users, :exercises, except: [:new, :edit]
+    resources :users, :exercises, :categories , except: [:new, :edit]
     post       "/auth",    to: "sessions#create"
     delete     "/logout",  to: "sessions#destroy"
   end
