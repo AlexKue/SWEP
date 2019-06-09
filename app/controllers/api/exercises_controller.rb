@@ -9,7 +9,7 @@ class Api::ExercisesController < ApplicationController
     end
 
     def create
-        @exercise = Exercise.new(exercise_params)
+        @exercise = Category.find(params[:exercise][:category_id]).exercises.build(exercise_params)
         if @exercise.save
             render json: @exercise, status: :created
         else
@@ -30,7 +30,7 @@ class Api::ExercisesController < ApplicationController
 
     private
         def exercise_params
-            params.require(:exercise).permit(:text, :points)
+            params.require(:exercise).permit(:title, :text, :points)
         end
 
     
