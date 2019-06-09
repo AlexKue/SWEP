@@ -6,6 +6,7 @@ class Api::ExercisesController < ApplicationController
     end
 
     def index
+        # TODO
     end
 
     def create
@@ -26,6 +27,7 @@ class Api::ExercisesController < ApplicationController
     end
 
     def update
+        # TODO
     end
 
     private
