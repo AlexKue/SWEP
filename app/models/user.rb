@@ -16,6 +16,9 @@ class User < ApplicationRecord
                         length: { minimum: 8}
   has_secure_password                      
   
+  def as_json(options={})
+    super(except: [:password_digest])
+  end
   
   private
   
