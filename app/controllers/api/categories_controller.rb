@@ -21,10 +21,21 @@ class Api::CategoriesController < ApplicationController
         end
     end
 
+    def index
+        #TODO
+    end
+    
     def destroy
         if category = Category.find_by(id: params[:id])
             category.destroy
         end
         head :no_content
     end 
+
+    private
+
+    def category_params
+        params.require(:category).permit(:title, :text)
+    end
+
 end
