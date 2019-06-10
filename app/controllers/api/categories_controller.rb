@@ -21,9 +21,10 @@ class Api::CategoriesController < ApplicationController
         end
     end
 
-    def index
+    def update
         #TODO
     end
+    
     
     def destroy
         if category = Category.find_by(id: params[:id])
