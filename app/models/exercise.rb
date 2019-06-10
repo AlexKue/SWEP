@@ -5,4 +5,8 @@ class Exercise < ApplicationRecord
     belongs_to :category
 
     validates :category_id, presence: true
+    validates :title, presence: true
+    validates :text, presence: true
+    validates :points, presence: true
+    
 end
