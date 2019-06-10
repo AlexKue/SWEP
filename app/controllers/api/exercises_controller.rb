@@ -6,11 +6,11 @@ class Api::ExercisesController < ApplicationController
     end
 
     def index
-        # TODO
+        @category = Category.find(params[:category_id])
     end
 
     def create
-        @exercise = Category.find(params[:exercise][:category_id]).exercises.build(exercise_params)
+        @exercise = Category.find(params[:category_id]).exercises.build(exercise_params)
         if @exercise.save
             render json: @exercise, status: :created
         else
