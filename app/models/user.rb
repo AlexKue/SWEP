@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :exercise_solvers
-  has_many :exercises, through: :exercise_solvers
+  has_many :exercises,  through: :exercise_solvers,
+                        dependent: :destroy
   before_save :downcase_email
   validates :name,  presence: true,
                     length: { maximum: 50}
@@ -16,6 +17,9 @@ class User < ApplicationRecord
                         length: { minimum: 8}
   has_secure_password                      
   
+  def as_json(options={})
+    super(except: [:password_digest])
+  end
   
   private
   

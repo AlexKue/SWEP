@@ -17,7 +17,7 @@ class Api::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test "should show index after logged in" do
+  test "should show index if logged in" do
     post api_auth_path params: {
       session: {
         email: @user.email,

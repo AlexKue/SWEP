@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   
   namespace :api, defaults: { format: 'json'} do
     resources :users, except: [:new, :edit]
+    resources :categories, except: [:new, :edit] do
+      resources :exercises, shallow: true
+    end
+  
     post       "/auth",    to: "sessions#create"
     delete     "/logout",  to: "sessions#destroy"
   end

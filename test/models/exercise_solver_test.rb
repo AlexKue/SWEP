@@ -12,10 +12,14 @@ class ExerciseSolverTest < ActiveSupport::TestCase
   test "should require user_id" do
     @relationship.user_id = nil
     assert_not @relationship.valid?
+    @relationship.user_id = users(:Alex).id
+    assert @relationship.valid?
   end
 
   test "should require exercise_id" do
     @relationship.exercise_id = nil
     assert_not @relationship.valid?
+    @relationship.exercise_id = exercises(:one).id
+    assert @relationship.valid?
   end
 end
