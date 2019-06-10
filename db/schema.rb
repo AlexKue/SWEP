@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_08_182822) do
+ActiveRecord::Schema.define(version: 2019_06_10_192021) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "categories", force: :cascade do |t|
     t.string "title"
@@ -18,9 +21,6 @@ ActiveRecord::Schema.define(version: 2019_06_08_182822) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
 
   create_table "exercise_solvers", force: :cascade do |t|
     t.integer "user_id"
@@ -35,10 +35,10 @@ ActiveRecord::Schema.define(version: 2019_06_08_182822) do
   create_table "exercises", force: :cascade do |t|
     t.float "points"
     t.text "text"
-    t.integer "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
+    t.bigint "category_id"
     t.index ["category_id"], name: "index_exercises_on_category_id"
   end
 
@@ -52,4 +52,5 @@ ActiveRecord::Schema.define(version: 2019_06_08_182822) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "exercises", "categories"
 end
