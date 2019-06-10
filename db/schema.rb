@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_05_065940) do
+ActiveRecord::Schema.define(version: 2019_06_08_182822) do
+
+  create_table "categories", force: :cascade do |t|
+    t.string "title"
+    t.text "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "exercise_solvers", force: :cascade do |t|
     t.integer "user_id"
@@ -25,9 +32,11 @@ ActiveRecord::Schema.define(version: 2019_06_05_065940) do
   create_table "exercises", force: :cascade do |t|
     t.float "points"
     t.text "text"
+    t.integer "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
+    t.index ["category_id"], name: "index_exercises_on_category_id"
   end
 
   create_table "users", force: :cascade do |t|
