@@ -6,7 +6,11 @@ class Api::ExercisesController < ApplicationController
     end
 
     def index
-        @category = Category.find(params[:category_id])
+        @exercises = Category.find(params[:category_id])
+        offset = params[:offset].to_i
+        limit = params[:limit].nil? ? 30 : params[:limit].to_i
+        
+        render json: @exercises, status: :ok
     end
 
     def create
