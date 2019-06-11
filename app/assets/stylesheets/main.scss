@@ -2,4 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-@import "semantic-ui-css/semantic.min.css"
+@import "semantic-ui-css/semantic.min.css";
+@import "codemirror/lib/codemirror.css";
+
+/* Override CodeMirror Class to achieve autoheight */
+.CodeMirror {
+    height: auto;
+    margin-bottom: 10px;
+    border: 1px solid #e3e3e3;
+}
