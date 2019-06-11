@@ -14,7 +14,23 @@ class MenuBar extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      activeItem: "home"
+    }
+
     this.logoutUser = this.logoutUser.bind(this);
+    this.handleMenuEvent = this.handleMenuEvent.bind(this);
+  }
+
+  handleMenuEvent(event, data) {
+    switch (data.name) {
+      case "home":
+        this.props.history.push("/");
+        break;
+      case "logout":
+        this.logoutUser();
+        break;
+    }
   }
 
   logoutUser() {
@@ -32,11 +48,17 @@ class MenuBar extends React.Component {
       <React.Fragment>
         <Menu id="menubar" stackable> 
           <Container>
-            <Menu.Item as={Link} to="/">Home</Menu.Item>
+            <Menu.Item 
+              name="home"
+              onClick={ this.handleMenuEvent }
+              active={ this.state.activeItem === "home" }>Home</Menu.Item>
             { /* There need to be menu generators here, based on the
               data we fetch from our server*/ }
             <Menu.Menu position="right">
-              <Menu.Item onClick={ this.logoutUser } id="logoutbutton">Logout</Menu.Item>
+              <Menu.Item 
+                name="logout"
+                id="logoutbutton"
+                onClick={ this.handleMenuEvent }>Logout</Menu.Item>
             </Menu.Menu>
           </Container>
         </Menu>
