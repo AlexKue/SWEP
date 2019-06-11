@@ -1,9 +1,10 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import {
   Grid,
   Button,
-  Menu
+  Menu,
+  Container
 } from "semantic-ui-react";
 
 import API from "../../API/API.jsx";
@@ -29,12 +30,15 @@ class MenuBar extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Menu stackable>
-          { /* There need to be menu generators here, based on the
-            data we fetch from our server*/}
-          <Menu.Menu position="right">
-            <Menu.Item onClick={ this.logoutUser }>Logout</Menu.Item>
-          </Menu.Menu>
+        <Menu id="menubar" stackable> 
+          <Container>
+            <Menu.Item as={Link} to="/">Home</Menu.Item>
+            { /* There need to be menu generators here, based on the
+              data we fetch from our server*/ }
+            <Menu.Menu position="right">
+              <Menu.Item onClick={ this.logoutUser } id="logoutbutton">Logout</Menu.Item>
+            </Menu.Menu>
+          </Container>
         </Menu>
         { /* Here comes the main view stuff */}
       </React.Fragment>
