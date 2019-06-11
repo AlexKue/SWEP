@@ -8,8 +8,4 @@ module QueryCheckerHelper
     query_checker.add_checker WhitespaceChecker.new
     query_checker
   end
-
-  def check (query, reference)
-    QueryChecker.new.check query, reference
-  end
 end
