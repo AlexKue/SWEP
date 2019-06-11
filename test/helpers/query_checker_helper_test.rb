@@ -16,7 +16,7 @@ class QueryCheckerHelperTest < ActionView::TestCase
     assert @checker.check query, reference
   end
 
-  test "syntax check" do
+  test "(way too) simple syntax check" do
     query = "SLCT * FRM test_db WHR a > 5;"
     reference = "SELECT * \nFROM test_db\nWHERE a > 5;"
     assert_equal @checker.check(query, reference), false
