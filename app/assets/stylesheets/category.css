@@ -1,0 +1,12 @@
+.categoryListItemTitle:before {
+    border: 1px solid white; /* clear border for title in menu */
+}
+
+.categoryListItemSolved {
+    min-width: 80px;
+    text-align: right;
+}
+
+.categoryListItemSolvedCenterDiv {
+    width: 100%;
+}
