@@ -4,12 +4,19 @@ class QueryChecker
     @hierarchy = []
   end
 
-  def check (query, reference)
-    correct = true
+  ##
+  # Runs checking objects on the query and returns whether the query was correct.
+  # There are three possible return values: +true+, +false+ and +nil+.
+  # +true+ indicates that this method is convinced the query is correct.
+  # +false+ means that the query is incorrect.
+  # +nil+ means that no checking object gave a boolean answer.
+  # This method returns quickly, i.e. it returns on the first checking object's decision that is not nil.
+  def check (query, reference="")
     @hierarchy.each do |checker|
-      correct &&= checker.check query, reference
+      checker_result = checker.check query, reference
+      return checker_result if checker_result != nil
     end
-    correct
+    nil
   end
 
   def add_checker checker
