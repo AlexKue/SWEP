@@ -5,13 +5,15 @@ class QueryChecker
   end
 
   def check (query, reference)
+    correct = true
     @hierarchy.each do |checker|
-      puts checker
+      correct &&= checker.check query, reference
     end
+    correct
   end
 
-  def the_truth
-    true
+  def add_checker checker
+    @hierarchy.append checker
   end
 
 end
