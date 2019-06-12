@@ -7,6 +7,7 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create category" do
+    log_in_as(users(:Alex))
     assert_difference 'Category.count', 1 do
       post api_categories_path, params: { category: { title: @category.title,
                                                       text: @category.text
@@ -16,6 +17,7 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not allow blank titles" do
+    log_in_as(users(:Alex))
     assert_no_difference 'Category.count' do
       post api_categories_path, params: { category: { title: "   ",
                                                       text: @category.text
@@ -25,6 +27,7 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not allow blank text" do
+    log_in_as(users(:Alex))
     assert_no_difference 'Category.count' do
       post api_categories_path, params: { category: { title: @category.title,
                                                       text: "   "

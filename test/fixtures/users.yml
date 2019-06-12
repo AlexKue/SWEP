@@ -2,6 +2,7 @@ Alex:
   name: "Alexander-Michael Kühnle"
   email: "test@example.com"
   password_digest: <%= User.digest("password") %>
+  role: 1
 Mark:
   name: "Mark Umnus"
   email: "umnus@example.com"
