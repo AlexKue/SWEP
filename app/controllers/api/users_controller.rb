@@ -46,7 +46,4 @@ class Api::UsersController < ApplicationController
             params.require(:user).permit(:name, :email, :password, :password_confirmation)
         end
 
-        def logged_in_user
-            head :unauthorized unless logged_in? 
-        end
 end
