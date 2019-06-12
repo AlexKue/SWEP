@@ -6,7 +6,17 @@ class WhitespaceChecker
     (compactify(query).casecmp(compactify(reference))==0) || nil
   end
 
-  def compactify string
-    string.gsub(/\s+/, "")
+  ##
+  # Removes all whitespace from +query+
+  # Does not work with escaped ' in strings.
+  def compactify query
+    new_query = ""
+    in_string = false
+
+    query.split("").each do |char|
+      in_string ^= char=="'" # toggle in_string if encountering a '
+      new_query += char if !char.match(/^\s$/) || in_string # keep non-whitespace and whitespace inside strings
+    end
+    new_query
   end
 end
