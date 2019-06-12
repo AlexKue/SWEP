@@ -1,5 +1,8 @@
 class Api::ExercisesController < ApplicationController
 
+    before_action :logged_in_user
+    before_action :admin_user, only: [:create, :destroy]
+
     def show
         @exercise = Exercise.find(params[:id])
         render json: @user, status: :ok

@@ -1,4 +1,7 @@
 class Api::CategoriesController < ApplicationController
+    before_action :logged_in_user
+    before_action :admin_user, only: [:create, :destroy]
+    
     def show
         @category = Category.find(params[:id])
         render json: @category, status: ok
