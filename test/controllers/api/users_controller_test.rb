@@ -7,6 +7,7 @@ class Api::UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "should delete user" do
     assert_difference "User.count", -1 do
+      log_in_as @user
       delete api_user_path @user
     end
     assert_response :no_content

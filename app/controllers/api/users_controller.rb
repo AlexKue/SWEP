@@ -1,6 +1,6 @@
 class Api::UsersController < ApplicationController
 
-    before_action :logged_in_user, only: [:index]
+    before_action :logged_in_user, only: [:index, :show, :destroy, :update]
 
     # GET /api/users/:id
     def show
