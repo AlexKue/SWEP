@@ -209,9 +209,9 @@ export default class API {
   static getExerciseInfo(id) {
     console.log("getExerciseInfo called");
     return new Promise((resolve, reject) => {
-      this.service.get("exercises/" + id), {
+      this.service.get("exercises/" + id, {
         authenticity_token: window._token
-      }.then(response => {
+      }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
