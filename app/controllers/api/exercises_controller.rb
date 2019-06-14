@@ -5,7 +5,7 @@ class Api::ExercisesController < ApplicationController
 
     def show
         @exercise = Exercise.find(params[:id])
-        render json: @user, status: :ok
+        render json: @exercise, status: :ok
     end
 
     def index
