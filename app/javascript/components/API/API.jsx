@@ -95,7 +95,7 @@ export default class API {
   static deleteUser(id) {
     console.log("deleteUser called");
     return new Promise((resolve, reject) => {
-      this.service.delete("api/users/" + id, {
+      this.service.delete("users/" + id, {
         data: {
           authenticity_token: window._token
         }
