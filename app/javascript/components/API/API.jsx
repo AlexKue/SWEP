@@ -81,8 +81,9 @@ export default class API {
   static getUserInfo(id) {
     console.log("getUserInfo called");
     return new Promise((resolve, reject) => {
-      this.service.get("users/" + id)
-      .then(response => {
+      this.service.get("users/" + id, {
+        authenticity_token: window._token
+      }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
@@ -94,8 +95,11 @@ export default class API {
   static deleteUser(id) {
     console.log("deleteUser called");
     return new Promise((resolve, reject) => {
-      this.service.delete("api/users/" + id)
-      .then(response => {
+      this.service.delete("api/users/" + id, {
+        data: {
+          authenticity_token: window._token
+        }
+      }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
@@ -111,7 +115,8 @@ export default class API {
         category: {
           title: title,
           text: text
-        }
+        },
+        authenticity_token: window._token
       }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
@@ -126,7 +131,8 @@ export default class API {
     return new Promise((resolve, reject) => {
       this.service.get("categories", {
         offset: offset,
-        limit: limit
+        limit: limit,
+        authenticity_token: window._token
       }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
@@ -139,8 +145,9 @@ export default class API {
   static getCategoryInfo(id) {
     console.log("getCategoryInfo called");
     return new Promise((resolve, reject) => {
-      this.service.get("categories/" + id)
-      .then(response => {
+      this.service.get("categories/" + id, {
+        authenticity_token: window._token
+      }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
@@ -152,8 +159,11 @@ export default class API {
   static deleteCategory(id) {
     console.log("deleteCategory called");
     return new Promise((resolve, reject) => {
-      this.service.delete("categories/" + id)
-      .then(response => {
+      this.service.delete("categories/" + id, {
+        data: {
+        authenticity_token: window._token
+        }
+      }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
@@ -166,7 +176,8 @@ export default class API {
     return new Promise((resolve, reject) => {
       this.service.get("categories/" + id + "/exercises", {
         offset: offset,
-        limit: limit
+        limit: limit,
+        authenticity_token: window._token
       }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
@@ -184,7 +195,8 @@ export default class API {
           title: title,
           text: text,
           points: points
-        }
+        },
+        authenticity_token: window._token
       }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
@@ -197,8 +209,9 @@ export default class API {
   static getExerciseInfo(id) {
     console.log("getExerciseInfo called");
     return new Promise((resolve, reject) => {
-      this.service.get("exercises/" + id)
-      .then(response => {
+      this.service.get("exercises/" + id), {
+        authenticity_token: window._token
+      }.then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
@@ -210,8 +223,11 @@ export default class API {
   static deleteExercise(id) {
     console.log("deleteExercise called");
     return new Promise((resolve, reject) => {
-      this.service.delete("exercises/" + id)
-      .then(response => {
+      this.service.delete("exercises/" + id, {
+        data: {
+          authenticity_token: window._token
+        }
+      }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
