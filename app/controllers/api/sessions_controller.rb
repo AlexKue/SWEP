@@ -5,7 +5,7 @@ class Api::SessionsController < ApplicationController
         user = User.find_by(email: params[:session][:email].downcase)
         if user && user.authenticate(params[:session][:password])
             log_in user
-            head :ok
+            render json: user, status: :ok
         else
             head :unauthorized
         end
