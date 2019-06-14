@@ -78,6 +78,32 @@ export default class API {
       });
     });
   }
+  static getUserInfo(id) {
+    console.log("getUserInfo called");
+    return new Promise((resolve, reject) => {
+      this.service.get("users/" + id)
+      .then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
+    })
+  }
+  static deleteUser(id) {
+    console.log("deleteUser called");
+    return new Promise((resolve, reject) => {
+      this.service.delete("api/users/" + id)
+      .then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
+    })
+  }
   static createCategory(title, text) {
     console.log("createCategory called");
     return new Promise((resolve, reject) => {
