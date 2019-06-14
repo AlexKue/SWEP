@@ -78,4 +78,63 @@ export default class API {
       });
     });
   }
+  static createCategory(title, text) {
+    console.log("createCategory called");
+    return new Promise((resolve, reject) => {
+      this.service.post("categories", {
+        category: {
+          title: title,
+          text: text
+        }
+      }).then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
+    });
+  }
+  static getCategories(offset = 0, limit = 30) {
+    console.log("getCategories called");
+    return new Promise((resolve, reject) => {
+      this.service.get("categories", {
+        offset: offset,
+        limit: limit
+      }).then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
+    })
+  }
+  static getCategoryInfo(id) {
+    console.log("getCategoryInfo called");
+    return new Promise((resolve, reject) => {
+      this.service.get("categories/" + id)
+      .then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
+    })
+  }
+  static deleteCategory(id) {
+    console.log("deleteCategory called");
+    return new Promise((resolve, reject) => {
+      this.service.delete("cateogires/" + id)
+      .then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
+    })
+  }
+  
 }
