@@ -25,6 +25,10 @@ export default class TestComponent extends React.Component {
     this.getcategoriestest = this.getcategoriestest.bind(this);
     this.getcategoryinfotest = this.getcategoryinfotest.bind(this);
     this.deletecategorytest = this.deletecategorytest.bind(this);
+    this.createexercisetest = this.createexercisetest.bind(this);
+    this.getexerciselisttest = this.getexerciselisttest.bind(this);
+    this.getexerciseinfotest = this.getexerciseinfotest.bind(this);
+    this.deleteexercisetest = this.deleteexercisetest.bind(this);
 
     this.updateName = this.updateName.bind(this);
     this.updateMail = this.updateMail.bind(this);
@@ -35,6 +39,9 @@ export default class TestComponent extends React.Component {
     this.updateExerciseId = this.updateExerciseId.bind(this);
     this.updateCategoryTitle = this.updateCategoryTitle.bind(this);
     this.updateCategoryText = this.updateCategoryText.bind(this);
+    this.updateExerciseTitle = this.updateExerciseTitle.bind(this);
+    this.updateExerciseText = this.updateExerciseText.bind(this);
+    this.updateExercisePoints = this.updateExercisePoints.bind(this);
 
     this.state = {
       name: "",
@@ -42,11 +49,14 @@ export default class TestComponent extends React.Component {
       password: "password",
       passwordConf: "",
       errorList: "",
-      categoryId: "",
       userId: "",
-      exerciseId: "",
+      categoryId: "",
       categoryTitle: "",
-      categoryText: ""
+      categoryText: "",
+      exerciseId: "",
+      exerciseTitle: "",
+      exerciseText: "",
+      exercisePoints: ""
     }
   }
 
@@ -132,6 +142,38 @@ export default class TestComponent extends React.Component {
       console.log(error);
     })
   }
+  createexercisetest() {
+    API.createExercise(this.state.categoryId, this.state.exerciseTitle, this.state.exerciseText, this.state.exercisePoints)
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.log(error);
+    })
+  }
+  getexerciselisttest() {
+    API.getExercises(this.state.categoryId)
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.log(error);
+    })
+  }
+  getexerciseinfotest() {
+    API.getExerciseInfo(this.state.exerciseId)
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.log(error);
+    })
+  }
+  deleteexercisetest() {
+    API.deleteExercise(this.state.exerciseId)
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.log(error);
+    })
+  }
 
   updateName(event) {
     this.setState({
@@ -163,11 +205,6 @@ export default class TestComponent extends React.Component {
       userId: event.target.value
     })
   }
-  updateExerciseId(event) {
-    this.setState({
-      exerciseId: event.target.value
-    })
-  }
   updateCategoryTitle(event) {
     this.setState({
       categoryTitle: event.target.value
@@ -176,6 +213,26 @@ export default class TestComponent extends React.Component {
   updateCategoryText(event) {
     this.setState({
       categoryText: event.target.value
+    })
+  }
+  updateExerciseId(event) {
+    this.setState({
+      exerciseId: event.target.value
+    })
+  }
+  updateExerciseTitle(event) {
+    this.setState({
+      exerciseTitle: event.target.value
+    })
+  }
+  updateExerciseText(event) {
+    this.setState({
+      exerciseText: event.target.value
+    })
+  }
+  updateExercisePoints(event) {
+    this.setState({
+      exercisePoints: event.target.value
     })
   }
 
@@ -195,19 +252,31 @@ export default class TestComponent extends React.Component {
         <button onClick={this.registertest}>Register</button>
         <br/><br/>
         <input onChange={this.updateCategoryId} placeholder="Category ID" value={this.state.categoryId} />
-        <input onChange={this.updateExerciseId} placeholder="Exercise ID" value={this.state.exerciseId} />
-        <input onChange={this.updateUserId} placeholder="User ID" value={this.state.userId} />
-        <br/>
         <input onChange={this.updateCategoryTitle} placeholder="Category Title" value={this.state.categoryTitle} />
         <input onChange={this.updateCategoryText} placeholder="Category Text" value={this.state.categoryText} />
-        <br/>
-        <button onClick={this.getuserbyidtest}>Get User Info</button>
-        <button onClick={this.deleteuserbyidtest}>Delete User</button>
         <br/>
         <button onClick={this.createcategorytest}>Create Category</button>
         <button onClick={this.getcategoriestest}>Get Categories</button>
         <button onClick={this.getcategoryinfotest}>Get Category Info</button>
         <button onClick={this.deletecategorytest}>Delete Category</button>
+        <br/>
+        <br/>
+        <input onChange={this.updateExerciseId} placeholder="Exercise ID" value={this.state.exerciseId} />
+        <input onChange={this.updateExerciseTitle} placeholder="Exercise Title" value={this.state.exerciseTitle} />
+        <input onChange={this.updateExerciseText} placeholder="Exercise Text" value={this.state.exerciseText} />
+        <input onChange={this.updateExercisePoints} placeholder="Exercise Points" value={this.state.exercisePoints} />
+        <br/>
+        <button onClick={this.createexercisetest}>Create Exercise</button>
+        <button onClick={this.getexerciselisttest}>Get Exercises</button>
+        <button onClick={this.getexerciseinfotest}>Get Exercise Info</button>
+        <button onClick={this.deleteexercisetest}>Delete Exercise</button>
+        <br/>
+        <br/>
+        <input onChange={this.updateUserId} placeholder="User ID" value={this.state.userId} />
+        <br/>
+        <button onClick={this.getuserbyidtest}>Get User Info</button>
+        <button onClick={this.deleteuserbyidtest}>Delete User</button>
+        <br/>
         <br/>
         <h1>Fehlerliste:</h1>
         <div>{ this.state.errorList }</div>
