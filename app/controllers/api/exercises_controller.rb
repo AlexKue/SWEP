@@ -9,7 +9,7 @@ class Api::ExercisesController < ApplicationController
     end
 
     def index
-        @exercises = Category.find(params[:category_id])
+        @exercises = Exercise.find(params[:category_id])
         offset = params[:offset].to_i
         limit = params[:limit].nil? ? 30 : params[:limit].to_i
         
