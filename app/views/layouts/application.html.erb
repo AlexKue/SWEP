@@ -10,7 +10,9 @@
     <!-- application.html.erb in Head tag below turbolinks -->
     <%= javascript_pack_tag 'application' %>
     <!-- add authenticity token to app-->
-    <%= javascript_tag "window._token = '#{form_authenticity_token}'; window._isLoggedIn = #{logged_in?} " %>
+    <%= javascript_tag "window._token = '#{form_authenticity_token}'; 
+                        window._isLoggedIn = #{logged_in?} 
+                        #{if logged_in? then 'window._userRole = ' + "\'#{current_user.role}\'" end}" %>
   </head>
 
   <body>
