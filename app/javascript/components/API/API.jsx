@@ -126,7 +126,7 @@ export default class API {
   static deleteCategory(id) {
     console.log("deleteCategory called");
     return new Promise((resolve, reject) => {
-      this.service.delete("cateogires/" + id)
+      this.service.delete("categories/" + id)
       .then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
@@ -136,5 +136,62 @@ export default class API {
       })
     })
   }
-  
+  static getExercises(id, offset = 0, limit = 30) {
+    return new Promise((resolve, reject) => {
+      this.service.get("categories/" + id + "/exercises", {
+        offset: offset,
+        limit: limit
+      }).then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
+    })
+  }
+  static createExercise(id, title, text, points) {
+    console.log("createExercise called");
+    return new Promise((resolve, reject) => {
+      this.service.post("categories/" + id + "/exercises", {
+        exercise: {
+          title: title,
+          text: text,
+          points: points
+        }
+      }).then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
+    })
+  }
+  static getExerciseInfo(id) {
+    console.log("getExerciseInfo called");
+    return new Promise((resolve, reject) => {
+      this.service.get("exercises/" + id)
+      .then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        resolve(error);
+      })
+    })
+  }
+  static deleteExercise(id) {
+    console.log("deleteExercise called");
+    return new Promise((resolve, reject) => {
+      this.service.delete("exercises/" + id)
+      .then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
+    })
+  }
 }
