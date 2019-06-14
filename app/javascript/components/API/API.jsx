@@ -216,7 +216,7 @@ export default class API {
         resolve(response);
       }).catch(error => {
         /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
-        resolve(error);
+        reject(error);
       })
     })
   }
