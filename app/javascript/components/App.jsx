@@ -16,7 +16,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      isLoggedIn: sessionStorage.getItem("isLoggedIn") // TODO: refactor with window._isLoggedIn
+      isLoggedIn: window._isLoggedIn
     }
 
     this.setUserLoggedIn = this.setUserLoggedIn.bind(this);
@@ -24,13 +24,13 @@ class App extends React.Component {
   }
 
   setUserLoggedIn() {
-    sessionStorage.setItem("isLoggedIn", true); // TODO: refactor with window._isLoggedIn
+    window._isLoggedIn = true;
     this.setState({
       isLoggedIn: true
     });
   }
   setUserLoggedOut() {
-    sessionStorage.clear(); // TODO: refactor with window._isLoggedIn
+    window._isLoggedIn = false;
     this.setState({
       isLoggedIn: false
     })
