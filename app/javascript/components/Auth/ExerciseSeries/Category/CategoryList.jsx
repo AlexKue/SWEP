@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import { withRouter, Link } from "react-router-dom";
 import {
     Container,
-    Loader,
-    Table
+    Loader
 } from "semantic-ui-react";
 
 import CategoryListItem from "./CategoryListItem.jsx";
 import { ExerciseSeriesContext } from '../ExerciseSeriesContext.jsx';
+import ThreeColumnTable from '../../Components/ThreeColumnTable.jsx';
 
 
 const CategoryList = (props) => {
@@ -55,16 +55,9 @@ class CategoryRender extends React.Component {
         if (!categoryMenuItems) return <Loader active>Lädt...</Loader>;
         
         return (
-            <Table celled striped>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell colSpan="3">Übungsserien</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    { categoryMenuItems }
-                </Table.Body>
-            </Table>
+            <ThreeColumnTable title="Übungsserien">
+                { categoryMenuItems }
+            </ThreeColumnTable>
         );
     }
 }

@@ -1,9 +1,10 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import {
-    Table,
     Icon
 } from "semantic-ui-react";
+
+import { ThreeColumnTableRow } from '../../Components/ThreeColumnTable.jsx';
 
 class CategoryListItem extends React.Component {
     constructor(props) {
@@ -21,11 +22,11 @@ class CategoryListItem extends React.Component {
     // Edit & Delete Button will show in the category itself
     render() {
         return (
-            <Table.Row>
-                <Table.Cell>{ this.props.title }</Table.Cell>
-                <Table.Cell collapsing textAlign="right">{this.props.solvedExerciseCount + "/" + this.props.totalExerciseCount}</Table.Cell>
-                <Table.Cell collapsing><Link to={"/" + this.props.categoryId }>Gehe zu <Icon name="arrow right" /></Link></Table.Cell>
-            </Table.Row>
+            <ThreeColumnTableRow
+                firstContent={ this.props.title }
+                secondContent={ this.props.solvedExerciseCount + "/" + this.props.totalExerciseCount}
+                thirdContent={<Link to={"/" + this.props.categoryId }>Gehe zu <Icon name="arrow right" /></Link>}
+            />
         );
     }
 }
