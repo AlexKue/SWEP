@@ -1,27 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { withRouter, Link } from "react-router-dom";
 import {
     Container
 } from "semantic-ui-react";
 
 import CategoryListItem from "./CategoryListItem.jsx";
+import { ExerciseSeriesContext } from '../ExerciseSeriesContext.jsx';
 
 
-class CategoryList extends React.Component {
-    /* 
-        CategoryList will render a List of all Categories
-        If there's no Category AND the user is admin, they'll see the
-        option to create a new Category
+const CategoryList = (props) => {
+    /*
+        Hooks are only working with React function components, that's why we
+        cannot use a class component.
     */
-    render() {
-        return (
-            <Container>
-                <CategoryListItem title="Testtitel" solvedExerciseCount="7" totalExerciseCount="31" categoryLink="test123"/> 
-                <CategoryListItem title="Testtitel" solvedExerciseCount="19" totalExerciseCount="96" /> 
-                <CategoryListItem title="Testtitel" solvedExerciseCount="5" totalExerciseCount="7" /> 
-            </Container>
-        );
-    }
+    const context = useContext(ExerciseSeriesContext);
+
+    return (
+        <React.Fragment>
+            <h1>{ context.text }</h1>
+            <button onClick={context.updateText}>Click me</button>
+        </React.Fragment>
+    );
 }
 
-export default withRouter(CategoryList);
+export default CategoryList;

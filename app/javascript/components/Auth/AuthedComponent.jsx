@@ -2,7 +2,7 @@ import React from "react";
 import { withRouter, Route } from "react-router-dom";
 
 import MenuBar from './MenuComponent/MenuBar.jsx';
-import CategoryList from './ExerciseSeries/Category/CategoryList.jsx';
+import ExerciseSeries from './ExerciseSeries/ExerciseSeries.jsx';
 
 class AuthedComponent extends React.Component {
 
@@ -18,7 +18,7 @@ class AuthedComponent extends React.Component {
     return (
       <React.Fragment>
         <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
-        <CategoryList />
+        <ExerciseSeries />
       </React.Fragment>
     );
   }

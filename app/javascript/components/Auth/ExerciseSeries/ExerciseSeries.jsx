@@ -3,10 +3,15 @@ import {
 
 } from "semantic-ui-react";
 
-export default class ExerciseSeries extends React {
+import CategoryList from './Category/CategoryList.jsx';
+import { ExerciseSeriesContextProvider } from './ExerciseSeriesContext.jsx';
+
+export default class ExerciseSeries extends React.Component {
     render() {
         return (
-            <h1>Hello from Exercise Series!</h1>
+            <ExerciseSeriesContextProvider>
+                <CategoryList />
+            </ExerciseSeriesContextProvider>
         );
     }
 }
