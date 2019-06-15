@@ -14,13 +14,32 @@ const CategoryList = (props) => {
         cannot use a class component.
     */
     const context = useContext(ExerciseSeriesContext);
+    context.getCategories();
 
     return (
-        <React.Fragment>
-            <h1>{ context.text }</h1>
-            <button onClick={context.updateText}>Click me</button>
-        </React.Fragment>
+        <Container>
+            <CategoryRender categories={ context.categories }/>
+        </Container>
     );
+}
+
+class CategoryRender extends React.Component {
+    render() {
+        const categoryMenuItems = this.props.categories ? this.props.categories.map((category) =>
+           <CategoryListItem
+                title={ category.title}
+                description={ category.description }
+                solvedExerciseCount={ category.solvedExerciseCount }
+                totalExerciseCount={ category.totalExerciseCount }
+                categoryId={ category.id} 
+                key={ "us" + category.id }/>
+        ) : null;
+        return (
+            <React.Fragment>
+                { categoryMenuItems }
+            </React.Fragment>
+        );
+    }
 }
 
 export default CategoryList;

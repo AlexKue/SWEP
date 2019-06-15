@@ -5,7 +5,7 @@ import {
 } from "semantic-ui-react";
 
 class CategoryListItem extends React.Component {
-    // TODO: Create Function to render depending on admin or not
+    // Edit & Delete Button will show in the category itself
     render() {
         return (
             <Menu>
@@ -16,7 +16,7 @@ class CategoryListItem extends React.Component {
                             { this.props.solvedExerciseCount } / { this.props.totalExerciseCount }
                         </div>
                     </Menu.Item>
-                    <Menu.Item as={Link} to={ this.props.categoryLink }>Gehe zu</Menu.Item>
+                    <Menu.Item as={Link} to={"/" + this.props.categoryId }>Gehe zu</Menu.Item>
                 </Menu.Menu>
             </Menu>
         );

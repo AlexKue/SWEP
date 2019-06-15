@@ -18,7 +18,7 @@ class AuthedComponent extends React.Component {
     return (
       <React.Fragment>
         <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
-        <ExerciseSeries />
+        <Route exact path="/" component={ExerciseSeries} />
       </React.Fragment>
     );
   }
