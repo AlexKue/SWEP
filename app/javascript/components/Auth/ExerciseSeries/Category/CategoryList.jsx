@@ -25,8 +25,9 @@ const CategoryList = (props) => {
 
 class CategoryRender extends React.Component {
     render() {
-        const categoryMenuItems = this.props.categories ? this.props.categories.map((category) =>
-           <CategoryListItem
+        const categoryMenuItems = this.props.categories ? 
+        [...this.props.categories].map(([id, category]) => 
+            <CategoryListItem
                 title={ category.title}
                 description={ category.description }
                 solvedExerciseCount={ category.solvedExerciseCount }

@@ -14,10 +14,10 @@ export class ExerciseSeriesContextProvider extends React.Component {
         } else {                            // We have to fetch them and build them
             API.getCategories()
             .then(response => {
-                let categories = [];
+                let categories = new Map();
                 let data = response.data;
                 for (let [key, value] of Object.entries(data)) {
-                    categories.push(
+                    categories.set(value.id,
                         new Category(
                             value.title,
                             value.text,
