@@ -23,10 +23,11 @@ class App extends React.Component {
     this.setUserLoggedOut = this.setUserLoggedOut.bind(this);
   }
 
-  setUserLoggedIn() {
-    window._isLoggedIn = true;
+  setUserLoggedIn(loggedInState, userRole) {
+    window._isLoggedIn = loggedInState;
+    window._userRole = userRole;
     this.setState({
-      isLoggedIn: true
+      isLoggedIn: loggedInState
     });
   }
   setUserLoggedOut() {
