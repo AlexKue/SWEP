@@ -27,9 +27,9 @@ const CategoryList = (props) => {
 
 class CategoryRender extends React.Component {
     render() {
-        let categoryMenuItems = null;
+        let categoryListItems = null;
         if (this.props.categories) {
-            categoryMenuItems = 
+            categoryListItems = 
             [...this.props.categories].map(([id, category]) => 
             <CategoryListItem
                 title={ category.title}
@@ -38,7 +38,7 @@ class CategoryRender extends React.Component {
                 totalExerciseCount={ category.totalExerciseCount }
                 categoryId={ category.id} 
                 key={ "us" + category.id }/>);
-            categoryMenuItems.push(
+            categoryListItems.push(
                 window._userRole === "admin" ?
                 <CategoryListItem
                     title="Übungsserie erstellen"
@@ -52,11 +52,11 @@ class CategoryRender extends React.Component {
             : null)
         }
 
-        if (!categoryMenuItems) return <Loader active>Lädt...</Loader>;
+        if (!categoryListItems) return <Loader active>Lädt...</Loader>;
         
         return (
             <ThreeColumnTable title="Übungsserien">
-                { categoryMenuItems }
+                { categoryListItems }
             </ThreeColumnTable>
         );
     }

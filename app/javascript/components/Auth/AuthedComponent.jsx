@@ -18,10 +18,10 @@ class AuthedComponent extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
-        <ExerciseSeriesContextProvider>
+      <ExerciseSeriesContextProvider>
+          <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
           <Route exact path="/" component={ExerciseSeries} />
-        </ExerciseSeriesContextProvider>
+      </ExerciseSeriesContextProvider>
       </React.Fragment>
     );
   }
