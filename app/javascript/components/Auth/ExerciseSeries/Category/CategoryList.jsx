@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { withRouter, Link } from "react-router-dom";
 import {
-    Container
+    Container,
+    Loader
 } from "semantic-ui-react";
 
 import CategoryListItem from "./CategoryListItem.jsx";
@@ -52,7 +53,8 @@ class CategoryRender extends React.Component {
 
         return (
             <React.Fragment>
-                { categoryMenuItems }
+                { categoryMenuItems ? categoryMenuItems
+                : <Loader active>Lädt...</Loader> }
             </React.Fragment>
         );
     }
