@@ -1,7 +1,8 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import {
-    Table
+    Table,
+    Icon
 } from "semantic-ui-react";
 
 class CategoryListItem extends React.Component {
@@ -23,7 +24,7 @@ class CategoryListItem extends React.Component {
             <Table.Row>
                 <Table.Cell>{ this.props.title }</Table.Cell>
                 <Table.Cell collapsing textAlign="right">{this.props.solvedExerciseCount + "/" + this.props.totalExerciseCount}</Table.Cell>
-                <Table.Cell collapsing><Link to={"/" + this.props.categoryId }>Gehe zu</Link></Table.Cell>
+                <Table.Cell collapsing><Link to={"/" + this.props.categoryId }>Gehe zu <Icon name="arrow right" /></Link></Table.Cell>
             </Table.Row>
         );
     }
