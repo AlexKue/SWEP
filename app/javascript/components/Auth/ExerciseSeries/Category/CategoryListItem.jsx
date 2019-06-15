@@ -5,6 +5,18 @@ import {
 } from "semantic-ui-react";
 
 class CategoryListItem extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.props.admin ? 
+        this.state = {
+            linkText: "Erstellen"
+        } : 
+        this.state = {
+            linkText: "Gehe zu"
+        };
+    }
+
     // Edit & Delete Button will show in the category itself
     render() {
         return (
@@ -16,7 +28,7 @@ class CategoryListItem extends React.Component {
                             { this.props.solvedExerciseCount } / { this.props.totalExerciseCount }
                         </div>
                     </Menu.Item>
-                    <Menu.Item as={Link} to={"/" + this.props.categoryId }>Gehe zu</Menu.Item>
+                    <Menu.Item as={Link} to={"/" + this.props.categoryId }>{ this.state.linkText }</Menu.Item>
                 </Menu.Menu>
             </Menu>
         );

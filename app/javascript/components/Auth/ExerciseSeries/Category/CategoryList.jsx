@@ -25,16 +25,31 @@ const CategoryList = (props) => {
 
 class CategoryRender extends React.Component {
     render() {
-        const categoryMenuItems = this.props.categories ? 
-        [...this.props.categories].map(([id, category]) => 
+        let categoryMenuItems = null;
+        if (this.props.categories) {
+            categoryMenuItems = 
+            [...this.props.categories].map(([id, category]) => 
             <CategoryListItem
                 title={ category.title}
                 description={ category.description }
                 solvedExerciseCount={ category.solvedExerciseCount }
                 totalExerciseCount={ category.totalExerciseCount }
                 categoryId={ category.id} 
-                key={ "us" + category.id }/>
-        ) : null;
+                key={ "us" + category.id }/>);
+            categoryMenuItems.push(
+                window._userRole === "admin" ?
+                <CategoryListItem
+                    title="Übungsserie erstellen"
+                    description=""
+                    solvedExerciseCount="42"
+                    totalExerciseCount="42"
+                    categoryId="createseries"
+                    admin={true}
+                    key="admin"
+                    />
+            : null)
+        }
+
         return (
             <React.Fragment>
                 { categoryMenuItems }
