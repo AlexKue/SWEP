@@ -3,6 +3,7 @@ import { withRouter, Route } from "react-router-dom";
 
 import MenuBar from './MenuComponent/MenuBar.jsx';
 import ExerciseSeries from './ExerciseSeries/ExerciseSeries.jsx';
+import { ExerciseSeriesContextProvider } from './ExerciseSeries/ExerciseSeriesContext.jsx';
 
 class AuthedComponent extends React.Component {
 
@@ -18,7 +19,9 @@ class AuthedComponent extends React.Component {
     return (
       <React.Fragment>
         <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
-        <Route exact path="/" component={ExerciseSeries} />
+        <ExerciseSeriesContextProvider>
+          <Route exact path="/" component={ExerciseSeries} />
+        </ExerciseSeriesContextProvider>
       </React.Fragment>
     );
   }

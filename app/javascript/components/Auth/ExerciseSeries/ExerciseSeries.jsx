@@ -9,9 +9,7 @@ import { ExerciseSeriesContextProvider } from './ExerciseSeriesContext.jsx';
 export default class ExerciseSeries extends React.Component {
     render() {
         return (
-            <ExerciseSeriesContextProvider>
-                <CategoryList />
-            </ExerciseSeriesContextProvider>
+            <CategoryList />
         );
     }
 }
