@@ -12,7 +12,7 @@ class Api::ExercisesController < ApplicationController
         offset = params[:offset].to_i
         limit = params[:limit].nil? ? 30 : params[:limit].to_i
 
-        @exercises = Exercise.offset(offset).limit(limit)
+        @exercises = Category.find(params[:category_id]).exercises.offset(offset).limit(limit)
         render json: @exercises, status: :ok
     end
 
