@@ -1,10 +1,11 @@
 import React from "react";
 
-import API from '../../API/API.jsx';
+import API from '../API/API.jsx';
 
-export const ExerciseSeriesContext = React.createContext();
+const AuthedContext = React.createContext();
+export default AuthedContext;
 
-export class ExerciseSeriesContextProvider extends React.Component {
+export class AuthedContextProvider extends React.Component {
     state = {
         categories: null
     }
@@ -42,9 +43,9 @@ export class ExerciseSeriesContextProvider extends React.Component {
             getCategories: this.getCategories
         }
         return (
-            <ExerciseSeriesContext.Provider value={contextValue}>
+            <AuthedContext.Provider value={contextValue}>
                 { this.props.children }
-            </ExerciseSeriesContext.Provider>
+            </AuthedContext.Provider>
         );
     }
 }

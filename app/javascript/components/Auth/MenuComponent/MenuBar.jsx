@@ -7,7 +7,7 @@ import {
 } from "semantic-ui-react";
 
 import API from "../../API/API.jsx";
-import { ExerciseSeriesContext } from '../ExerciseSeries/ExerciseSeriesContext.jsx';
+import AuthedContext from '../AuthedContext.jsx';
 /* asdf */
 class MenuBar extends React.Component {
 
@@ -64,7 +64,7 @@ class MenuBar extends React.Component {
 
 const CategoriesMenuEntry = () => {
   
-  const context = useContext(ExerciseSeriesContext);
+  const context = useContext(AuthedContext);
   
   if (context.categories) {
     return (

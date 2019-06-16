@@ -6,7 +6,7 @@ import {
 } from "semantic-ui-react";
 
 import CategoryListItem from "./CategoryListItem.jsx";
-import { ExerciseSeriesContext } from '../ExerciseSeriesContext.jsx';
+import AuthedContext from '../../AuthedContext.jsx';
 import ThreeColumnTable from '../../Components/ThreeColumnTable.jsx';
 
 
@@ -15,7 +15,7 @@ const CategoryList = (props) => {
         Hooks are only working with React function components, that's why we
         cannot use a class component.
     */
-    const context = useContext(ExerciseSeriesContext);
+    const context = useContext(AuthedContext);
     context.getCategories();
 
     return (
