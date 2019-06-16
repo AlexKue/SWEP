@@ -65,19 +65,14 @@ class MenuBar extends React.Component {
 const CategoriesMenuEntry = () => {
   
   const context = useContext(AuthedContext);
-  
-  if (context.categories) {
-    return (
-      <Dropdown item simple text="Übungsserien">
-        <Dropdown.Menu>
-          <CategoriesMenuEntryRender categories={ context.categories }/>
-        </Dropdown.Menu>
-      </Dropdown>
-    );
-  } else {
-    context.getCategories();
-    return null;
-  }
+
+  return (
+    <Dropdown item simple text="Übungsserien">
+      <Dropdown.Menu>
+        <CategoriesMenuEntryRender categories={ context.getCategories() }/>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
 }
 
 class CategoriesMenuEntryRender extends React.Component {

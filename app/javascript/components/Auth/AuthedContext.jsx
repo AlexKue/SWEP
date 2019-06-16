@@ -6,13 +6,13 @@ const AuthedContext = React.createContext();
 export default AuthedContext;
 
 export class AuthedContextProvider extends React.Component {
+    isFetching = false;
     state = {
         categories: null
     }
-    getCategories = () => {
-        if (this.state.categories) {        // We fetched them once
-            return this.state.categories;
-        } else {                            // We have to fetch them and build them
+    fetchCategories = () => {                   // We have to fetch them and build them
+        if (!this.isFetching) {
+            this.isFetching = true;             // As promises are async, we need to block further fetches 
             API.getCategories()
             .then(response => {
                 let categories = new Map();
@@ -30,17 +30,22 @@ export class AuthedContextProvider extends React.Component {
                 this.setState({
                     categories: categories
                 });
+                this.isFetching = false;    // For future fetch purposes
             })
             .catch(error => {               // This shouldn't happen, so for debug purpose we output this to console
+                this.isFetching = false;    // For future fetch purposes
                 console.log(error);
             })
         }
     }
+    getCategories = () => {
+        return this.state.categories;
+    }
 
     render() {
         const contextValue = {
-            categories: this.state.categories,
-            getCategories: this.getCategories
+            getCategories: this.getCategories,
+            fetchCategories: this.fetchCategories
         }
         return (
             <AuthedContext.Provider value={contextValue}>

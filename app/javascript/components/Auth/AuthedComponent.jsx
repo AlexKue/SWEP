@@ -1,9 +1,30 @@
-import React from "react";
+import React , { useContext } from "react";
 import { withRouter, Route } from "react-router-dom";
+import {
+  Container,
+  Loader
+} from "semantic-ui-react";
 
 import MenuBar from './MenuComponent/MenuBar.jsx';
 import ExerciseSeries from './ExerciseSeries/ExerciseSeries.jsx';
-import { AuthedContextProvider } from './AuthedContext.jsx';
+import AuthedContext from './AuthedContext.jsx';
+
+export const AuthedWrapper = (props) => {
+  const context = useContext(AuthedContext);
+
+  if (context.getCategories()) {
+    return (
+      <AuthedComponent context={context} setUserLoggedOut={props.setUserLoggedOut}/>
+    )
+  } else {
+    context.fetchCategories();
+    return (
+      <Container>
+        <Loader active>Lädt...</Loader>
+      </Container>
+    )
+  }
+}
 
 class AuthedComponent extends React.Component {
 
@@ -17,12 +38,10 @@ class AuthedComponent extends React.Component {
 
   render() {
     return (
-      <AuthedContextProvider>
-          <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
-          <Route exact path="/" component={ExerciseSeries} />
-      </AuthedContextProvider>
+      <React.Fragment>
+        <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
+        <Route exact path="/" component={ExerciseSeries} />
+      </React.Fragment>
     );
   }
 }
-
-export default withRouter(AuthedComponent);

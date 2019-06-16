@@ -16,43 +16,39 @@ const CategoryList = (props) => {
         cannot use a class component.
     */
     const context = useContext(AuthedContext);
-    context.getCategories();
 
     return (
         <Container>
-            <CategoryRender categories={ context.categories }/>
+            <CategoryRender categories={ context.getCategories() }/>
         </Container>
     );
 }
 
 class CategoryRender extends React.Component {
     render() {
-        let categoryListItems = null;
-        if (this.props.categories) {
-            categoryListItems = 
-            [...this.props.categories].map(([id, category]) => 
-            <CategoryListItem
-                title={ category.title}
-                description={ category.description }
-                solvedExerciseCount={ category.solvedExerciseCount }
-                totalExerciseCount={ category.totalExerciseCount }
-                categoryId={ category.id} 
-                key={ "us" + category.id }/>);
-            categoryListItems.push(
-                window._userRole === "admin" ?
-                <CategoryListItem
-                    title="Übungsserie erstellen"
-                    description=""
-                    solvedExerciseCount="42"
-                    totalExerciseCount="42"
-                    categoryId="createseries"
-                    admin={true}
-                    key="admin"
-                    />
-            : null)
-        }
+        let categoryListItems = 
+        [...this.props.categories].map(([id, category]) => 
+        <CategoryListItem
+            title={ category.title}
+            description={ category.description }
+            solvedExerciseCount={ category.solvedExerciseCount }
+            totalExerciseCount={ category.totalExerciseCount }
+            categoryId={ category.id} 
+            key={ "us" + category.id }/>);
 
-        if (!categoryListItems) return <Loader active>Lädt...</Loader>;
+        // Add AdminItem if userRole is admin
+        categoryListItems.push(
+            window._userRole === "admin" ?
+            <CategoryListItem
+                title="Übungsserie erstellen"
+                description=""
+                solvedExerciseCount="42"
+                totalExerciseCount="42"
+                categoryId="createseries"
+                admin={true}
+                key="admin"
+                />
+        : null);
         
         return (
             <ThreeColumnTable title="Übungsserien">

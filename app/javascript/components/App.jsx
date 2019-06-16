@@ -6,7 +6,8 @@ import RegisterHOC from './Unauth/Register/RegisterHOC.jsx';
 import UserList from './Auth/UserList/UserList.jsx';
 import TestComponent from './TestComponent.jsx';
 import { FormWrapperContextProvider } from './Unauth/FormWrapper/FormWrapperContext.jsx';
-import AuthedComponent from './Auth/AuthedComponent.jsx';
+import { AuthedWrapper } from './Auth/AuthedComponent.jsx';
+import { AuthedContextProvider } from './Auth/AuthedContext.jsx';
 
 import API from './API/API.jsx';
 
@@ -46,7 +47,9 @@ class App extends React.Component {
   render() {
     if (this.state.isLoggedIn) {
       return (
-        <AuthedComponent setUserLoggedOut={ this.setUserLoggedOut }/>
+        <AuthedContextProvider>
+          <AuthedWrapper setUserLoggedOut={ this.setUserLoggedOut }/>
+        </AuthedContextProvider>
       );
     } else {
       return (
