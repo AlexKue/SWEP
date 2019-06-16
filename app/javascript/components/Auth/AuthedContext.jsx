@@ -17,14 +17,14 @@ export class AuthedContextProvider extends React.Component {
             .then(response => {
                 let categories = new Map();
                 let data = response.data;
-                for (let [key, value] of Object.entries(data)) {
-                    categories.set(value.id,
+                for (let [key, category] of Object.entries(data)) {
+                    categories.set(category.id,
                         new Category(
-                            value.title,
-                            value.text,
+                            category.title,
+                            category.text,
                             0,              // TODO: Server is not sending this information so far
                             0,              // TODO: Server is not sending this information so far
-                            value.id
+                            category.id
                         ));
                 }
                 this.setState({
