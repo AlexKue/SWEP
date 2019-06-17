@@ -1,22 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { withRouter, Link } from "react-router-dom";
 import {
-  Grid,
-  Button,
+  Dropdown,
   Menu,
   Container
 } from "semantic-ui-react";
 
 import API from "../../API/API.jsx";
-
+import AuthedContext from '../AuthedContext.jsx';
+/* asdf */
 class MenuBar extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      activeItem: "home"
-    }
 
     this.logoutUser = this.logoutUser.bind(this);
     this.handleMenuEvent = this.handleMenuEvent.bind(this);
@@ -50,10 +46,8 @@ class MenuBar extends React.Component {
           <Container>
             <Menu.Item 
               name="home"
-              onClick={ this.handleMenuEvent }
-              active={ this.state.activeItem === "home" }>Home</Menu.Item>
-            { /* There need to be menu generators here, based on the
-              data we fetch from our server*/ }
+              onClick={ this.handleMenuEvent }>Home</Menu.Item>
+            <CategoriesMenuEntry />
             <Menu.Menu position="right">
               <Menu.Item 
                 name="logout"
@@ -65,6 +59,37 @@ class MenuBar extends React.Component {
         { /* Here comes the main view stuff */}
       </React.Fragment>
     );
+  }
+}
+
+const CategoriesMenuEntry = () => {
+  
+  const context = useContext(AuthedContext);
+
+  return (
+    <Dropdown item simple text="Übungsserien">
+      <Dropdown.Menu>
+        <CategoriesMenuEntryRender categories={ context.getCategories() }/>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+}
+
+class CategoriesMenuEntryRender extends React.Component {
+  render() {
+    let categoryMenuEntries = [...this.props.categories].map(([id, category]) => {
+      return (
+        <Dropdown.Item key={"usm" + category.id} as={Link} to={"/category-" + category.id}>
+          <i className='dropdown icon' />
+          <span className='text'>{ category.title }</span>
+          <Dropdown.Menu>
+            <Dropdown.Item as={Link} to="/static">TODO: EXERCISES</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown.Item>
+      )
+    });
+
+    return categoryMenuEntries;
   }
 }
 

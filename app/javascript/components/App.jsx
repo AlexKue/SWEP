@@ -6,7 +6,8 @@ import RegisterHOC from './Unauth/Register/RegisterHOC.jsx';
 import UserList from './Auth/UserList/UserList.jsx';
 import TestComponent from './TestComponent.jsx';
 import { FormWrapperContextProvider } from './Unauth/FormWrapper/FormWrapperContext.jsx';
-import AuthedComponent from './Auth/AuthedComponent.jsx';
+import { AuthedWrapper } from './Auth/AuthedComponent.jsx';
+import { AuthedContextProvider } from './Auth/AuthedContext.jsx';
 
 import API from './API/API.jsx';
 
@@ -16,21 +17,22 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      isLoggedIn: sessionStorage.getItem("isLoggedIn") // TODO: refactor with window._isLoggedIn
+      isLoggedIn: window._isLoggedIn
     }
 
     this.setUserLoggedIn = this.setUserLoggedIn.bind(this);
     this.setUserLoggedOut = this.setUserLoggedOut.bind(this);
   }
 
-  setUserLoggedIn() {
-    sessionStorage.setItem("isLoggedIn", true); // TODO: refactor with window._isLoggedIn
+  setUserLoggedIn(loggedInState, userRole) {
+    window._isLoggedIn = loggedInState;
+    window._userRole = userRole;
     this.setState({
-      isLoggedIn: true
+      isLoggedIn: loggedInState
     });
   }
   setUserLoggedOut() {
-    sessionStorage.clear(); // TODO: refactor with window._isLoggedIn
+    window._isLoggedIn = false;
     this.setState({
       isLoggedIn: false
     })
@@ -45,7 +47,9 @@ class App extends React.Component {
   render() {
     if (this.state.isLoggedIn) {
       return (
-        <AuthedComponent setUserLoggedOut={ this.setUserLoggedOut }/>
+        <AuthedContextProvider>
+          <AuthedWrapper setUserLoggedOut={ this.setUserLoggedOut }/>
+        </AuthedContextProvider>
       );
     } else {
       return (

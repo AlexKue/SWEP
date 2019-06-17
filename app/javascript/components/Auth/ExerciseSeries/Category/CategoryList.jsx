@@ -1,27 +1,54 @@
-import React from "react";
-import { withRouter, Link } from "react-router-dom";
-import {
-    Container
-} from "semantic-ui-react";
+import React, { useContext } from "react";
 
 import CategoryListItem from "./CategoryListItem.jsx";
+import AuthedContext from '../../AuthedContext.jsx';
+import ThreeColumnTable from '../../Components/ThreeColumnTable.jsx';
 
 
-class CategoryList extends React.Component {
-    /* 
-        CategoryList will render a List of all Categories
-        If there's no Category AND the user is admin, they'll see the
-        option to create a new Category
+const CategoryList = (props) => {
+    /*
+        Hooks are only working with React function components, that's why we
+        cannot use a class component.
     */
+    const context = useContext(AuthedContext);
+
+    return (
+        <CategoryRender categories={ context.getCategories() }/>
+    );
+}
+
+class CategoryRender extends React.Component {
     render() {
+        let categoryListItems = 
+        [...this.props.categories].map(([id, category]) => 
+        <CategoryListItem
+            title={ category.title}
+            description={ category.description }
+            solvedExerciseCount={ category.solvedExerciseCount }
+            totalExerciseCount={ category.totalExerciseCount }
+            categoryId={ category.id} 
+            key={ "us" + category.id }/>);
+
+        // Add AdminItem if userRole is admin
+        categoryListItems.push(
+            window._userRole === "admin" ?
+            <CategoryListItem
+                title="Übungsserie erstellen"
+                description=""
+                solvedExerciseCount="42"
+                totalExerciseCount="42"
+                categoryId="createseries"
+                admin={true}
+                key="admin"
+                />
+        : null);
+        
         return (
-            <Container>
-                <CategoryListItem title="Testtitel" solvedExerciseCount="7" totalExerciseCount="31" categoryLink="test123"/> 
-                <CategoryListItem title="Testtitel" solvedExerciseCount="19" totalExerciseCount="96" /> 
-                <CategoryListItem title="Testtitel" solvedExerciseCount="5" totalExerciseCount="7" /> 
-            </Container>
+            <ThreeColumnTable title="Übungsserien">
+                { categoryListItems }
+            </ThreeColumnTable>
         );
     }
 }
 
-export default withRouter(CategoryList);
+export default CategoryList;
