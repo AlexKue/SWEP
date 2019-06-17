@@ -43,7 +43,7 @@ class AuthedComponent extends React.Component {
         <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
         <Container>
           <Route exact path="/" component={CategoryList} />
-          <Route exact path="/category-:id" component={CategoryView} />
+          <Route exact path="/category-:id" render={(props) => <CategoryView {...props} />} />
         </Container>
       </React.Fragment>
     );
