@@ -1,4 +1,8 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import {
+    Button
+} from "semantic-ui-react";
 
 import CategoryListItem from "./CategoryListItem.jsx";
 import AuthedContext from '../../AuthedContext.jsx';
@@ -13,7 +17,18 @@ const CategoryList = (props) => {
     const context = useContext(AuthedContext);
 
     return (
-        <CategoryRender categories={ context.getCategories() }/>
+        <React.Fragment>
+            <CategoryRender categories={ context.getCategories() }/>
+            { window._userRole === "admin" ?
+                <Button 
+                    as={ Link }
+                    to="/create-category"
+                    content="Übungsserie erstellen"
+                    icon="add"
+                    labelPosition="right"
+                    />
+            : null}
+        </React.Fragment>
     );
 }
 
@@ -28,20 +43,6 @@ class CategoryRender extends React.Component {
             totalExerciseCount={ category.totalExerciseCount }
             categoryId={ category.id} 
             key={ "us" + category.id }/>);
-
-        // Add AdminItem if userRole is admin
-        categoryListItems.push(
-            window._userRole === "admin" ?
-            <CategoryListItem
-                title="Übungsserie erstellen"
-                description=""
-                solvedExerciseCount="42"
-                totalExerciseCount="42"
-                categoryId="createseries"
-                admin={true}
-                key="admin"
-                />
-        : null);
         
         return (
             <ThreeColumnTable title="Übungsserien">
