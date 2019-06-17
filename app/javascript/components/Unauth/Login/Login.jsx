@@ -51,7 +51,7 @@ class Login extends React.Component {
     // TODO Enhancement: Set button loading (may need refactor)
     API.loginUser(this.state.userID, this.state.userPass)
     .then(response => {
-      this.props.setUserLoggedIn(true, "admin");  // TODO: Get role by response
+      this.props.setUserLoggedIn(true, response.data.role);
     }).catch(error => {
       console.log(error);
       this.setState({
