@@ -79,7 +79,7 @@ class CategoriesMenuEntryRender extends React.Component {
   render() {
     let categoryMenuEntries = [...this.props.categories].map(([id, category]) => {
       return (
-        <Dropdown.Item key={"usm" + category.id} as={Link} to={"/" + category.id}>
+        <Dropdown.Item key={"usm" + category.id} as={Link} to={"/category-" + category.id}>
           <i className='dropdown icon' />
           <span className='text'>{ category.title }</span>
           <Dropdown.Menu>

@@ -25,7 +25,7 @@ class CategoryListItem extends React.Component {
             <ThreeColumnTableRow
                 firstContent={ this.props.title }
                 secondContent={ this.props.solvedExerciseCount + "/" + this.props.totalExerciseCount}
-                thirdContent={<Link to={"/" + this.props.categoryId }>Gehe zu <Icon name="arrow right" /></Link>}
+                thirdContent={<Link to={"/category-" + this.props.categoryId }>Gehe zu <Icon name="arrow right" /></Link>}
             />
         );
     }

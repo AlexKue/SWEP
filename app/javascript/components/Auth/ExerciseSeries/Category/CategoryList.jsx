@@ -1,9 +1,4 @@
 import React, { useContext } from "react";
-import { withRouter, Link } from "react-router-dom";
-import {
-    Container,
-    Loader
-} from "semantic-ui-react";
 
 import CategoryListItem from "./CategoryListItem.jsx";
 import AuthedContext from '../../AuthedContext.jsx';
@@ -18,9 +13,7 @@ const CategoryList = (props) => {
     const context = useContext(AuthedContext);
 
     return (
-        <Container>
-            <CategoryRender categories={ context.getCategories() }/>
-        </Container>
+        <CategoryRender categories={ context.getCategories() }/>
     );
 }
 

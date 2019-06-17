@@ -8,6 +8,7 @@ import {
 import MenuBar from './MenuComponent/MenuBar.jsx';
 import ExerciseSeries from './ExerciseSeries/ExerciseSeries.jsx';
 import AuthedContext from './AuthedContext.jsx';
+import { CategoryView } from './ExerciseSeries/Category/CategoryView.jsx';
 
 export const AuthedWrapper = (props) => {
   const context = useContext(AuthedContext);
@@ -40,7 +41,10 @@ class AuthedComponent extends React.Component {
     return (
       <React.Fragment>
         <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
-        <Route exact path="/" component={ExerciseSeries} />
+        <Container>
+          <Route exact path="/" component={ExerciseSeries} />
+          <Route exact path="/category-:id" component={CategoryView} />
+        </Container>
       </React.Fragment>
     );
   }
