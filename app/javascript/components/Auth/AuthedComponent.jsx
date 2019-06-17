@@ -6,7 +6,7 @@ import {
 } from "semantic-ui-react";
 
 import MenuBar from './MenuComponent/MenuBar.jsx';
-import ExerciseSeries from './ExerciseSeries/ExerciseSeries.jsx';
+import CategoryList from './ExerciseSeries/Category/CategoryList.jsx';
 import AuthedContext from './AuthedContext.jsx';
 import { CategoryView } from './ExerciseSeries/Category/CategoryView.jsx';
 
@@ -42,7 +42,7 @@ class AuthedComponent extends React.Component {
       <React.Fragment>
         <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
         <Container>
-          <Route exact path="/" component={ExerciseSeries} />
+          <Route exact path="/" component={CategoryList} />
           <Route exact path="/category-:id" component={CategoryView} />
         </Container>
       </React.Fragment>
