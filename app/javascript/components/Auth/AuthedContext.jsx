@@ -77,6 +77,11 @@ export class AuthedContextProvider extends React.Component {
         // Trigger Update
         this.forceUpdate();
     }
+    removeCategory = (Id) => {
+        this.state.categories.delete(Id);
+
+        this.forceUpdate();
+    }
 
 
     render() {
@@ -85,7 +90,8 @@ export class AuthedContextProvider extends React.Component {
             fetchCategories: this.fetchCategories,
             getCategoryById: this.getCategoryById,
             addCategory: this.addCategory,
-            updateCategory: this.updateCategory
+            updateCategory: this.updateCategory,
+            removeCategory: this.removeCategory
         }
         return (
             <AuthedContext.Provider value={contextValue}>

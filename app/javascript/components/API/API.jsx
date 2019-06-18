@@ -161,7 +161,7 @@ export default class API {
     return new Promise((resolve, reject) => {
       this.service.delete("categories/" + id, {
         data: {
-        authenticity_token: window._token
+          authenticity_token: window._token
         }
       }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */

@@ -5,7 +5,9 @@ import {
     Input,
     Segment,
     Button,
-    Message
+    Message,
+    Icon,
+    Grid
 } from "semantic-ui-react";
 
 import AuthedContext from '../../AuthedContext.jsx';
@@ -40,16 +42,20 @@ class CRUDCategoryViewComponent extends React.Component {
             id: props.id ? parseInt(props.id) : null,
             requestPending: false,
             context: props.context,
+            history: props.history,
             error: false,
             success: false,
             showMessage: false,
             messageTitle: "",
-            messageContent: ""
+            messageContent: "",
+            deleteTitle: "Löschen"
         }
 
         this.updateDescription = this.updateDescription.bind(this);
         this.updateTitle = this.updateTitle.bind(this);
         this.crudCategory = this.crudCategory.bind(this);
+        this.deleteCategory = this.deleteCategory.bind(this);
+        this.resetDeleteButton = this.resetDeleteButton.bind(this);
         this.hideMessage = this.hideMessage.bind(this);
         this.toggleSubmitButton = this.toggleSubmitButton.bind(this);
         this.setRequestPending = this.setRequestPending.bind(this);
@@ -129,6 +135,28 @@ class CRUDCategoryViewComponent extends React.Component {
     toggleSubmitButton() {
         return (this.state.title == "" && this.state.description == "");
     }
+    deleteCategory() {
+        if (this.state.deleteTitle === "Löschen") {
+            this.setState({
+                deleteTitle: "Wirklich löschen?"
+            });
+        } else {
+            this.setRequestPending();
+            API.deleteCategory(this.state.id)
+            .then(response => {
+                this.state.context.removeCategory(this.state.id);
+                this.state.history.push("/");
+            }).catch(error => {
+                // TODO optional - In theory this shouldn't happen
+                console.log("Error in deleting category");
+            })
+        }
+    }
+    resetDeleteButton() {
+        this.setState({
+            deleteTitle: "Löschen"
+        })
+    }
 
     render() {
         return (
@@ -152,14 +180,29 @@ class CRUDCategoryViewComponent extends React.Component {
                             onChange={ this.updateDescription }
                             />
                     </Form.Field>
-                    <Button 
-                        type="submit"
-                        content="Abschicken"
-                        onClick={ this.crudCategory }
-                        loading={ this.state.requestPending }
-                        disabled={ this.toggleSubmitButton() || this.state.requestPending }
-                        primary
-                        />
+                    <Grid columns={2}>
+                        <Grid.Column>
+                            <Button 
+                                type="submit"
+                                content="Abschicken"
+                                onClick={ this.crudCategory }
+                                loading={ this.state.requestPending }
+                                disabled={ this.toggleSubmitButton() || this.state.requestPending }
+                                primary
+                                />
+                        </Grid.Column>
+                        <Grid.Column>
+                            { this.state.id ?
+                                <Button 
+                                    color="red"
+                                    onClick={ this.deleteCategory }
+                                    onBlur={ this.resetDeleteButton }
+                                    content={ this.state.deleteTitle }
+                                    style={{float: "right"}}>
+                                </Button>
+                                : null }
+                        </Grid.Column>
+                    </Grid>
                     <Message
                         header={ this.state.messageTitle }
                         content={ this.state.messageContent }
