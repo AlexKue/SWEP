@@ -10,6 +10,11 @@ export class AuthedContextProvider extends React.Component {
     state = {
         categories: null
     }
+    forceUpdate = () => {
+        this.setState({
+            state: this.state
+        })
+    }
     fetchCategories = () => {                   // We have to fetch them and build them
         if (!this.isFetching) {
             this.isFetching = true;             // As promises are async, we need to block further fetches 
@@ -62,10 +67,17 @@ export class AuthedContextProvider extends React.Component {
             ));
         
         // Trigger Update
-        this.setState({
-            categories: this.state.categories
-        })
+        this.forceUpdate();
     }
+    updateCategory = (Id, title, description) => {
+        let category = this.getCategoryById(Id);
+        category.title = title;
+        category.description = description;
+
+        // Trigger Update
+        this.forceUpdate();
+    }
+
 
     render() {
         const contextValue = {
