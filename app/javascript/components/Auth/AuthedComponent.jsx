@@ -10,6 +10,7 @@ import CategoryList from './ExerciseSeries/Category/CategoryList.jsx';
 import AuthedContext from './AuthedContext.jsx';
 import { CategoryView } from './ExerciseSeries/Category/CategoryView.jsx';
 import CRUDCategoryView from './ExerciseSeries/Category/CRUDCategoryView.jsx';
+import TestComponent from '../TestComponent.jsx';
 
 export const AuthedWrapper = (props) => {
   const context = useContext(AuthedContext);
@@ -46,6 +47,7 @@ class AuthedComponent extends React.Component {
           <Route exact path="/" component={CategoryList} />
           <Route exact path="/category-:id" render={(props) => <CategoryView {...props} />} />
           <Route exact path="/create-category" render={(props) => <CRUDCategoryView {...props} />} />
+          <Route exact path="/test" component={TestComponent} />
         </Container>
       </React.Fragment>
     );
