@@ -41,11 +41,37 @@ export class AuthedContextProvider extends React.Component {
     getCategories = () => {
         return this.state.categories;
     }
+    getCategoryById = (Id) => {
+        return this.state.categories.get(Id);
+    }
+    addCategory = (
+        title,
+        description,
+        solvedExerciseCount,
+        totalExerciseCount,
+        id,
+        exerciseIdList) => {
+        this.categories.set(id, 
+            new Category(
+            title,
+            description,
+            solvedExerciseCount,
+            totalExerciseCount,
+            id,
+            exerciseIdList
+        ));
+        // To trigger update
+        this.setState({
+            categories: this.categories
+        });
+    }
 
     render() {
         const contextValue = {
             getCategories: this.getCategories,
-            fetchCategories: this.fetchCategories
+            fetchCategories: this.fetchCategories,
+            getCategoryById: this.getCategoryById,
+            addCategory: this.addCategory
         }
         return (
             <AuthedContext.Provider value={contextValue}>
