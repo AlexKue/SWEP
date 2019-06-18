@@ -60,7 +60,11 @@ export class AuthedContextProvider extends React.Component {
                 id,
                 exerciseIdList
             ));
-        // To trigger update
+        
+        // Trigger Update
+        this.setState({
+            categories: this.state.categories
+        })
     }
 
     render() {
