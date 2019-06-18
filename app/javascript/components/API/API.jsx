@@ -172,6 +172,12 @@ export default class API {
       })
     })
   }
+  static updateCategory(id, title, description) {
+    console.log("updateCateogry called: TODO, this function is currently not implemented!");
+    return new Promise((resolve, reject) => {
+      resolve(null);  //TODO: Implement
+    });
+  }
   static getExercises(id, offset = 0, limit = 30) {
     return new Promise((resolve, reject) => {
       this.service.get("categories/" + id + "/exercises", {

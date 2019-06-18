@@ -14,7 +14,19 @@ import API from '../../../API/API.jsx';
 const CRUDCategoryView = (props) => {
     const context = useContext(AuthedContext);
 
-    return <CRUDCategoryViewComponent context={context} {...props} />
+    let category = null;
+    let categoryId = props.match.params.id;
+
+    if (categoryId) {
+        category = context.getCategoryById(parseInt(categoryId));
+    }
+
+    return <CRUDCategoryViewComponent 
+        context={context}
+        title={ category ? category.title : null}
+        description={ category ? category.description : null } 
+        id={ categoryId }
+        {...props} />
 }
 
 class CRUDCategoryViewComponent extends React.Component {
@@ -25,7 +37,7 @@ class CRUDCategoryViewComponent extends React.Component {
         this.state = {
             title: props.title ? props.title : "",
             description: props.description ? props.description : "",
-            id: props.id,
+            id: props.id ? parseInt(props.id) : null,
             requestPending: false,
             context: props.context,
             error: false,
@@ -40,6 +52,20 @@ class CRUDCategoryViewComponent extends React.Component {
         this.crudCategory = this.crudCategory.bind(this);
         this.hideMessage = this.hideMessage.bind(this);
         this.toggleSubmitButton = this.toggleSubmitButton.bind(this);
+        this.setRequestPending = this.setRequestPending.bind(this);
+        this.resetRequestPending = this.resetRequestPending.bind(this);
+    }
+    setRequestPending() {
+        this.setState({
+            requestPending: true
+        });
+    }
+
+    resetRequestPending() {
+        this.setState({
+            requestPending: false,
+            showMessage: true
+        });
     }
 
     updateTitle(event) {
@@ -53,11 +79,18 @@ class CRUDCategoryViewComponent extends React.Component {
         });
     }
     crudCategory() {
-        this.setState({
-            requestPending: true
-        });
+        this.setRequestPending();
+        
         if (this.state.id) {    // Component was opened for edit
-            // TODO: Update
+            API.updateCategory(this.state.id, this.state.title, this.state.description)
+            .then(response => {
+                // TODO: IMPLEMENT proper response
+                this.state.context.updateCategory(this.state.id, this.state.title, this.state.description);
+            }).catch(error => {
+                //TODO: IMPLEMENT proper response
+            }).finally(() => {
+                this.resetRequestPending();
+            })
         } else {
             API.createCategory(this.state.title, this.state.description)
             .then(response => {
@@ -83,10 +116,7 @@ class CRUDCategoryViewComponent extends React.Component {
                     messageContent: "Titel oder Beschreibung dürfen nicht leer sein / nicht nur aus Leerzeichen bestehen."
                 })
             }).finally(() => {
-                this.setState({
-                    requestPending: false,
-                    showMessage: true
-                })
+                this.resetRequestPending();
             })
         }
     }
@@ -110,7 +140,7 @@ class CRUDCategoryViewComponent extends React.Component {
                         <label>Titel</label>
                         <Input 
                             placeholder="Titel" 
-                            content={ this.state.title }
+                            value={ this.state.title }
                             onChange={ this.updateTitle }
                             />
                     </Form.Field>
@@ -127,7 +157,7 @@ class CRUDCategoryViewComponent extends React.Component {
                         content="Abschicken"
                         onClick={ this.crudCategory }
                         loading={ this.state.requestPending }
-                        disabled={ this.toggleSubmitButton() }
+                        disabled={ this.toggleSubmitButton() || this.state.requestPending }
                         primary
                         />
                     <Message
