@@ -51,19 +51,16 @@ export class AuthedContextProvider extends React.Component {
         totalExerciseCount,
         id,
         exerciseIdList) => {
-        this.categories.set(id, 
-            new Category(
-            title,
-            description,
-            solvedExerciseCount,
-            totalExerciseCount,
-            id,
-            exerciseIdList
-        ));
+            this.state.categories.set(id, 
+                new Category(
+                title,
+                description,
+                solvedExerciseCount,
+                totalExerciseCount,
+                id,
+                exerciseIdList
+            ));
         // To trigger update
-        this.setState({
-            categories: this.categories
-        });
     }
 
     render() {
