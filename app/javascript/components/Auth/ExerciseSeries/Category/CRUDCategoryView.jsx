@@ -17,7 +17,7 @@ const CRUDCategoryView = (props) => {
     const context = useContext(AuthedContext);
 
     let category = null;
-    let categoryId = props.match.params.id;
+    let categoryId = props.match.params.categoryId;
 
     if (categoryId) {
         category = context.getCategoryById(parseInt(categoryId));

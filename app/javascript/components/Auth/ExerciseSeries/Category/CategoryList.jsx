@@ -22,7 +22,7 @@ const CategoryList = (props) => {
             { window._userRole === "admin" ?
                 <Button 
                     as={ Link }
-                    to="/create-category"
+                    to="/category/create"
                     content="Übungsserie erstellen"
                     icon="add"
                     labelPosition="right"
