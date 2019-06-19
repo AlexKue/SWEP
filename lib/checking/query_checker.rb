@@ -1,4 +1,3 @@
-require 'json'
 class QueryChecker
 
   def initialize ()
@@ -15,6 +14,7 @@ class QueryChecker
   # Higher values result in this method returning +nil+ more often.
   def correct? (query, reference, confidence=0)
     result = check query, reference
+    
     if result[:score] >= confidence
       true
     elsif result[:score] <= -confidence
@@ -25,7 +25,7 @@ class QueryChecker
   end
 
   ##
-  # Compares both queries and returns a JSON-formatted string containg some information about the process.
+  # Compares both queries and returns a hash containg some information about the process.
   # Callers can rely on a minimum of a :score and a :checkers field.
   def check query, reference
     result = {:score => 0, :checkers => []}
@@ -34,8 +34,7 @@ class QueryChecker
       result[:checkers].append({checker.class.to_s.to_sym => checker_result})
       result[:score] += checker_result[:score]
     end
-
-    JSON.unparse result
+    result
   end
 
   def add_checker checker
