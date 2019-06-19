@@ -25,7 +25,7 @@ class Api::ExercisesController < ApplicationController
         if @exercise.save
             render json: @exercise, status: :created
         else
-            render json: @exercise.errors, status: :unprocessable_entity
+            render json: @exercise.errors.full_messages, status: :unprocessable_entity
 
         end
     end
