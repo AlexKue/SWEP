@@ -12,7 +12,7 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
       post api_categories_path, params: { category: { title: @category.title,
                                                       text: @category.text
       }}
-      assert_response :ok
+      assert_response :created
     end
   end
 
@@ -34,6 +34,13 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
       }}
       assert_response :unprocessable_entity
     end
+  end
+
+
+  test "response" do
+    log_in_as(users(:Alex))
+    get api_categories_path
+    puts response.body
   end
 
 end
