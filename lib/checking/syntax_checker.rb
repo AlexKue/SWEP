@@ -5,7 +5,7 @@ class SyntaxChecker
   # If that's not the case then this method sets score to +-Float::INFINITY+.
   # TODO: use EXPLAIN to check the syntax or remove this file completely
   def check (query, reference)
-    score = Float::INFINITY
+    score = -Float::INFINITY
     score = 0 if contains(query, "select") && contains(query, "from")
     {:score => score}
   end
