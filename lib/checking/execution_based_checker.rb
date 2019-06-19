@@ -6,15 +6,13 @@ class ExecutionBasedChecker
   # This method needs to be insensitive to that while respecting the order if ORDER BY statements are part of any query.
   # TODO cache reference results
   def check query, reference, dbname='unidb'
+    score = - Float::INFINITY
     query_result = execute query, dbname
     reference_result = execute reference, dbname
     
-    if result_eql? query_result, reference_result
-      nil
-    else
-      false
-    end
+    score = 0 if result_eql? query_result, reference_result
 
+    {:score => score, :debug => {:query => query_result, :reference => reference_result, :aim => :equality}}
   end
 
   ##
