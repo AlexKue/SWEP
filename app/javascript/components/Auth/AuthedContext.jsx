@@ -8,7 +8,8 @@ export default AuthedContext;
 export class AuthedContextProvider extends React.Component {
     isFetching = false;
     state = {
-        categories: null
+        categories: null,
+        totalCategoriesCount: 0
     }
     forceUpdate = () => {
         this.setState({
@@ -21,8 +22,10 @@ export class AuthedContextProvider extends React.Component {
             API.getCategories()
             .then(response => {
                 let categories = new Map();
-                let data = response.data;
-                for (let [key, category] of Object.entries(data)) {
+                let totalCategoriesCount = response.data.count;
+                let categoriesResponse = response.data.data;
+                for (let [key, category] of Object.entries(categoriesResponse)) {
+                    console.log(categories);
                     categories.set(category.id,
                         new Category(
                             category.title,
@@ -33,7 +36,8 @@ export class AuthedContextProvider extends React.Component {
                         ));
                 }
                 this.setState({
-                    categories: categories
+                    categories: categories,
+                    totalCategoriesCount: totalCategoriesCount
                 });
                 this.isFetching = false;    // For future fetch purposes
             })
