@@ -12,8 +12,12 @@ class Api::ExercisesController < ApplicationController
         offset = params[:offset].to_i
         limit = params[:limit].nil? ? 30 : params[:limit].to_i
 
-        @exercises = Category.find(params[:category_id]).exercises.offset(offset).limit(limit)
-        render json: @exercises, status: :ok
+        @category = Category.find(params[:category_id])
+        @exercises = @category.exercises.offset(offset).limit(limit)
+        render json: {
+            count: @category.exercises.count,
+            data: @exercises.as_json
+        }, status: :ok
     end
 
     def create
@@ -21,7 +25,7 @@ class Api::ExercisesController < ApplicationController
         if @exercise.save
             render json: @exercise, status: :created
         else
-            render json: @exercise.errors, status: :unprocessable_entity
+            render json: @exercise.errors.full_messages, status: :unprocessable_entity
 
         end
     end
@@ -41,7 +45,7 @@ class Api::ExercisesController < ApplicationController
         def exercise_params
             params.require(:exercise).permit(:title, :text, :points)
         end
-
+            
     
 
 end

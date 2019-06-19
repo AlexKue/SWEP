@@ -12,7 +12,10 @@ class Api::CategoriesController < ApplicationController
         limit = params[:limit].nil? ? 30 : params[:limit].to_i
         
         @categories = Category.offset(offset).limit(limit)
-        render json: @categories, status: :ok
+        render json: {
+            count: Category.count,
+            data: @categories.as_json
+        }, status: :ok
     end
 
     def create
@@ -20,7 +23,7 @@ class Api::CategoriesController < ApplicationController
         if @category.save
             render json: @category, status: :created
         else
-            render json: @category.errors, status: :unprocessable_entity
+            render json: @category.errors.full_messages, status: :unprocessable_entity
         end
     end
 

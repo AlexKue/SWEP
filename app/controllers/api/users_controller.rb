@@ -15,7 +15,10 @@ class Api::UsersController < ApplicationController
         limit = params[:limit].nil? ? 30 : params[:limit].to_i
         
         @users = User.offset(offset).limit(limit)
-        render json: @users, status: :ok
+        render json: {
+            count: User.count,
+            data: @users.as_json
+        }, status: :ok
     end
 
     # POST /api/users
@@ -25,7 +28,7 @@ class Api::UsersController < ApplicationController
             log_in @user
             render json: @user, status: :created
         else
-            render json: @user.errors, status: :unprocessable_entity
+            render json: @user.errors.full_messages, status: :unprocessable_entity
         end
     end
 

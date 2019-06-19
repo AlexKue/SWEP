@@ -9,16 +9,7 @@ export default class APIHelper {
     let errorData = error.response.data;
     return (
       <List bulleted>
-        {Object.keys(errorData).map(key => (
-          <List.Item key={key}>
-            {key}
-            <List>
-              {errorData[key].map(value => (
-                <List.Item key={value}>{ value }</List.Item>
-              ))}
-            </List>
-          </List.Item>
-        ))}
+        {errorData.map((message => <List.Item key={message}>{message}</List.Item>))}
       </List>
     );
   }
