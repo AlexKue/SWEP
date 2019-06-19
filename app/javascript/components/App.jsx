@@ -16,23 +16,34 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    if (!window._isLoggedIn) {
+      localStorage.clear();
+    }
+
     this.state = {
-      isLoggedIn: window._isLoggedIn
+      isLoggedIn: window._isLoggedIn,
+      userName: localStorage.getItem("userName"),
+      userMail: localStorage.getItem("userMail"),
+      userId: localStorage.getItem("userId")
     }
 
     this.setUserLoggedIn = this.setUserLoggedIn.bind(this);
     this.setUserLoggedOut = this.setUserLoggedOut.bind(this);
   }
 
-  setUserLoggedIn(loggedInState, userRole) {
+  setUserLoggedIn(loggedInState, userRole, userName, userMail, userId) {
     window._isLoggedIn = loggedInState;
     window._userRole = userRole;
     this.setState({
       isLoggedIn: loggedInState
     });
+    localStorage.setItem("userName", userName);
+    localStorage.setItem("userMail", userMail);
+    localStorage.setItem("userId", userId);
   }
   setUserLoggedOut() {
     window._isLoggedIn = false;
+    localStorage.clear();
     this.setState({
       isLoggedIn: false
     })
