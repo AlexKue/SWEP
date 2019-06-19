@@ -17,7 +17,7 @@ class QueryChecker
     result = check query, reference
     if result[:score] >= confidence
       true
-    else if result[:score] <= -confidence
+    elsif result[:score] <= -confidence
       false
     else 
       nil
@@ -31,7 +31,7 @@ class QueryChecker
     result = {:score => 0, :checkers => []}
     @hierarchy.each do |checker|
       checker_result = checker.check query, reference
-      result[:checkers].append {checker.class.to_s.to_sym => checker_result}
+      result[:checkers].append({checker.class.to_s.to_sym => checker_result})
       result[:score] += checker_result[:score]
     end
 
