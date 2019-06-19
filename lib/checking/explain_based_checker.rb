@@ -13,14 +13,12 @@ class ExplainBasedChecker
 
   ##
   # Checks +query+ against +reference+ by comapring the +Node Type+ and the +Filter+ attributes.
-  def check (query, reference)
-    query_explanation = explain query
-    reference_explanation = explain reference
-    if query_explanation["Node Type"].eql?(reference_explanation["Node Type"]) &&
-       query_explanation["Filter"].eql?(reference_explanation["Filter"])
-       true
-    else nil
-    end
+  def check (query, reference, dbname='unidb')
+    score = 0
+    query_explanation = explain query, dbname
+    reference_explanation = explain reference, dbname
+    score = 1 if query_explanation["Node Type"].eql?(reference_explanation["Node Type"]) && query_explanation["Filter"].eql?(reference_explanation["Filter"])
+    {:score => score, :debug => {:query => query_explanation, :reference => reference_explanation, :aim => :equality, :dbname => dbname}}
   end
 
   ##
