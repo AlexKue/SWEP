@@ -36,11 +36,17 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-
-  test "response" do
-    log_in_as(users(:Alex))
-    get api_categories_path
-    puts response.body
+  test "should edit category as admin" do
+    log_in_as users(:Alex)
+    title = "New Title"
+    patch api_category_path(@category),
+    params: {
+      category: {
+        title: title
+      }
+    }
+    assert_response :no_content
+    @category.reload
+    assert_equal title, @category.title
   end
-
 end
