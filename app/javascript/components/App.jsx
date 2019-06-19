@@ -31,12 +31,12 @@ class App extends React.Component {
   setUserLoggedIn(loggedInState, userRole, userName, userMail, userId) {
     window._isLoggedIn = loggedInState;
     window._userRole = userRole;
-    this.setState({
-      isLoggedIn: loggedInState
-    });
     localStorage.setItem("userName", userName);
     localStorage.setItem("userMail", userMail);
     localStorage.setItem("userId", userId);
+    this.setState({
+      isLoggedIn: loggedInState
+    });
   }
   setUserLoggedOut() {
     window._isLoggedIn = false;

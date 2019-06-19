@@ -9,8 +9,10 @@ export class AuthedContextProvider extends React.Component {
     isFetching = false;
     state = {
         categories: null,
-        totalCategoriesCount: 0
+        totalCategoriesCount: 0,
+        userName: localStorage.getItem("userName")
     }
+
     forceUpdate = () => {
         this.setState({
             state: this.state
@@ -86,7 +88,15 @@ export class AuthedContextProvider extends React.Component {
 
         this.forceUpdate();
     }
-
+    getUserName = () => {
+        return this.state.userName;
+    }
+    updateUserName = (newUserName) => {
+        localStorage.setItem("userName", newUserName);
+        this.setState({
+            userName: newUserName
+        });
+    }
 
     render() {
         const contextValue = {
@@ -96,7 +106,9 @@ export class AuthedContextProvider extends React.Component {
             addCategory: this.addCategory,
             updateCategory: this.updateCategory,
             removeCategory: this.removeCategory,
-            setUserLoggedOut: this.props.setUserLoggedOut
+            setUserLoggedOut: this.props.setUserLoggedOut,
+            getUserName: this.getUserName,
+            updateUserName: this.updateUserName
         }
 
         return (

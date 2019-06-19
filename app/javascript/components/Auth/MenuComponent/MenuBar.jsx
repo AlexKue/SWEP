@@ -9,13 +9,24 @@ import {
 import API from "../../API/API.jsx";
 import AuthedContext from '../AuthedContext.jsx';
 /* asdf */
-class MenuBar extends React.Component {
+
+const MenuBar = (props) => {
+  let context = useContext(AuthedContext);
+
+  return <MenuBarComponent context={context} {...props} />
+}
+
+class MenuBarComponent extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.logoutUser = this.logoutUser.bind(this);
     this.handleMenuEvent = this.handleMenuEvent.bind(this);
+
+    this.state = {
+      userNick: this.props.context.getUserName()
+    }
   }
 
   handleMenuEvent(event, data) {
@@ -49,7 +60,7 @@ class MenuBar extends React.Component {
               onClick={ this.handleMenuEvent }>Home</Menu.Item>
             <CategoriesMenuEntry />
             <Menu.Menu position="right">
-              <Dropdown item simple text={"Eingeloggt als: " + localStorage.getItem("userName") }>
+              <Dropdown item simple text={"Eingeloggt als: " + this.state.userNick }>
                 <Dropdown.Menu>
                   <Dropdown.Item as={Link} to="/edit-profile">Benutzereinstellungen</Dropdown.Item>
                 </Dropdown.Menu>
