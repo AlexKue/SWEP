@@ -3,7 +3,11 @@ class WhitespaceChecker
   # Returns +true+ if +query+ and +reference+ are equal ignoring case after removing all whitespace and +nil+ otherwise.
   # The case insensitivity is not restricted to SQL keywords.
   def check (query, reference)
-    (compactify(query).casecmp(compactify(reference))==0) || nil
+    compact_query = compactify(query)
+    compact_reference = compactify(reference)
+    score = 0
+    score += Float::INFINITY if compact_query.casecmp(compact_reference) == 0
+    {:score => score, :debug => {:query => compact_query, :reference => compact_reference, :aim => :equality}}
   end
 
   ##
