@@ -7,12 +7,17 @@ class ExecutionBasedChecker
   # TODO cache reference results
   def check query, reference, dbname='unidb'
     score = - Float::INFINITY
-    query_result = execute query, dbname
-    reference_result = execute reference, dbname
-    
-    score = 0 if result_eql? query_result, reference_result
 
-    {:score => score, :debug => {:query => query_result, :reference => reference_result, :aim => :equality}}
+    begin
+      query_result = execute query, dbname
+      reference_result = execute reference, dbname
+      score = 0 if result_eql? query_result, reference_result
+      debug = {:query => query_result, :reference => reference_result, :aim => :equality}
+    rescue PG::Error => e
+      debug = {:error => e}
+    end
+
+    {:score => score, :debug => debug}
   end
 
   ##
@@ -37,8 +42,6 @@ class ExecutionBasedChecker
       #rs.each do |row|
       #  puts row # TODO compare with reference
       #end
-    rescue PG::Error => e
-      puts e.message
     ensure
       con.close if con
     end
