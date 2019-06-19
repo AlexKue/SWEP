@@ -49,7 +49,11 @@ class MenuBar extends React.Component {
               onClick={ this.handleMenuEvent }>Home</Menu.Item>
             <CategoriesMenuEntry />
             <Menu.Menu position="right">
-              <Menu.Item>Eingeloggt als: { localStorage.getItem("userName") }</Menu.Item>
+              <Dropdown item simple text={"Eingeloggt als: " + localStorage.getItem("userName") }>
+                <Dropdown.Menu>
+                  <Dropdown.Item as={Link} to="/edit-profile">Benutzereinstellungen</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
               <Menu.Item 
                 name="logout"
                 id="logoutbutton"

@@ -3,13 +3,10 @@ import { Route, withRouter } from "react-router-dom";
 
 import LoginHOC from './Unauth/Login/LoginHOC.jsx';
 import RegisterHOC from './Unauth/Register/RegisterHOC.jsx';
-import UserList from './Auth/UserList/UserList.jsx';
 import TestComponent from './TestComponent.jsx';
 import { FormWrapperContextProvider } from './Unauth/FormWrapper/FormWrapperContext.jsx';
 import { AuthedWrapper } from './Auth/AuthedComponent.jsx';
 import { AuthedContextProvider } from './Auth/AuthedContext.jsx';
-
-import API from './API/API.jsx';
 
 class App extends React.Component {
 
@@ -58,7 +55,7 @@ class App extends React.Component {
   render() {
     if (this.state.isLoggedIn) {
       return (
-        <AuthedContextProvider>
+        <AuthedContextProvider setUserLoggedOut={ this.setUserLoggedOut }>
           <AuthedWrapper setUserLoggedOut={ this.setUserLoggedOut }/>
         </AuthedContextProvider>
       );

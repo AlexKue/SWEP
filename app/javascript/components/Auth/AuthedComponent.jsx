@@ -10,6 +10,7 @@ import CategoryList from './ExerciseSeries/Category/CategoryList.jsx';
 import AuthedContext from './AuthedContext.jsx';
 import { CategoryView } from './ExerciseSeries/Category/CategoryView.jsx';
 import CRUDCategoryView from './ExerciseSeries/Category/CRUDCategoryView.jsx';
+import UserSettings from './User/UserSettings.jsx';
 import TestComponent from '../TestComponent.jsx';
 
 export const AuthedWrapper = (props) => {
@@ -45,6 +46,7 @@ class AuthedComponent extends React.Component {
         <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
         <Container>
           <Route exact path="/" component={CategoryList} />
+          <Route exact path="/edit-profile" component={UserSettings} />
           <Route exact path="/category/create" render={(props) => <CRUDCategoryView {...props} />} />
           <Route exact path="/category-:categoryId/edit" render={(props) => <CRUDCategoryView {...props} />} />
           <Route exact path="/category-:categoryId" render={(props) => <CategoryView {...props} />} />

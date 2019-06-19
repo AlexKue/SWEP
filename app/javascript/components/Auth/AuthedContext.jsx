@@ -95,8 +95,10 @@ export class AuthedContextProvider extends React.Component {
             getCategoryById: this.getCategoryById,
             addCategory: this.addCategory,
             updateCategory: this.updateCategory,
-            removeCategory: this.removeCategory
+            removeCategory: this.removeCategory,
+            setUserLoggedOut: this.props.setUserLoggedOut
         }
+
         return (
             <AuthedContext.Provider value={contextValue}>
                 { this.props.children }
