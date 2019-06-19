@@ -119,6 +119,23 @@ export default class API {
       })
     })
   }
+  static updateUser(id, oldPassword, newName = null, newMail = null, showInLeaderbord = null, newPassword = null, newPasswordConf = null) {
+    console.log("updateCategory called");
+    let dataObject = {
+      id,           //TODO: Refactor with proper field
+      oldPassword   //TODO: Refactor with proper field
+    };
+    // TODO: REFACTOR WITH PROPER FIELDS
+    newName ? dataObject.newName = newName : null;
+    newMail ? dataObject.newMail = newMail : null;
+    showInLeaderbord != null ? dataObject.showInLeaderbord = showInLeaderbord : null;
+    newPassword ? dataObject.newPassword = newPassword : null;
+    newPasswordConf ? dataObject.newPasswordConf = newPasswordConf : null;
+    return new Promise((resolve, reject) => {
+      //TODO: IMPLEMENT
+      resolve(null);
+    })
+  }
   static createCategory(title, text) {
     console.log("createCategory called");
     return new Promise((resolve, reject) => {
