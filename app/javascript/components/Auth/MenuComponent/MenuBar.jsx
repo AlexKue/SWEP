@@ -23,10 +23,6 @@ class MenuBarComponent extends React.Component {
 
     this.logoutUser = this.logoutUser.bind(this);
     this.handleMenuEvent = this.handleMenuEvent.bind(this);
-
-    this.state = {
-      userNick: this.props.context.getUserName()
-    }
   }
 
   handleMenuEvent(event, data) {
@@ -60,7 +56,7 @@ class MenuBarComponent extends React.Component {
               onClick={ this.handleMenuEvent }>Home</Menu.Item>
             <CategoriesMenuEntry />
             <Menu.Menu position="right">
-              <Dropdown item simple text={"Eingeloggt als: " + this.state.userNick }>
+              <Dropdown item simple text={"Eingeloggt als: " + this.props.context.getUserName() }>
                 <Dropdown.Menu>
                   <Dropdown.Item as={Link} to="/edit-profile">Benutzereinstellungen</Dropdown.Item>
                 </Dropdown.Menu>

@@ -100,6 +100,7 @@ class UserSettingsComponent extends React.Component {
             state.newUserPass != "" ? state.newUserPass : null,
             state.newUserPassConf != "" ? state.newUserPassConf : null)
         .then(response => {
+            this.props.context.updateUserName(state.newUserNick);
             this.setState((prevState) => ({
                 success: true,
                 error: false,
