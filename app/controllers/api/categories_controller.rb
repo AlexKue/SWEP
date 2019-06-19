@@ -1,6 +1,6 @@
 class Api::CategoriesController < ApplicationController
     before_action :logged_in_user
-    before_action :admin_user, only: [:create, :destroy]
+    before_action :admin_user, only: [:create, :destroy, :update]
     
     def show
         @category = Category.find(params[:id])
@@ -28,7 +28,12 @@ class Api::CategoriesController < ApplicationController
     end
 
     def update
-        #TODO
+        @category = Category.find(params[:id])
+        if @category.update_attributes(category_params)
+            head :no_content
+        else
+            head :created
+        end
     end
     
     

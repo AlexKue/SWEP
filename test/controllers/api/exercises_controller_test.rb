@@ -27,4 +27,19 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
     }
     assert_response :forbidden
   end
+
+  test "should edit exercise as admin" do
+    @exercise = exercises(:two)
+
+    log_in_as users(:Alex)
+    patch api_exercise_path(@exercise),
+    params: {
+      exercise: {
+        title: "New Title"
+      }
+    }
+    assert_response :no_content
+    @exercise.reload
+    assert_equal @exercise.title, "New Title"
+  end
 end

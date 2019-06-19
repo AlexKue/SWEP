@@ -42,7 +42,11 @@ class Api::UsersController < ApplicationController
 
     # PATCH /api/users/:id
     def update
-        # TODO
+        if @user.update_attributes(user_params)
+            head :no_content
+        else
+            head :unprocessable_entity
+        end
     end
 
     private

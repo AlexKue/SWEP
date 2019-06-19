@@ -28,4 +28,22 @@ class Api::UsersControllerTest < ActionDispatch::IntegrationTest
     get api_users_path
     assert_response :ok
   end
+
+  test "should accept successful edit" do
+    log_in_as @user
+    email = "test@newmail.de"
+
+    patch api_user_path(@user), 
+    params: {
+      user: {
+        email: email,
+        password: "",
+        password_confirmation: ""
+      }
+    }
+    assert_response :no_content
+    @user.reload
+    assert_equal email, @user.email
+  end
+    
 end

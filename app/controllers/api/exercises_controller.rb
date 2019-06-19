@@ -1,7 +1,7 @@
 class Api::ExercisesController < ApplicationController
 
     before_action :logged_in_user
-    before_action :admin_user, only: [:create, :destroy]
+    before_action :admin_user, only: [:create, :destroy, :update]
 
     def show
         @exercise = Exercise.find(params[:id])
@@ -38,7 +38,12 @@ class Api::ExercisesController < ApplicationController
     end
 
     def update
-        # TODO
+        @exercise = Exercise.find(params[:id])
+        if @exercise.update_attributes(exercise_params)
+            head :no_content
+        else
+            head :unprocessable_entity
+        end
     end
 
     private
