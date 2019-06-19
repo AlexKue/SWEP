@@ -120,20 +120,27 @@ export default class API {
     })
   }
   static updateUser(id, oldPassword, newName = null, newMail = null, showInLeaderbord = null, newPassword = null, newPasswordConf = null) {
-    console.log("updateCategory called");
-    let dataObject = {
-      id,           //TODO: Refactor with proper field
+    console.log("updateUser called");
+    let userObject = {
+      id,           
       oldPassword   //TODO: Refactor with proper field
     };
-    // TODO: REFACTOR WITH PROPER FIELDS
-    newName ? dataObject.newName = newName : null;
-    newMail ? dataObject.newMail = newMail : null;
-    showInLeaderbord != null ? dataObject.showInLeaderbord = showInLeaderbord : null;
-    newPassword ? dataObject.newPassword = newPassword : null;
-    newPasswordConf ? dataObject.newPasswordConf = newPasswordConf : null;
+    newName ? userObject.name = newName : null;
+    newMail ? userObject.email = newMail : null;
+    showInLeaderbord != null ? userObject.showInLeaderbord = showInLeaderbord : null; //TODO: REFACTOR
+    newPassword ? userObject.password = newPassword : null;
+    newPasswordConf ? userObject.password_confirmation = newPasswordConf : null;
+    console.log({user: userObject, authenticity_token: window._token});
     return new Promise((resolve, reject) => {
-      //TODO: IMPLEMENT
-      resolve(null);
+      this.service.patch("users/" + id, {
+        user: userObject,
+        authenticity_token: window._token
+      }).then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        reject(this.getErrorList(error));
+      })
     })
   }
   static createCategory(title, text) {
