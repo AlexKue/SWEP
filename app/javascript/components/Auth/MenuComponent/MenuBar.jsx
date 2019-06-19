@@ -49,6 +49,7 @@ class MenuBar extends React.Component {
               onClick={ this.handleMenuEvent }>Home</Menu.Item>
             <CategoriesMenuEntry />
             <Menu.Menu position="right">
+              <Menu.Item>Eingeloggt als: { localStorage.getItem("userName") }</Menu.Item>
               <Menu.Item 
                 name="logout"
                 id="logoutbutton"
