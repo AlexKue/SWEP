@@ -15,7 +15,7 @@ const CategoryList = (props) => {
         cannot use a class component.
     */
     const context = useContext(AuthedContext);
-
+    
     return (
         <React.Fragment>
             <CategoryRender categories={ context.getCategories() }/>

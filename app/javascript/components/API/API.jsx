@@ -1,6 +1,8 @@
 import axios from "axios";
-
-import APIHelper from './APIHelper.jsx';
+import React from "react";
+import {
+  List
+} from "semantic-ui-react";
 
 export default class API {
 
@@ -8,6 +10,15 @@ export default class API {
     baseURL: "http://localhost:3000/api/",
     responseType: "json"
   });
+
+  static getErrorList(error) {
+    let errorData = error.response.data;
+    return (
+      <List bulleted>
+        {errorData.map((message) => <List.Item key={message}>{message}</List.Item>)}
+      </List>
+    );
+  }
 
   static loginUser(email, password) {
     console.log("loginUser called");
@@ -58,7 +69,7 @@ export default class API {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
-        reject(APIHelper.makeRegisterErrorList(error));
+        reject(this.getErrorList(error));
       });
     });
   }
@@ -121,8 +132,7 @@ export default class API {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
-        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
-        reject(error);
+        reject(this.getErrorList(error));
       })
     });
   }

@@ -119,7 +119,7 @@ class CRUDCategoryViewComponent extends React.Component {
                     success: false,
                     error: true,
                     messageTitle: "Fehler",
-                    messageContent: "Titel oder Beschreibung dürfen nicht leer sein / nicht nur aus Leerzeichen bestehen."
+                    messageContent: error
                 })
             }).finally(() => {
                 this.resetRequestPending();
