@@ -28,4 +28,10 @@ class QueryCheckerHelperTest < ActionView::TestCase
     assert_equal @checker.check(query, reference), false
   end
 
+  test "2-element WHERE clause permutation" do
+    query = "SELECT * FROM studenten WHERE name LIKE 'matthias' AND semester = 4;"
+    reference = "SELECT * FROM studenten WHERE semester = 4 AND name LIKE 'matthias';"
+    assert @checker.check query, reference
+  end
+
 end
