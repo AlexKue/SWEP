@@ -25,7 +25,7 @@ const CategoryList = (props) => {
                     to="/category/create"
                     content="Übungsserie erstellen"
                     icon="add"
-                    labelPosition="right"
+                    labelPosition="left"
                     />
             : null}
         </React.Fragment>
