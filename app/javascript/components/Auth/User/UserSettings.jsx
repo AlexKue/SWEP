@@ -48,6 +48,7 @@ class UserSettingsComponent extends React.Component {
         this.deleteUser = this.deleteUser.bind(this);
         this.resetDeleteButton = this.resetDeleteButton.bind(this);
         this.hideMessage = this.hideMessage.bind(this);
+        this.updateOldUserPass = this.updateOldUserPass.bind(this);
     }
 
     updateUserNick(event) {
@@ -80,6 +81,11 @@ class UserSettingsComponent extends React.Component {
             changed: true
         }));
     }
+    updateOldUserPass(event) {
+        this.setState({
+            oldUserPass: event.target.value
+        });
+    }
     saveSettings() {
         this.setState({
             loading: true
@@ -94,13 +100,16 @@ class UserSettingsComponent extends React.Component {
             state.newUserPass != "" ? state.newUserPass : null,
             state.newUserPassConf != "" ? state.newUserPassConf : null)
         .then(response => {
-            this.setState({
+            this.setState((prevState) => ({
                 success: true,
                 error: false,
                 messageTitle: "Erfolg",
                 messageContent: "Einstellungen erfolgreich geändert.",
-                loading: false
-            })
+                loading: false,
+                oldUserNick: prevState.newUserNick,
+                oldUserMail: prevState.newUserMail,
+                oldShowInLeaderboard: prevState.newShowInLeaderboard
+            }));
         }).catch(error => {
             this.setState({
                 success: false,
@@ -158,9 +167,16 @@ class UserSettingsComponent extends React.Component {
                         value={ this.state.newUserMail }
                         onChange={ this.updateUserMail } />
                     <Form.Input
-                        label="Passwort"
+                        label="Altes Passwort"
+                        value={ this.state.oldUserPass }
+                        onChange={ this.updateOldUserPass } 
+                        type="password"
+                        placeholder="Passwort" />
+                    <Form.Input
+                        label="Neues Passwort"
                         value={ this.state.newUserPass }
                         onChange={ this.updateUserPass } 
+                        placeholder="Passwort"
                         type="password" />
                     <Form.Input
                         value={ this.state.newUserPassConf }
@@ -180,6 +196,7 @@ class UserSettingsComponent extends React.Component {
                                     onClick={ this.saveSettings }
                                     loading={ this.state.loading }
                                     disabled={ this.state.loading }
+                                    type="submit"
                                     primary />
                             : null }
                         </Grid.Column>
@@ -191,7 +208,8 @@ class UserSettingsComponent extends React.Component {
                                 color="red"
                                 loading={ this.state.loading }
                                 disabled={ this.state.loading }
-                                style={{float: "right"}}/>
+                                style={{float: "right"}}
+                                type="reset"/>  {/* Make reset to prevent default RETURN behaviour */}
                         </Grid.Column>
                     </Grid>
                     <Message
