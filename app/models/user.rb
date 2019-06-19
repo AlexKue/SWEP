@@ -16,7 +16,8 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX }
   
   validates :password,  presence: true,
-                        length: { minimum: 8}
+                        length: { minimum: 8},
+                        allow_nil: true
   has_secure_password                      
   
   def as_json(options={})
