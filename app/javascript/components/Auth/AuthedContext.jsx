@@ -24,17 +24,17 @@ export class AuthedContextProvider extends React.Component {
                 let categories = new Map();
                 let totalCategoriesCount = response.data.count;
                 let categoriesResponse = response.data.data;
-                for (let [key, category] of Object.entries(categoriesResponse)) {
-                    console.log(categories);
+                categoriesResponse.map((category) => {
                     categories.set(category.id,
-                        new Category(
-                            category.title,
-                            category.text,
-                            0,              // TODO: Server is not sending this information so far
-                            0,              // TODO: Server is not sending this information so far
-                            category.id
-                        ));
-                }
+                    new Category(
+                        category.title,
+                        category.text,
+                        0,              // TODO: Server is not sending this information so far
+                        0,              // TODO: Server is not sending this information so far
+                        category.id
+                    ));
+                });
+                
                 this.setState({
                     categories: categories,
                     totalCategoriesCount: totalCategoriesCount
