@@ -25,13 +25,19 @@ class QueryCheckerHelperTest < ActionView::TestCase
   test "(way too) simple syntax check" do
     query = "SLCT * FRM test_db WHR a > 5;"
     reference = "SELECT * \nFROM test_db\nWHERE a > 5;"
-    assert_equal @checker.check(query, reference), false
+    assert_equal false, @checker.check(query, reference)
   end
 
   test "2-element WHERE clause permutation" do
-    query = "SELECT * FROM studenten WHERE name LIKE 'matthias' AND semester = 4;"
+    query = "SELECT * FROM studenten WHERE name LIKE 'oliver' AND semester = 4;"
     reference = "SELECT * FROM studenten WHERE semester = 4 AND name LIKE 'matthias';"
     assert @checker.check query, reference
+  end
+
+  test "forgot one predicate" do
+    query = "SELECT * FROM studenten;"
+    reference = "SELECT * FROM studenten WHERE name LIKE 'Xenokrates';"
+    assert_equal false, @checker.check(query, reference)
   end
 
 end
