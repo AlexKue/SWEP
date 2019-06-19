@@ -39,11 +39,11 @@ export class AuthedContextProvider extends React.Component {
                     categories: categories,
                     totalCategoriesCount: totalCategoriesCount
                 });
-                this.isFetching = false;    // For future fetch purposes
             })
             .catch(error => {               // This shouldn't happen, so for debug purpose we output this to console
-                this.isFetching = false;    // For future fetch purposes
                 console.log(error);
+            }).finally(() => {
+                this.isFetching = false;    // End blocking
             })
         }
     }
