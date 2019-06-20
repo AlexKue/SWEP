@@ -10,7 +10,8 @@ export class AuthedContextProvider extends React.Component {
     state = {
         categories: null,
         totalCategoriesCount: 0,
-        userName: localStorage.getItem("userName")
+        userName: localStorage.getItem("userName"),
+        initialized: false
     }
 
     forceUpdate = () => {
@@ -18,7 +19,7 @@ export class AuthedContextProvider extends React.Component {
             state: this.state
         })
     }
-    fetchCategories = () => {                   // We have to fetch them and build them
+    initialize = () => {                   // We have to fetch them and build them
         if (!this.isFetching) {
             this.isFetching = true;             // As promises are async, we need to block further fetches 
             API.getCategories()
@@ -46,11 +47,17 @@ export class AuthedContextProvider extends React.Component {
                 console.log(error);
             }).finally(() => {
                 this.isFetching = false;    // End blocking
+                this.setState({
+                    initialized: true
+                })
             })
         }
     }
     getCategories = () => {
         return this.state.categories;
+    }
+    isInitialized = () => {
+        return this.state.initialized;
     }
     getCategoryById = (Id) => {
         return this.state.categories.get(Id);
@@ -101,14 +108,15 @@ export class AuthedContextProvider extends React.Component {
     render() {
         const contextValue = {
             getCategories: this.getCategories,
-            fetchCategories: this.fetchCategories,
+            initialize: this.initialize,
             getCategoryById: this.getCategoryById,
             addCategory: this.addCategory,
             updateCategory: this.updateCategory,
             removeCategory: this.removeCategory,
             setUserLoggedOut: this.props.setUserLoggedOut,
             getUserName: this.getUserName,
-            updateUserName: this.updateUserName
+            updateUserName: this.updateUserName,
+            isInitialized: this.isInitialized
         }
 
         return (

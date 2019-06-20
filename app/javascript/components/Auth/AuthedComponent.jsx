@@ -17,12 +17,12 @@ import TestComponent from '../TestComponent.jsx';
 export const AuthedWrapper = (props) => {
   const context = useContext(AuthedContext);
 
-  if (context.getCategories()) {
+  if (context.isInitialized()) {
     return (
       <AuthedComponent context={context} setUserLoggedOut={props.setUserLoggedOut}/>
     )
   } else {
-    context.fetchCategories();
+    context.initialize();
     return (
       <Container>
         <Loader active>Lädt...</Loader>
