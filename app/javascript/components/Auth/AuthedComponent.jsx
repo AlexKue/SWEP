@@ -25,7 +25,7 @@ export const AuthedWrapper = (props) => {
     context.initialize();
     return (
       <Container>
-        <Loader active>Lädt...</Loader>
+        <Loader active>{ context.loadText }</Loader>
       </Container>
     )
   }

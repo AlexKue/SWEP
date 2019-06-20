@@ -11,7 +11,8 @@ export class AuthedContextProvider extends React.Component {
         categories: null,
         totalCategoriesCount: 0,
         userName: localStorage.getItem("userName"),
-        initialized: false
+        initialized: false,
+        loadText: "Starte..."
     }
 
     forceUpdate = () => {
@@ -24,8 +25,12 @@ export class AuthedContextProvider extends React.Component {
             this.isFetching = true;             // As promises are async, we need to block further fetches
             let categories = new Map();
             let totalCategoriesCount = 0;
+            let promiseExerciseList = [];
             API.getCategories()
             .then(response => {
+                this.setState({
+                    loadText: "Lade Serien..."
+                });
                 totalCategoriesCount = response.data.count;
                 let categoriesResponse = response.data.data;
                 categoriesResponse.map((category) => {
@@ -40,16 +45,39 @@ export class AuthedContextProvider extends React.Component {
                 });
             })
             .then(() => {
-                console.log(categories);
+                this.setState({
+                    loadText: "Lade Aufgaben..."
+                });
+                categories.forEach((category, index) => {
+                    promiseExerciseList.push(new Promise((resolve, reject) => {
+                        API.getExercisesForCategory(category.id)
+                        .then(response => {
+                            let totalExerciseCount = response.data.count;
+                            let exerciseIdListResponse = response.data.data;
+                            let exerciseIdList = [];
+                            for (const exercise of exerciseIdListResponse) {
+                                exerciseIdList.push(exercise.id);
+                            }
+                            category.totalExerciseCount = totalExerciseCount;
+                            category.exerciseIdList = exerciseIdList;
+                            resolve(true);
+                        }).catch(error => {
+                            console.error(error);
+                            reject(error);
+                        })
+                    }));
+                })
             })
             .catch(error => {               // This shouldn't happen, so for debug purpose we output this to console
                 console.log(error);
             }).finally(() => {
-                this.isFetching = false;    // End blocking
-                this.setState({
-                    initialized: true,
-                    categories: categories,
-                    totalCategoriesCount: totalCategoriesCount
+                Promise.all(promiseExerciseList).then(response => {
+                    this.isFetching = false;    // End blocking
+                    this.setState({
+                        initialized: true,
+                        categories: categories,
+                        totalCategoriesCount: totalCategoriesCount
+                    });
                 });
             })
         }
@@ -117,7 +145,8 @@ export class AuthedContextProvider extends React.Component {
             setUserLoggedOut: this.props.setUserLoggedOut,
             getUserName: this.getUserName,
             updateUserName: this.updateUserName,
-            isInitialized: this.isInitialized
+            isInitialized: this.isInitialized,
+            loadText: this.state.loadText
         }
 
         return (
