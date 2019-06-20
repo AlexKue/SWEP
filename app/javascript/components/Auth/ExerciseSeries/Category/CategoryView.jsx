@@ -28,8 +28,7 @@ export const CategoryView = (props) => {    // props is containing the Router co
                             to={"/category-" + categoryId + "/create-exercise"}
                             content="Aufgabe erstellen" 
                             icon="add"
-                            labelPosition="left"
-                            disabled />
+                            labelPosition="left" />
                     </Grid.Column>
                     <Grid.Column>
                         <Button
