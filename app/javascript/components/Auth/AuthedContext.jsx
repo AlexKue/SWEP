@@ -21,11 +21,12 @@ export class AuthedContextProvider extends React.Component {
     }
     initialize = () => {                   // We have to fetch them and build them
         if (!this.isFetching) {
-            this.isFetching = true;             // As promises are async, we need to block further fetches 
+            this.isFetching = true;             // As promises are async, we need to block further fetches
+            let categories = new Map();
+            let totalCategoriesCount = 0;
             API.getCategories()
             .then(response => {
-                let categories = new Map();
-                let totalCategoriesCount = response.data.count;
+                totalCategoriesCount = response.data.count;
                 let categoriesResponse = response.data.data;
                 categoriesResponse.map((category) => {
                     categories.set(category.id,
@@ -37,19 +38,19 @@ export class AuthedContextProvider extends React.Component {
                         category.id
                     ));
                 });
-                
-                this.setState({
-                    categories: categories,
-                    totalCategoriesCount: totalCategoriesCount
-                });
+            })
+            .then(() => {
+                console.log(categories);
             })
             .catch(error => {               // This shouldn't happen, so for debug purpose we output this to console
                 console.log(error);
             }).finally(() => {
                 this.isFetching = false;    // End blocking
                 this.setState({
-                    initialized: true
-                })
+                    initialized: true,
+                    categories: categories,
+                    totalCategoriesCount: totalCategoriesCount
+                });
             })
         }
     }
