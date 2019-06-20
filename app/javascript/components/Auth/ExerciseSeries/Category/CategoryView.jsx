@@ -12,7 +12,8 @@ export const CategoryView = (props) => {    // props is containing the Router co
     let context = useContext(AuthedContext);
     let categoryId = parseInt(props.match.params.categoryId);
     let category = context.getCategories().get(categoryId);
-
+    let localUrl = props.history.location.pathname;
+    
     return (
         <React.Fragment>
             <CategoryViewComponent

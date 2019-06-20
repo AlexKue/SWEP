@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
     Grid,
     Header,
@@ -9,7 +9,19 @@ import {
 import CodeMirror from "react-codemirror";
 require("codemirror/mode/sql/sql");
 
-export default class Exercise extends React.Component {
+import AuthedContext from '../../AuthedContext.jsx';
+
+const ExerciseView = (props) => {
+    let context = useContext(AuthedContext);
+    console.log(props);
+
+    return <ExerciseViewComponent
+        title="Static"
+        description="static"
+        storedQuery="static" />
+}
+
+class ExerciseViewComponent extends React.Component {
     constructor(props) {
         super(props);
 
@@ -71,3 +83,5 @@ export default class Exercise extends React.Component {
         );
     }
 }
+
+export default ExerciseView;
