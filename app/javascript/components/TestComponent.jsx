@@ -151,7 +151,7 @@ export default class TestComponent extends React.Component {
     })
   }
   getexerciselisttest() {
-    API.getExercises(this.state.categoryId)
+    API.getExercisesForCategory(this.state.categoryId)
     .then(response => {
       console.log(response);
     }).catch(error => {

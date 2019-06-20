@@ -212,7 +212,7 @@ export default class API {
       resolve(null);  //TODO: Implement
     });
   }
-  static getExercises(id, offset = 0, limit = 30) {
+  static getExercisesForCategory(id, offset = 0, limit = 30) {
     return new Promise((resolve, reject) => {
       this.service.get("categories/" + id + "/exercises", {
         offset: offset,
