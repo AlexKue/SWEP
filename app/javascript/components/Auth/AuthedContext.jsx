@@ -48,7 +48,7 @@ export class AuthedContextProvider extends React.Component {
                 this.setState({
                     loadText: "Lade Aufgaben..."
                 });
-                categories.forEach((category, index) => {
+                for (let [categoryId, category] of categories) {
                     promiseExerciseList.push(new Promise((resolve, reject) => {
                         API.getExercisesForCategory(category.id)
                         .then(response => {
@@ -72,7 +72,7 @@ export class AuthedContextProvider extends React.Component {
                             reject(error);
                         })
                     }));
-                })
+                }
             })
             .catch(error => {               // This shouldn't happen, so for debug purpose we output this to console
                 console.log(error);
