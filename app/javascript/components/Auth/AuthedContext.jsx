@@ -9,6 +9,7 @@ export class AuthedContextProvider extends React.Component {
     isFetching = false;
     state = {
         categories: null,
+        exercises: null,
         totalCategoriesCount: 0,
         userName: localStorage.getItem("userName"),
         initialized: false,
@@ -24,6 +25,7 @@ export class AuthedContextProvider extends React.Component {
         if (!this.isFetching) {
             this.isFetching = true;             // As promises are async, we need to block further fetches
             let categories = new Map();
+            let exercises = new Map();
             let totalCategoriesCount = 0;
             let promiseExerciseList = [];
             API.getCategories()
@@ -54,18 +56,19 @@ export class AuthedContextProvider extends React.Component {
                         .then(response => {
                             let totalExerciseCount = response.data.count;
                             let exerciseListResponse = response.data.data;
-                            let exerciseMap = new Map();
+                            let exerciseIdSet = new Set();
                             for (const exercise of exerciseListResponse) {
-                                exerciseMap.set(exercise.id, new Exercise(
+                                exercises.set(exercise.id, new Exercise(
                                     exercise.title,
                                     "",
                                     exercise.points,
                                     false,
                                     exercise.id
                                 ));
+                                exerciseIdSet.add(exercise.id);
                             }
                             category.totalExerciseCount = totalExerciseCount;
-                            category.exerciseMap = exerciseMap;
+                            category.exerciseIdSet = exerciseIdSet;
                             resolve(true);
                         }).catch(error => {
                             console.error(error);
@@ -82,6 +85,7 @@ export class AuthedContextProvider extends React.Component {
                     this.setState({
                         initialized: true,
                         categories: categories,
+                        exercises: exercises,
                         totalCategoriesCount: totalCategoriesCount
                     });
                 });
@@ -91,11 +95,20 @@ export class AuthedContextProvider extends React.Component {
     getCategories = () => {
         return this.state.categories;
     }
+    getExercises = () => {
+        return this.state.exercises;
+    }
     isInitialized = () => {
         return this.state.initialized;
     }
     getCategoryById = (Id) => {
         return this.state.categories.get(Id);
+    }
+    getExerciseById = (Id) => {
+        return this.state.exercises.get(Id);
+    }
+    getExercisesForCategory = (Id) => {
+        return this.state.categories.get(Id).exerciseIdSet;
     }
     addCategory = (
         title,
@@ -143,8 +156,11 @@ export class AuthedContextProvider extends React.Component {
     render() {
         const contextValue = {
             getCategories: this.getCategories,
+            getExercises: this.getExercises,
+            getExercisesForCategory: this.getExercisesForCategory,
             initialize: this.initialize,
             getCategoryById: this.getCategoryById,
+            getExerciseById: this.getExerciseById,
             addCategory: this.addCategory,
             updateCategory: this.updateCategory,
             removeCategory: this.removeCategory,
@@ -170,14 +186,14 @@ class Category {
         solvedExerciseCount,
         totalExerciseCount,
         id,
-        exerciseMap = null
+        exerciseIdSet = null
     ) {
         this.title = title;
         this.description = description;
         this.solvedExerciseCount = solvedExerciseCount;
         this.totalExerciseCount = totalExerciseCount;
         this.id = id;
-        this.exerciseMap = exerciseMap;
+        this.exerciseIdSet = exerciseIdSet;
     }
 }
 

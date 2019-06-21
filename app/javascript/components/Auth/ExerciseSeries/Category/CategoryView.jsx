@@ -21,8 +21,9 @@ export const CategoryView = (props) => {    // props is containing the Router co
             <CategoryViewComponent
                     title={ category.title }
                     description={ category.description }
-                    exercises={ exercises }
+                    exerciseIdSet={ category.exerciseIdSet }
                     localUrl={ localUrl }
+                    context={ context }
                     {...props} />
             { window._userRole === "admin" ?
                 <Grid columns={2} stackable>
@@ -52,8 +53,10 @@ export const CategoryView = (props) => {    // props is containing the Router co
 class CategoryViewComponent extends React.Component {
     
     render() {
+        let context = this.props.context;
         let exerciseListItems = 
-        [...this.props.exercises].map(([id, exercise]) => {
+        [...this.props.exerciseIdSet].map(exerciseId => {
+            let exercise = context.getExerciseById(exerciseId);
             return <ExerciseListItem
                 title={ exercise.title }
                 totalExercisePoints={ exercise.totalExercisePoints }

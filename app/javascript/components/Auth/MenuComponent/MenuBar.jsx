@@ -81,7 +81,7 @@ const CategoriesMenuEntry = () => {
   return (
     <Dropdown item simple text="Übungsserien">
       <Dropdown.Menu>
-        <CategoriesMenuEntryRender categories={ context.getCategories() }/>
+        <CategoriesMenuEntryRender categories={ context.getCategories() } context={ context }/>
       </Dropdown.Menu>
     </Dropdown>
   );
@@ -95,7 +95,7 @@ class CategoriesMenuEntryRender extends React.Component {
           <i className='dropdown icon' />
           <span className='text'>{ category.title }</span>
           <Dropdown.Menu>
-            <ExercisesMenuEntryRender exercises={category.exerciseMap} categoryId={category.id} /> 
+            <ExercisesMenuEntryRender exerciseIdSet={category.exerciseIdSet} categoryId={category.id} context={ this.props.context }/> 
           </Dropdown.Menu>
         </Dropdown.Item>
       )
@@ -107,9 +107,14 @@ class CategoriesMenuEntryRender extends React.Component {
 
 class ExercisesMenuEntryRender extends React.Component {
   render() {
-    let exerciseMenuEntries = [...this.props.exercises].map(([id, exercise]) => {
+    let exerciseMenuEntries = [...this.props.exerciseIdSet].map(exerciseId => {
       return (
-        <Dropdown.Item key={"exc" + exercise.id} as={Link} to={"/category-" + this.props.categoryId + "/exercise-" + exercise.id}>{ exercise.title }</Dropdown.Item>
+        <Dropdown.Item 
+          key={"exc" + exerciseId} 
+          as={Link} 
+          to={"/category-" + this.props.categoryId + "/exercise-" + exerciseId}>
+          { this.props.context.getExerciseById(exerciseId).title }
+        </Dropdown.Item>
       )
     });
 
