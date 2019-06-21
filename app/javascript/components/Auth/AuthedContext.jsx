@@ -53,13 +53,19 @@ export class AuthedContextProvider extends React.Component {
                         API.getExercisesForCategory(category.id)
                         .then(response => {
                             let totalExerciseCount = response.data.count;
-                            let exerciseIdListResponse = response.data.data;
-                            let exerciseIdList = [];
-                            for (const exercise of exerciseIdListResponse) {
-                                exerciseIdList.push(exercise.id);
+                            let exerciseListResponse = response.data.data;
+                            let exerciseMap = new Map();
+                            for (const exercise of exerciseListResponse) {
+                                exerciseMap.set(exercise.id, new Exercise(
+                                    exercise.title,
+                                    "",
+                                    -1,
+                                    false,
+                                    exercise.id
+                                ));
                             }
                             category.totalExerciseCount = totalExerciseCount;
-                            category.exerciseIdList = exerciseIdList;
+                            category.exerciseMap = exerciseMap;
                             resolve(true);
                         }).catch(error => {
                             console.error(error);
@@ -73,6 +79,7 @@ export class AuthedContextProvider extends React.Component {
             }).finally(() => {
                 Promise.all(promiseExerciseList).then(response => {
                     this.isFetching = false;    // End blocking
+                    console.log(categories);
                     this.setState({
                         initialized: true,
                         categories: categories,
@@ -164,18 +171,30 @@ class Category {
         solvedExerciseCount,
         totalExerciseCount,
         id,
-        exerciseIdList = null           // List of the exercise IDs belonging to that category
-        // will be assigned when the category is opened the first time, as this is another request
+        exerciseMap = null
     ) {
         this.title = title;
         this.description = description;
         this.solvedExerciseCount = solvedExerciseCount;
         this.totalExerciseCount = totalExerciseCount;
         this.id = id;
-        this.exerciseIdList = exerciseIdList;
+        this.exerciseMap = exerciseMap;
     }
 }
 
 class Exercise {
+    constructor(
+        title,
+        description,
+        totalExercisePoints,
+        solved,
+        id
+    ) {
+        this.title = title;
+        this.description = description;
+        this.totalExercisePoints = totalExercisePoints;
+        this.solved = solved;
+        this.id = id;
+    }
 
 }
