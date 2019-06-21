@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import {
-    Button
+    Button,
+    Icon
 } from "semantic-ui-react";
 
-import CategoryListItem from "./CategoryListItem.jsx";
 import AuthedContext from '../../AuthedContext.jsx';
-import ThreeColumnTable from '../../Components/ThreeColumnTable.jsx';
+import ThreeColumnTable, { ThreeColumnTableRow } from '../../Components/ThreeColumnTable.jsx';
 
 
 const CategoryList = (props) => {
@@ -48,6 +48,31 @@ class CategoryRender extends React.Component {
             <ThreeColumnTable title="Übungsserien">
                 { categoryListItems }
             </ThreeColumnTable>
+        );
+    }
+}
+
+class CategoryListItem extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.props.admin ? 
+        this.state = {
+            linkText: "Erstellen"
+        } : 
+        this.state = {
+            linkText: "Gehe zu"
+        };
+    }
+
+    // Edit & Delete Button will show in the category itself
+    render() {
+        return (
+            <ThreeColumnTableRow
+                firstContent={ this.props.title }
+                secondContent={ this.props.solvedExerciseCount + "/" + this.props.totalExerciseCount}
+                thirdContent={<Link to={"/category-" + this.props.categoryId }>Gehe zu <Icon name="arrow right" /></Link>}
+            />
         );
     }
 }
