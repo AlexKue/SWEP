@@ -95,13 +95,25 @@ class CategoriesMenuEntryRender extends React.Component {
           <i className='dropdown icon' />
           <span className='text'>{ category.title }</span>
           <Dropdown.Menu>
-            <Dropdown.Item as={Link} to="/static">TODO: EXERCISES</Dropdown.Item>
+            <ExercisesMenuEntryRender exercises={category.exerciseMap} categoryId={category.id} /> 
           </Dropdown.Menu>
         </Dropdown.Item>
       )
     });
 
     return categoryMenuEntries;
+  }
+}
+
+class ExercisesMenuEntryRender extends React.Component {
+  render() {
+    let exerciseMenuEntries = [...this.props.exercises].map(([id, exercise]) => {
+      return (
+        <Dropdown.Item key={"exc" + exercise.id} as={Link} to={"/category-" + this.props.categoryId + "/exercise-" + exercise.id}>{ exercise.title }</Dropdown.Item>
+      )
+    });
+
+    return exerciseMenuEntries;
   }
 }
 

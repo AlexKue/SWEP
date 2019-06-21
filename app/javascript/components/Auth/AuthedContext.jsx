@@ -79,7 +79,6 @@ export class AuthedContextProvider extends React.Component {
             }).finally(() => {
                 Promise.all(promiseExerciseList).then(response => {
                     this.isFetching = false;    // End blocking
-                    console.log(categories);
                     this.setState({
                         initialized: true,
                         categories: categories,
