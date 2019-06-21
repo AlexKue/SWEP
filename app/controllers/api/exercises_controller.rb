@@ -48,7 +48,7 @@ class Api::ExercisesController < ApplicationController
 
     private
         def exercise_params
-            params.require(:exercise).permit(:title, :text, :points, queries: [:query] )
+            params.require(:exercise).permit(:title, :text, :points, queries_attributes: [:id, :query] )
         end
             
 end
