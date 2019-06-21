@@ -59,7 +59,7 @@ export class AuthedContextProvider extends React.Component {
                                 exerciseMap.set(exercise.id, new Exercise(
                                     exercise.title,
                                     "",
-                                    -1,
+                                    exercise.points,
                                     false,
                                     exercise.id
                                 ));

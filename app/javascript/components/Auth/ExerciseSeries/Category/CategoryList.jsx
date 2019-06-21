@@ -38,11 +38,10 @@ class CategoryRender extends React.Component {
         [...this.props.categories].map(([id, category]) => 
         <CategoryListItem
             title={ category.title}
-            description={ category.description }
             solvedExerciseCount={ category.solvedExerciseCount }
             totalExerciseCount={ category.totalExerciseCount }
             categoryId={ category.id} 
-            key={ "us" + category.id }/>);
+            key={ "usl" + category.id }/>);
         
         return (
             <ThreeColumnTable title="Übungsserien">
@@ -53,17 +52,6 @@ class CategoryRender extends React.Component {
 }
 
 class CategoryListItem extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.props.admin ? 
-        this.state = {
-            linkText: "Erstellen"
-        } : 
-        this.state = {
-            linkText: "Gehe zu"
-        };
-    }
 
     // Edit & Delete Button will show in the category itself
     render() {
