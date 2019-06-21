@@ -1,4 +1,5 @@
 import React, { useContext} from "react";
+import { Link } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import {
     Segment,
@@ -55,15 +56,19 @@ class CRUDExerciseViewComponent extends React.Component {
         const updatedList = this.state.queryComponentList.concat(
             <List.Item>
                 <Form.Field>
-                    <label>Query { this.state.queryComponentList.length + 1 }</label>
+                    <label><Link to="#" onClick={ this.deleteQuery } style={{color: "red"}}>Query Löschen</Link></label>
                     <CodeMirror
-                        options={ this.state.codeMirrorOptions } />
+                        options={ this.state.codeMirrorOptions } 
+                        value="INSERT INTO Here VALUES('Query')"/>
                 </Form.Field>
             </List.Item>
         );
         this.setState({
             queryComponentList: updatedList
         });
+    }
+    deleteQuery = () => {
+        console.log("TODO");
     }
     crudExercise = () => {
         // TODO
