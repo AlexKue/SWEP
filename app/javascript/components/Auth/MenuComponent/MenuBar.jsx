@@ -94,9 +94,11 @@ class CategoriesMenuEntryRender extends React.Component {
         <Dropdown.Item key={"usm" + category.id} as={Link} to={"/category-" + category.id}>
           <i className='dropdown icon' />
           <span className='text'>{ category.title }</span>
-          <Dropdown.Menu>
-            <ExercisesMenuEntryRender exerciseIdSet={category.exerciseIdSet} categoryId={category.id} context={ this.props.context }/> 
-          </Dropdown.Menu>
+          { category.exerciseIdSet.size > 0 ? 
+            <Dropdown.Menu>
+              <ExercisesMenuEntryRender exerciseIdSet={category.exerciseIdSet} categoryId={category.id} context={ this.props.context }/> 
+            </Dropdown.Menu>
+            : null}
         </Dropdown.Item>
       )
     });
