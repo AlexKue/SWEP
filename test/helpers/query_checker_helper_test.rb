@@ -5,14 +5,14 @@ class QueryCheckerHelperTest < ActionView::TestCase
   end
 
   test "case insensitivity" do
-    query = "select * from test_db where a > 5;"
-    reference = "SELECT * \nFROM test_db\nWHERE a > 5;"
+    query = "select * from studenten where semester > 5;"
+    reference = "SELECT * \nFROM semester\nWHERE semester > 5;"
     assert @checker.correct? query, reference
   end
 
   test "whitespace insensitivity" do
-    query = "SELECT    * FROM   test_db   WHERE a>5;"
-    reference = "SELECT * \nFROM test_db\nWHERE a > 5;"
+    query = "SELECT    * FROM   studenten   WHERE semester>5;"
+    reference = "SELECT * \nFROM studenten\nWHERE semester > 5;"
     assert @checker.correct? query, reference
   end
 
@@ -23,8 +23,8 @@ class QueryCheckerHelperTest < ActionView::TestCase
   end
 
   test "(way too) simple syntax check" do
-    query = "SLCT * FRM test_db WHR a > 5;"
-    reference = "SELECT * \nFROM test_db\nWHERE a > 5;"
+    query = "SLCT * FRM studenten WHR semester > 5;"
+    reference = "SELECT * \nFROM studenten\nWHERE semester > 5;"
     assert_equal false, @checker.correct?(query, reference)
   end
 
