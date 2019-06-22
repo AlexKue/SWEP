@@ -6,7 +6,7 @@ class QueryCheckerHelperTest < ActionView::TestCase
 
   test "case insensitivity" do
     query = "select * from studenten where semester > 5;"
-    reference = "SELECT * \nFROM semester\nWHERE semester > 5;"
+    reference = "SELECT * \nFROM studenten\nWHERE semester > 5;"
     assert @checker.correct? query, reference
   end
 
@@ -19,7 +19,7 @@ class QueryCheckerHelperTest < ActionView::TestCase
   test "whitespace insensitivity does not affect strings in query" do
     query = "SELECT * FROM professoren WHERE name LIKE 'oliver giften';"
     reference = "SELECT * FROM professoren WHERE name LIKE 'oli vergiften';"
-    assert_nil @checker.correct? query, reference
+    assert_equal false, @checker.correct?(query, reference)
   end
 
   test "(way too) simple syntax check" do
