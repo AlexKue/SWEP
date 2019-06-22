@@ -102,7 +102,7 @@ class CRUDCategoryViewComponent extends React.Component {
             }).finally(() => {
                 this.resetRequestPending();
             })
-        } else {
+        } else {    // Component needs to be created
             API.createCategory(this.state.title, this.state.description)
             .then(response => {
                 this.state.context.addCategory(
@@ -110,8 +110,7 @@ class CRUDCategoryViewComponent extends React.Component {
                     this.state.description,
                     0,
                     0,
-                    response.data.id,
-                    null
+                    response.data.id
                 );
                 this.setState({
                     success: true,

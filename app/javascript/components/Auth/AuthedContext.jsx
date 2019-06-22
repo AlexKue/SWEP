@@ -186,7 +186,7 @@ class Category {
         solvedExerciseCount,
         totalExerciseCount,
         id,
-        exerciseIdSet = null
+        exerciseIdSet = new Set()
     ) {
         this.title = title;
         this.description = description;
