@@ -90,8 +90,13 @@ class CRUDCategoryViewComponent extends React.Component {
         if (this.state.id) {    // Component was opened for edit
             API.updateCategory(this.state.id, this.state.title, this.state.description)
             .then(response => {
-                // TODO: IMPLEMENT proper response
                 this.state.context.updateCategory(this.state.id, this.state.title, this.state.description);
+                this.setState({
+                    success: true,
+                    error: false,
+                    messageTitle: "Erfolg",
+                    messageContent: "Die Änderungen wurden erfolgreich übernommen."
+                });
             }).catch(error => {
                 //TODO: IMPLEMENT proper response
             }).finally(() => {

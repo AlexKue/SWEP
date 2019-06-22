@@ -209,7 +209,19 @@ export default class API {
   static updateCategory(id, title, description) {
     console.log("updateCateogry called: TODO, this function is currently not implemented!");
     return new Promise((resolve, reject) => {
-      resolve(null);  //TODO: Implement
+      this.service.patch("categories/" + id, {
+        category: {
+          title: title,
+          text: description
+        },
+        authenticity_token: window._token
+      }).then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
     });
   }
   static getExercisesForCategory(id, offset = 0, limit = 30) {
