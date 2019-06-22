@@ -15,9 +15,9 @@ class QueryChecker
   def correct? (query, reference, confidence=0)
     result = check query, reference
     
-    if result[:score] >= confidence
+    if result[:score] > confidence
       true
-    elsif result[:score] <= -confidence
+    elsif result[:score] < -confidence
       false
     else 
       nil

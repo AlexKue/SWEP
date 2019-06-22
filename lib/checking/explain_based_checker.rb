@@ -14,7 +14,7 @@ class ExplainBasedChecker
   ##
   # Checks +query+ against +reference+ by comapring the +Node Type+ and the +Filter+ attributes.
   def check (query, reference, dbname='unidb')
-    score = 0
+    score = -1
     begin
       query_explanation = explain query, dbname
       reference_explanation = explain reference, dbname

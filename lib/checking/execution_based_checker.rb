@@ -25,12 +25,12 @@ class ExecutionBasedChecker
   # It is drawn out of the `check` method to provide a better testability.
   def result_eql? query_result, reference_result
     # result tables must have the same size
-    false if query_result.ntuples != reference_result.ntuples
-    false if query_result.nfields != reference_result.nfields
+    return false if query_result.ntuples != reference_result.ntuples
+    return false if query_result.nfields != reference_result.nfields
     
     # result tables must not have any different elements
-    false if not (query_result.filter do |row| !reference_result.include? row end).empty?
-    false if not (reference_result.filter do |row| !query_result.include? row end).empty?
+    return false if not (query_result.filter do |row| !reference_result.include? row end).empty?
+    return false if not (reference_result.filter do |row| !query_result.include? row end).empty?
   
     true
   end
