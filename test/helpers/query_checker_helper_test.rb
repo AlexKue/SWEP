@@ -30,7 +30,7 @@ class QueryCheckerHelperTest < ActionView::TestCase
 
   test "2-element WHERE clause permutation" do
     query = "SELECT * FROM studenten WHERE name LIKE 'oliver' AND semester = 4;"
-    reference = "SELECT * FROM studenten WHERE semester = 4 AND name LIKE 'matthias';"
+    reference = "SELECT * FROM studenten WHERE semester = 4 AND name LIKE 'oliver';"
     assert @checker.correct? query, reference
   end
 
