@@ -18,7 +18,6 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
           }
         }
       assert_response :created
-      puts Query.all
       end
     end
   end
@@ -36,17 +35,33 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should edit exercise as admin" do
-    @exercise = exercises(:two)
+    @exercise = exercises(:one)
 
     log_in_as users(:Alex)
-    patch api_exercise_path(@exercise),
-    params: {
+    assert_no_difference "@exercise.queries.count" do
+      patch api_exercise_path(@exercise),
+      params: {
       exercise: {
-        title: "New Title"
+        title: "New Title",
+        queries_attributes: [
+          {
+            id: queries(:one).id,
+            query:"SELECT new FROM table"
+          },
+          {
+            id: queries(:two).id,
+            destroy: true
+          },
+          {
+            query: "SELECT table FROM newtable"
+          }
+        ]
+        }
       }
-    }
-    assert_response :no_content
-    @exercise.reload
-    assert_equal @exercise.title, "New Title"
+      assert_response :no_content
+      @exercise.reload
+      assert_equal @exercise.title, "New Title"
+      assert_equal @exercise.queries.find(queries(:one).id).query, "SELECT new FROM table"
+    end
   end
 end
