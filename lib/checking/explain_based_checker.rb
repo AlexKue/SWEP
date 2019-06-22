@@ -13,14 +13,17 @@ class ExplainBasedChecker
 
   ##
   # Checks +query+ against +reference+ by comapring the +Node Type+ and the +Filter+ attributes.
-  def check (query, reference)
-    query_explanation = explain query
-    reference_explanation = explain reference
-    if query_explanation["Node Type"].eql?(reference_explanation["Node Type"]) &&
-       query_explanation["Filter"].eql?(reference_explanation["Filter"])
-       true
-    else nil
+  def check (query, reference, dbname='unidb')
+    score = -1
+    begin
+      query_explanation = explain query, dbname
+      reference_explanation = explain reference, dbname
+      score = 1 if query_explanation["Node Type"].eql?(reference_explanation["Node Type"]) && query_explanation["Filter"].eql?(reference_explanation["Filter"])
+      debug = {:query => query_explanation, :reference => reference_explanation, :aim => :equality, :dbname => dbname}
+    rescue PG::Error => e
+      debug = {:error => e.message}
     end
+    {:score => score, :debug => debug}
   end
 
   ##
@@ -30,8 +33,6 @@ class ExplainBasedChecker
       con = PG.connect :dbname => dbname # TODO really change this
       rs = con.exec "EXPLAIN (FORMAT JSON) " + query # TODO sanitize
       (JSON.parse rs[0]["QUERY PLAN"])[0]["Plan"]
-    rescue PG::Error => e
-      puts e.message
     ensure
       con.close if con
     end
