@@ -1,0 +1,9 @@
+one: 
+  query: "SELECT * FROM table"
+  exercise: one
+two: 
+  query: "SELECT * FROM table2"
+  exercise: one
+three: 
+  query: "SELECT * FROM table3 ORDER BY date"
+  exercise: one
