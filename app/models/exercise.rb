@@ -3,7 +3,6 @@ class Exercise < ApplicationRecord
     has_many :users,    through: :exercise_solvers,
                         dependent: :destroy
     has_many :queries, dependent: :destroy
-    accepts_nested_attributes_for :queries, allow_destroy: true
     belongs_to :category
 
     validates :category_id, presence: true
