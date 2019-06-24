@@ -4,8 +4,9 @@ import TextareaAutosize from "react-textarea-autosize";
 import {
     Segment,
     Form,
-    List,
-    Divider
+    Divider,
+    Tab,
+    Button
 } from "semantic-ui-react";
 
 import CodeMirror from "react-codemirror";
@@ -30,14 +31,15 @@ class CRUDExerciseViewComponent extends React.Component {
         this.state = {
             title: props.title ? props.title : "",
             description: props.description ? props.description : "",
-            queryComponentList: props.queryList ? props.queryList : [], // TODO: Add queries depending on received ones
-            id: props.id ? parseInt(props.id) : null,
+            id: props.id ? parseInt(props.id) : null,                   // set null if this is a new exercise
             context: props.context,
             history: props.history,
             codeMirrorOptions: {
                 lineNumbers: true,
                 mode: "sql"
-            }
+            },
+            queryList: [],
+            queryPanes: [ { menuItem: "Query Hinzufügen", render: () => "Query hinzufügen"} ]
         };
     }
 
@@ -51,29 +53,26 @@ class CRUDExerciseViewComponent extends React.Component {
             description: event.target.value
         });
     }
-    addQuery = () => {
-        // TODO: Maybe make own component for that
-        const updatedList = this.state.queryComponentList.concat(
-            <List.Item>
-                <Form.Field>
-                    <label><Link to="#" onClick={ this.deleteQuery } style={{color: "red"}}>Query Löschen</Link></label>
-                    <CodeMirror
-                        options={ this.state.codeMirrorOptions } 
-                        value="INSERT INTO Here VALUES('Query')"/>
-                </Form.Field>
-            </List.Item>
-        );
-        this.setState({
-            queryComponentList: updatedList
-        });
-    }
-    deleteQuery = () => {
-        console.log("TODO");
-    }
     crudExercise = () => {
         // TODO
     }
+
+    handleTabChange = (event, data) => {
+        console.log(data.activeIndex);
+        console.log(data);
+        console.log(this.state.queryPanes.length);
+        if ((data.activeIndex + 1) == this.state.queryPanes.length) { /* If the last element was clicked */
+            let queryPanes = [{menuItem: "test", render: () => "Test" }];
+            console.log(this.state.queryPanes);
+            queryPanes = queryPanes.concat(this.state.queryPanes);
     
+            this.setState({
+                queryPanes: queryPanes
+            })
+        }
+    }
+
+
     render () {
         return (
             <Segment>
@@ -92,26 +91,31 @@ class CRUDExerciseViewComponent extends React.Component {
                             onChange={ this.updateDescription }
                             />
                     </Form.Field>
-                    <Divider />
-                    <Form.Field>
-                        <label>Hinterlegte Queries</label>
-                        <List divided>
-                            { this.state.queryComponentList }
-                            <List.Item>
-                                <Form.Button
-                                    type="reset"
-                                    content="Query hinzufügen" 
-                                    onClick={ this.addQuery }/>
-                            </List.Item>
-                        </List>
-                    </Form.Field>
-                    <Divider />
                     <Form.Button
                         type="submit"
                         content="Abschicken"
                         onClick={ this.crudExercise } />
+                    <Divider />
+                    <Form.Field>
+                        <label>Hinterlegte Queries</label>
+                        <Tab 
+                            menu={{
+                                fluid: true, 
+                                vertical: true, 
+                                }} 
+                            panes={ this.state.queryPanes } 
+                            onTabChange={ this.handleTabChange }/>
+                    </Form.Field>
+                    <Divider />
                 </Form>
             </Segment>
         );
+    }
+}
+
+class Query {
+    constructor(id, queryValue) {
+        this.id = id;
+        this.queryValue = queryValue;
     }
 }
