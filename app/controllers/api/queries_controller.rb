@@ -25,5 +25,14 @@ class Api::QueriesController < ApplicationController
         end
     end
 
+    def destroy
+        if @query = Query.find_by(id: params[:id])
+            @query.destroy
+        end
+        head :no_content
+    end
+
     
+
+
 end
