@@ -15,5 +15,15 @@ class Api::QueriesController < ApplicationController
             data: @queries.as_json
         }, status: :ok
     end
+ 
+    def create
+        @query = Exercise.find(params[:exercise_id]).queries.build(query_params)
+        if @query.save
+            render json: @query, status: :created
+        else
+            render json: @query.errors.full_messages, status: :unprocessable_entity
+        end
+    end
 
+    
 end
