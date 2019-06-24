@@ -6,7 +6,7 @@ import {
     Form,
     Divider,
     Tab,
-    Button
+    Loader
 } from "semantic-ui-react";
 
 import CodeMirror from "react-codemirror";
@@ -28,6 +28,7 @@ class CRUDExerciseViewComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.addQueryButton = { menuItem: "Query Hinzufügen", render: () => null };
         this.state = {
             title: props.title ? props.title : "",
             description: props.description ? props.description : "",
@@ -39,7 +40,8 @@ class CRUDExerciseViewComponent extends React.Component {
                 mode: "sql"
             },
             queryList: [],
-            queryPanes: [ { menuItem: "Query Hinzufügen", render: () => "Query hinzufügen"} ]
+            queryPanes: [],
+            queriesInitialized: false
         };
     }
 
@@ -58,17 +60,20 @@ class CRUDExerciseViewComponent extends React.Component {
     }
 
     handleTabChange = (event, data) => {
-        console.log(data.activeIndex);
-        console.log(data);
-        console.log(this.state.queryPanes.length);
-        if ((data.activeIndex + 1) == this.state.queryPanes.length) { /* If the last element was clicked */
-            let queryPanes = [{menuItem: "test", render: () => "Test" }];
-            console.log(this.state.queryPanes);
-            queryPanes = queryPanes.concat(this.state.queryPanes);
-    
+        if (data.activeIndex + 1 == this.state.queryPanes.length) { // If the last element was clicked
+            // Add query Component
+        }
+    }
+
+    componentDidMount() {   // Start processing of query list data
+        if (this.props.queryList) {
+            // do processing here
+        } else {
+            // Else case just sets loading true
             this.setState({
-                queryPanes: queryPanes
-            })
+                queriesInitialized: true,
+                queryPanes: [this.addQueryButton]
+            });
         }
     }
 
@@ -98,15 +103,16 @@ class CRUDExerciseViewComponent extends React.Component {
                     <Divider />
                     <Form.Field>
                         <label>Hinterlegte Queries</label>
-                        <Tab 
-                            menu={{
-                                fluid: true, 
-                                vertical: true, 
-                                }} 
-                            panes={ this.state.queryPanes } 
-                            onTabChange={ this.handleTabChange }/>
+                        { this.state.queriesInitialized ? 
+                            <Tab 
+                                menu={{
+                                    fluid: true, 
+                                    vertical: true, 
+                                    }} 
+                                panes={ this.state.queryPanes } 
+                                onTabChange={ this.handleTabChange }/>
+                            : <Loader active style={{margin: "auto"}}>Lade Queries...</Loader> }
                     </Form.Field>
-                    <Divider />
                 </Form>
             </Segment>
         );
