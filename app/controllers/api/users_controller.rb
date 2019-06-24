@@ -44,7 +44,7 @@ class Api::UsersController < ApplicationController
         if @user.update_attributes(user_params)
             head :no_content
         else
-            head :unprocessable_entity
+            render json: @user.errors.full_messages, status: :unprocessable_entity
         end
     end
 
