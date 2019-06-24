@@ -32,7 +32,19 @@ class Api::QueriesController < ApplicationController
         head :no_content
     end
 
-    
+    def update
+        @query = Query.find(params[:id])
+        if @query.update_attributes(query_params)
+            head :no_content
+        else
+            render json: @query.errors.full_messages, status: :unprocessable_entity
+        end
+    end
+
+    private
+        def query_params
+            params.require(:query).permit(:query)
+        end
 
 
 end
