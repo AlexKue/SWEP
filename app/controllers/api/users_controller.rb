@@ -25,7 +25,6 @@ class Api::UsersController < ApplicationController
     def create
         @user = User.new(user_params)
         if @user.save
-            log_in @user
             render json: @user, status: :created
         else
             render json: @user.errors.full_messages, status: :unprocessable_entity
@@ -45,7 +44,7 @@ class Api::UsersController < ApplicationController
         if @user.update_attributes(user_params)
             head :no_content
         else
-            head :unprocessable_entity
+            render json: @user.errors.full_messages, status: :unprocessable_entity
         end
     end
 

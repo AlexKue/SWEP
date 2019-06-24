@@ -42,7 +42,7 @@ class Api::ExercisesController < ApplicationController
         if @exercise.update_attributes(exercise_params)
             head :no_content
         else
-            head :unprocessable_entity
+            render json: @exercise.errors.full_messages, status: :unprocessable_entity
         end
     end
 
@@ -50,7 +50,7 @@ class Api::ExercisesController < ApplicationController
         def exercise_params
             params.require(:exercise).permit(:title, :text, :points)
         end
-            
-    
 
+
+            
 end

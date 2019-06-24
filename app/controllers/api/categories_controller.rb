@@ -32,7 +32,7 @@ class Api::CategoriesController < ApplicationController
         if @category.update_attributes(category_params)
             head :no_content
         else
-            head :created
+            render json: @category.errors.full_messages, status: unprocessable_entity
         end
     end
     
