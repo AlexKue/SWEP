@@ -5,18 +5,14 @@ import {
     Segment,
     Form,
     Divider,
-    Tab,
     Loader,
     Message,
-    Grid,
-    Button
+    Grid
 } from "semantic-ui-react";
-
-import CodeMirror from "react-codemirror";
-require("codemirror/mode/sql/sql");
 
 import API from '../../../API/API.jsx';
 import AuthedContext from '../../AuthedContext.jsx';
+import CRUDQueryView from '../Query/CRUDQueryView.jsx';
 
 const CRUDExerciseView = (props) => {
 
@@ -39,25 +35,11 @@ class CRUDExerciseViewComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        this.addQueryButton = { menuItem: "Query Hinzufügen", render: () => {
-            let queryCount = this.state.queryPanes.length;
-            if (queryCount > 0) {   // There can be at most one untracked query
-                return <label>Bitte erst Query {queryCount} abschicken.</label>
-            } else {    // There's no query so far, so we don't show to submit the untracked query
-                return null;
-            }
-        }};
         this.state = {
             title: "",
             description: "",
             id: props.exerciseId ? parseInt(props.exerciseId) : null,                   // set null if this is a new exercise
             history: props.history,
-            codeMirrorOptions: {
-                lineNumbers: true,
-                mode: "sql"
-            },
-            queryMap: new Map(),
-            queryPanes: [],
             queriesInitialized: props.exerciseId ? false : true,    // It's initialized if it's new
             crudExerciseLoading: false,
             points: 1,
@@ -92,9 +74,6 @@ class CRUDExerciseViewComponent extends React.Component {
         this.setState({
             points: event.target.value
         });
-    }
-    updateQueryLocal = (queryId, query) => {
-        this.state.queryMap.set(queryId, query);
     }
     crudExercise = () => {
         this.setState({
@@ -153,28 +132,34 @@ class CRUDExerciseViewComponent extends React.Component {
             });
         }
     }
-
-    handleTabChange = (event, data) => {
-        if (data.activeIndex == this.state.queryPanes.length    // If the last element was clicked
-            && !this.state.queryMap.get(-1)) {                  // And there is no -1 Object (unsubmittet query) 
-            // This ensures that there'll be at most one untracked query. Necessary for dealing with ID's
-            // add a new query, local
-            this.state.queryMap.set(-1, "INSERT INTO Here VALUES('Query')");    // Add Query with ID -1 
-            let newQueryPanes = this.state.queryPanes.concat([{
-                menuItem: "Query " + (this.state.queryPanes.length + 1),
-                render: () => 
-                    <QueryComponent 
-                        options={ this.state.codeMirrorOptions }
-                        id={-1}
-                        key={-1}
-                        query={ this.state.queryMap.get(-1) }                   // Link it to state.queryMap.get(-1), so state updates will affect
-                        updateQueryLocal={ this.updateQueryLocal }
-                        />
-                }]);
-
+    hideMessage = () => {
+        this.setState({
+            error: false,
+            success: false
+        })
+    }
+    deleteExercise = () => {
+        if (this.state.deleteTitle === "Löschen") {
             this.setState({
-                queryPanes: newQueryPanes
+                deleteTitle: "Wirklich löschen?"
             });
+        } else {
+            this.setState({
+                crudExerciseLoading: true
+            });
+            API.deleteExercise(this.state.id)
+            .then(response => {
+                this.state.context.removeExercise(this.state.id, this.props.categoryId);
+                this.props.history.push("/category-" + this.props.categoryId);
+            }).catch(error => {
+                this.setState({
+                    error: true,
+                    success: false,
+                    messageTitle: "Fehler",
+                    messageContent: "Irgendwas ist schiefgelaufen...",
+                    crudExerciseLoading: false
+                })
+            })
         }
     }
 
@@ -213,36 +198,6 @@ class CRUDExerciseViewComponent extends React.Component {
                     queriesInitialized: true
                 });
             });
-        }
-    }
-    hideMessage = () => {
-        this.setState({
-            error: false,
-            success: false
-        })
-    }
-    deleteExercise = () => {
-        if (this.state.deleteTitle === "Löschen") {
-            this.setState({
-                deleteTitle: "Wirklich löschen?"
-            });
-        } else {
-            this.setState({
-                crudExerciseLoading: true
-            });
-            API.deleteExercise(this.state.id)
-            .then(response => {
-                this.state.context.removeExercise(this.state.id, this.props.categoryId);
-                this.props.history.push("/category-" + this.props.categoryId);
-            }).catch(error => {
-                this.setState({
-                    error: true,
-                    success: false,
-                    messageTitle: "Fehler",
-                    messageContent: "Irgendwas ist schiefgelaufen...",
-                    crudExerciseLoading: false
-                })
-            })
         }
     }
 
@@ -315,15 +270,7 @@ class CRUDExerciseViewComponent extends React.Component {
                                 <Divider />
                                 <Form.Field>
                                     <label>Hinterlegte Queries</label>
-                                    { this.state.queriesInitialized ? 
-                                        <Tab 
-                                            menu={{
-                                                fluid: true, 
-                                                vertical: true, 
-                                                }} 
-                                            panes={ this.state.queryPanes.concat(this.addQueryButton) } 
-                                            onTabChange={ this.handleTabChange }/>
-                                        : <Loader active style={{margin: "auto"}}>Lade Queries...</Loader> }
+                                    <CRUDQueryView exerciseId={ this.state.id }/>
                                 </Form.Field>
                             </React.Fragment>
                         }
@@ -333,52 +280,5 @@ class CRUDExerciseViewComponent extends React.Component {
         } else {
             return <Loader active>{ this.state.loaderText }</Loader>
         }
-    }
-}
-
-class Query {
-    constructor(id, queryValue) {
-        this.id = id;
-        this.queryValue = queryValue;
-    }
-}
-
-class QueryComponent extends React.Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            id: props.id,
-            query: props.query ? props.query : "INSERT INTO Here VALUES('Query')"
-        }
-    }
-
-    updateQuery = (content) => {
-        this.props.updateQueryLocal(this.state.id, content);
-    }
-
-    render() {
-        return (
-            <Tab.Pane>
-                <CodeMirror
-                    options={ this.props.options }
-                    value={ this.state.query }
-                    onChange={ this.updateQuery }
-                    />
-                <Grid columns={2}>
-                    <Grid.Column>
-                        <Form.Button
-                            content="Abschicken" />
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Form.Button
-                            content="Löschen"
-                            color="red" 
-                            style={{float: "right"}}/>
-                    </Grid.Column>
-                </Grid>
-            </Tab.Pane>
-        );
     }
 }
