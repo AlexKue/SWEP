@@ -7,7 +7,9 @@ import {
     Divider,
     Tab,
     Loader,
-    Message
+    Message,
+    Grid,
+    Button
 } from "semantic-ui-react";
 
 import CodeMirror from "react-codemirror";
@@ -130,9 +132,10 @@ class CRUDExerciseViewComponent extends React.Component {
             let newQueryPanes = this.state.queryPanes.concat([{
                 menuItem: "Query " + (this.state.queryPanes.length + 1),
                 render: () => 
-                <Tab.Pane key={Math.random()}> {/* */}
-                    <CodeMirror options={this.state.codeMirrorOptions} value={query} />
-                </Tab.Pane>
+                    <QueryComponent 
+                        key={Math.random()} 
+                        options={ this.state.codeMirrorOptions }
+                        />
                 }]);
             console.log(newQueryPanes);
             this.setState({
@@ -234,5 +237,47 @@ class Query {
     constructor(id, queryValue) {
         this.id = id;
         this.queryValue = queryValue;
+    }
+}
+
+class QueryComponent extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            id: props.id ? props.id : null,
+            query: props.query ? props.query : "INSERT INTO Here VALUES('Query')"
+        }
+    }
+
+    updateQuery = (content) => {
+        this.setState({
+            query: content 
+        });
+    }
+
+    render() {
+        return (
+            <Tab.Pane>
+                <CodeMirror
+                    options={ this.props.options }
+                    value={ this.state.query }
+                    onChange={ this.updateQuery }
+                    />
+                <Grid columns={2}>
+                    <Grid.Column>
+                        <Form.Button
+                            content="Abschicken" />
+                    </Grid.Column>
+                    <Grid.Column>
+                        <Form.Button
+                            content="Löschen"
+                            color="red" 
+                            style={{float: "right"}}/>
+                    </Grid.Column>
+                </Grid>
+            </Tab.Pane>
+        );
     }
 }
