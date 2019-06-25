@@ -88,11 +88,13 @@ class CRUDQueryViewComponent extends React.Component {
                             <Message
                                 header={ this.state.messageTitle }
                                 content={ this.state.messageContent }
+                                onDismiss={ this.hideMessage }
                                 positive />
                             : 
                             <Message
                                 header={ this.state.messageTitle }
                                 content={ this.state.messageContent }
+                                onDismiss={ this.hideMessage }
                                 negative />
                         : null }
                         
