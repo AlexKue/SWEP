@@ -22,18 +22,11 @@ const CRUDExerciseView = (props) => {
 
     const context = useContext(AuthedContext);
 
-    let exercise = null;
     let exerciseId = parseInt(props.match.params.exerciseId);
     let categoryId = parseInt(props.match.params.categoryId);
 
-    if (exerciseId) {
-        exercise = context.getExerciseById(exerciseId);
-    }
-
     return <CRUDExerciseViewComponent 
-                context={context} 
-                title={ exercise ? exercise.title : null }
-                description={ exercise ? exercise.description : null}
+                context={context}
                 exerciseId={exerciseId}
                 categoryId={categoryId}
                 {...props} />
@@ -55,9 +48,9 @@ class CRUDExerciseViewComponent extends React.Component {
             }
         }};
         this.state = {
-            title: props.title ? props.title : "",
-            description: props.description ? props.description : "",
-            id: props.id ? parseInt(props.id) : -1,                   // set null if this is a new exercise
+            title: "",
+            description: "",
+            id: props.exerciseId ? parseInt(props.exerciseId) : -1,                   // set null if this is a new exercise
             context: props.context,
             history: props.history,
             codeMirrorOptions: {
@@ -73,7 +66,9 @@ class CRUDExerciseViewComponent extends React.Component {
             success: false,
             messageTitle: "",
             messageContent: "",
-            context: props.context
+            context: props.context,
+            initialized: props.exerciseId ? false : true,    // It's initialized if it's new
+            loaderText: "Lade Übung"
         };
     }
 
@@ -183,71 +178,75 @@ class CRUDExerciseViewComponent extends React.Component {
 
 
     render () {
-        return (
-            <Segment>
-                <Form
-                    error={ this.state.error }
-                    success={ this.state.success }>
-                    <Form.Input
-                        label="Titel"
-                        placeholder="Titel"
-                        value={ this.state.title }
-                        onChange={ this.updateTitle }
-                        />
-                    <Form.Field>
-                        <label>Beschreibung</label>
-                        <TextareaAutosize
-                            placeholder="Beschreibung"
-                            value={ this.state.description }
-                            onChange={ this.updateDescription }
+        if (this.state.initialized) {
+            return (
+                <Segment>
+                    <Form
+                        error={ this.state.error }
+                        success={ this.state.success }>
+                        <Form.Input
+                            label="Titel"
+                            placeholder="Titel"
+                            value={ this.state.title }
+                            onChange={ this.updateTitle }
                             />
-                    </Form.Field>
-                    <Form.Input
-                        label="Punkte"
-                        placeholder="1"
-                        value={ this.state.points }
-                        onChange={ this.updatePoints }
-                        />
-                    <Form.Button
-                        type="submit"
-                        content="Abschicken"
-                        onClick={ this.crudExercise } 
-                        disabled={ this.state.crudExerciseLoading }
-                        loading={ this.state.crudExerciseLoading }/>
-                    <Message
-                        header={ this.state.messageTitle }
-                        content={ this.state.messageContent }
-                        onDismiss={ this.hideMessage }
-                        success
-                        />
-                    <Message
-                        header={ this.state.messageTitle }
-                        content={ this.state.messageContent }
-                        onDismiss={ this.hideMessage }
-                        error
-                        />
-                    { !this.state.id ?
-                        <label>Hinweis: Die Aufgabe muss erstellt werden um Queries hinzuzufügen.</label>
-                        : 
-                        <React.Fragment>
-                            <Divider />
-                            <Form.Field>
-                                <label>Hinterlegte Queries</label>
-                                { this.state.queriesInitialized ? 
-                                    <Tab 
-                                        menu={{
-                                            fluid: true, 
-                                            vertical: true, 
-                                            }} 
-                                        panes={ this.state.queryPanes.concat(this.addQueryButton) } 
-                                        onTabChange={ this.handleTabChange }/>
-                                    : <Loader active style={{margin: "auto"}}>Lade Queries...</Loader> }
-                            </Form.Field>
-                        </React.Fragment>
-                    }
-                </Form>
-            </Segment>
-        );
+                        <Form.Field>
+                            <label>Beschreibung</label>
+                            <TextareaAutosize
+                                placeholder="Beschreibung"
+                                value={ this.state.description }
+                                onChange={ this.updateDescription }
+                                />
+                        </Form.Field>
+                        <Form.Input
+                            label="Punkte"
+                            placeholder="1"
+                            value={ this.state.points }
+                            onChange={ this.updatePoints }
+                            />
+                        <Form.Button
+                            type="submit"
+                            content="Abschicken"
+                            onClick={ this.crudExercise } 
+                            disabled={ this.state.crudExerciseLoading }
+                            loading={ this.state.crudExerciseLoading }/>
+                        <Message
+                            header={ this.state.messageTitle }
+                            content={ this.state.messageContent }
+                            onDismiss={ this.hideMessage }
+                            success
+                            />
+                        <Message
+                            header={ this.state.messageTitle }
+                            content={ this.state.messageContent }
+                            onDismiss={ this.hideMessage }
+                            error
+                            />
+                        { !this.state.id ?
+                            <label>Hinweis: Die Aufgabe muss erstellt werden um Queries hinzuzufügen.</label>
+                            : 
+                            <React.Fragment>
+                                <Divider />
+                                <Form.Field>
+                                    <label>Hinterlegte Queries</label>
+                                    { this.state.queriesInitialized ? 
+                                        <Tab 
+                                            menu={{
+                                                fluid: true, 
+                                                vertical: true, 
+                                                }} 
+                                            panes={ this.state.queryPanes.concat(this.addQueryButton) } 
+                                            onTabChange={ this.handleTabChange }/>
+                                        : <Loader active style={{margin: "auto"}}>Lade Queries...</Loader> }
+                                </Form.Field>
+                            </React.Fragment>
+                        }
+                    </Form>
+                </Segment>
+            );
+        } else {
+            return <Loader active>{ this.state.loaderText }</Loader>
+        }
     }
 }
 
