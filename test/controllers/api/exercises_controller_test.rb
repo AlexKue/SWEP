@@ -15,6 +15,20 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
       assert_response :created
     end
   end
+
+  test "should solve an exercise" do
+    log_in_as(users(:Mark))
+    post solve_api_exercise_path(exercises(:one)),
+    params: {
+      query: {
+        query: student_queries(:one).query,
+
+      }
+    }
+    assert_response :created
+    puts response.body
+  end
+
   test "should not add exercise as non-admin" do
     log_in_as(users(:Mark))
     post api_category_exercises_path(categories(:sfw_queries)), 

@@ -48,8 +48,21 @@ class Api::ExercisesController < ApplicationController
 
     def solve
         @exercise = Exercise.find(params[:id])
-        @query = StudentQuery.create(params[:query])
-        
+        @query = StudentQuery.create(query_params)
+        if @query.valid?
+            @query.save
+
+            correct = QueryChecker.new.correct?(@query.query, @exercise.queries.first.query) ? true : false
+            solution = ExerciseSolver.where(user_id: current_user.id, 
+                                            exercise_id: @exercise.id).first_or_create( user_id: current_user.id, 
+                                                                                        exercise_id: @exercise.id, 
+                                                                                        student_query_id: @query.id, 
+                                                                                        solved: correct, 
+                                                                                        certainity: 1)
+            render json: solution, status: :created 
+        else 
+            render json: @query.errors.full_messages, status: :unprocessable_entity
+        end 
     end
 
 
@@ -57,6 +70,10 @@ class Api::ExercisesController < ApplicationController
     private
         def exercise_params
             params.require(:exercise).permit(:title, :text, :points)
+        end
+
+        def query_params
+            params.require(:query).permit(:query)
         end
 
 
