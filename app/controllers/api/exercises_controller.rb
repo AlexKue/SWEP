@@ -46,6 +46,14 @@ class Api::ExercisesController < ApplicationController
         end
     end
 
+    def solve
+        @exercise = Exercise.find(params[:id])
+        @query = StudentQuery.create(params[:query])
+        
+    end
+
+
+
     private
         def exercise_params
             params.require(:exercise).permit(:title, :text, :points)
