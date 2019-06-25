@@ -100,8 +100,28 @@ class CRUDExerciseViewComponent extends React.Component {
             crudExerciseLoading: true
         });
         if (this.state.id) {    // component has ID ==> Update
-            // TODO
-        } else {
+            API.updateExercise(this.props.exerciseId, this.state.title, this.state.description, this.state.points)
+            .then(response => {
+                this.state.context.updateExercise(this.props.exerciseId, this.state.title, this.state.description, this.state.points);
+                this.setState({
+                    error: false,
+                    success: true,
+                    messageTitle: "Erfolg",
+                    messageContent: "Die Änderungen wurden erfolgreich übernommen."
+                });
+            }).catch(error => {
+                this.setState({
+                    error: true,
+                    success: false,
+                    messageTitle: "Fehler",
+                    messageContent: error
+                })
+            }).finally(() => {
+                this.setState({
+                    crudExerciseLoading: false
+                })
+            });
+        } else { // Component has no ID => We need to create it
             API.createExercise(this.props.categoryId, this.state.title, this.state.description, this.state.points)
             .then(response => {
                 this.state.context.addExercise(
@@ -176,7 +196,7 @@ class CRUDExerciseViewComponent extends React.Component {
                 this.setState({
                     title: exercise.title,
                     description: exercise.description,
-                    points: exercise.points
+                    points: exercise.totalExercisePoints
                 });
                 // TODO: Fetch Queries
             }).catch(error => {

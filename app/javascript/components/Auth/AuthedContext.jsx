@@ -186,6 +186,14 @@ export class AuthedContextProvider extends React.Component {
             // Trigger Update
             this.forceUpdate();
     }
+    updateExercise = (Id, title, description, totalExercisePoints) => {
+        let exercise = this.getExerciseById(Id);
+        exercise.title = title;
+        exercise.description = description;
+        exercise.totalExercisePoints = totalExercisePoints;
+
+        this.forceUpdate();
+    }
     getUserName = () => {
         return this.state.userName;
     }
@@ -213,7 +221,8 @@ export class AuthedContextProvider extends React.Component {
             updateUserName: this.updateUserName,
             isInitialized: this.isInitialized,
             loadText: this.state.loadText,
-            fetchExerciseInformation: this.fetchExerciseInformation
+            fetchExerciseInformation: this.fetchExerciseInformation,
+            updateExercise: this.updateExercise
         }
 
         return (
