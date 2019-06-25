@@ -271,8 +271,6 @@ export default class API {
       }).then(response => {
         resolve(response);
       }).catch(error => {
-        console.log("FEHLER HIER");
-        console.log(this.getErrorList(error));
         reject(this.getErrorList(error));
       });
     })

@@ -50,7 +50,7 @@ class CRUDExerciseViewComponent extends React.Component {
         this.state = {
             title: "",
             description: "",
-            id: props.exerciseId ? parseInt(props.exerciseId) : -1,                   // set null if this is a new exercise
+            id: props.exerciseId ? parseInt(props.exerciseId) : null,                   // set null if this is a new exercise
             history: props.history,
             codeMirrorOptions: {
                 lineNumbers: true,
@@ -58,7 +58,7 @@ class CRUDExerciseViewComponent extends React.Component {
             },
             queryMap: new Map(),
             queryPanes: [],
-            queriesInitialized: false,
+            queriesInitialized: props.exerciseId ? false : true,    // It's initialized if it's new
             crudExerciseLoading: false,
             points: 1,
             error: false,
@@ -100,9 +100,9 @@ class CRUDExerciseViewComponent extends React.Component {
             crudExerciseLoading: true
         });
         if (this.state.id) {    // component has ID ==> Update
-            API.updateExercise(this.props.exerciseId, this.state.title, this.state.description, this.state.points)
+            API.updateExercise(this.state.id, this.state.title, this.state.description, this.state.points)
             .then(response => {
-                this.state.context.updateExercise(this.props.exerciseId, this.state.title, this.state.description, this.state.points);
+                this.state.context.updateExercise(this.state.id, this.state.title, this.state.description, this.state.points);
                 this.setState({
                     error: false,
                     success: true,
