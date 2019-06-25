@@ -37,14 +37,56 @@ class CRUDQueryViewComponent extends React.Component {
                 lineNumbers: true,
                 mode: "sql"
             },
-            queryPanes: []
+            queryPanes: [],
+            localQueryMap: new Map(),
+            activeIndex: 0
         }
     }
-    
+
     componentDidMount() {
         this.setState({
             initialized: true
         });
+    }
+
+    handleTabChange = (event, data) => {
+        let newActiveIndex = data.activeIndex;
+        if (newActiveIndex == this.state.queryPanes.length && !this.state.localQueryMap.has(-1)) {
+            // Clicked last element
+            // and there's no untracked element at the moment
+            this.state.localQueryMap.set(-1, "INSERT INTO Here VALUES('QUERY')");
+            this.updatePanes();
+        }
+        this.setState({
+            activeIndex: data.activeIndex
+        });
+    }
+
+    updatePanes = () => {
+        let panes = [];
+        let i = 1;
+        for (const [id, value] of this.state.localQueryMap) {
+            panes.push({
+                menuItem: "Query " + i,
+                render: () => {
+                    return (
+                    <Tab.Pane key={id}>
+                        <CodeMirror
+                            options={ this.state.codeMirrorOptions }
+                            value={ this.state.localQueryMap.get(id) } 
+                            onChange={ (content) => this.updateLocalQuery(id, content)}/>
+                    </Tab.Pane>
+                    )
+                }
+            })
+        }
+        this.setState({
+            queryPanes: panes
+        })
+    }
+
+    updateLocalQuery = (queryId, value) => {
+        this.state.localQueryMap.set(queryId, value);
     }
 
     render() {
@@ -54,7 +96,9 @@ class CRUDQueryViewComponent extends React.Component {
                     fluid: true,
                     vertical: true
                 }}
-                panes={this.state.queryPanes} />
+                panes={this.state.queryPanes.concat(this.addQueryButton)} 
+                onTabChange={ this.handleTabChange }
+                activeIndex={ this.state.activeIndex }/>
             );
         } else {
             return <Loader active inline="centered">Lade Queries...</Loader>
