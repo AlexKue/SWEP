@@ -194,6 +194,12 @@ export class AuthedContextProvider extends React.Component {
 
         this.forceUpdate();
     }
+    removeExercise = (exerciseId, categoryId) => {
+        this.state.exercises.delete(exerciseId);
+        this.getCategoryById(categoryId).exerciseIdSet.delete(exerciseId);
+
+        this.forceUpdate();
+    }
     getUserName = () => {
         return this.state.userName;
     }
@@ -222,7 +228,8 @@ export class AuthedContextProvider extends React.Component {
             isInitialized: this.isInitialized,
             loadText: this.state.loadText,
             fetchExerciseInformation: this.fetchExerciseInformation,
-            updateExercise: this.updateExercise
+            updateExercise: this.updateExercise,
+            removeExercise: this.removeExercise
         }
 
         return (

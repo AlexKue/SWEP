@@ -67,7 +67,8 @@ class CRUDExerciseViewComponent extends React.Component {
             messageContent: "",
             initialized: props.exerciseId ? false : true,    // It's initialized if it's new
             loaderText: "Lade Übung",
-            context: props.context
+            context: props.context,
+            deleteTitle: "Löschen"
         };
     }
 
@@ -215,6 +216,30 @@ class CRUDExerciseViewComponent extends React.Component {
             success: false
         })
     }
+    deleteExercise = () => {
+        if (this.state.deleteTitle === "Löschen") {
+            this.setState({
+                deleteTitle: "Wirklich löschen?"
+            });
+        } else {
+            this.setState({
+                crudExerciseLoading: true
+            });
+            API.deleteExercise(this.state.id)
+            .then(response => {
+                this.state.context.removeExercise(this.state.id, this.props.categoryId);
+                this.props.history.push("/category-" + this.props.categoryId);
+            }).catch(error => {
+                this.setState({
+                    error: true,
+                    success: false,
+                    messageTitle: "Fehler",
+                    messageContent: "Irgendwas ist schiefgelaufen...",
+                    crudExerciseLoading: false
+                })
+            })
+        }
+    }
 
 
     render () {
@@ -244,12 +269,28 @@ class CRUDExerciseViewComponent extends React.Component {
                             value={ this.state.points }
                             onChange={ this.updatePoints }
                             />
-                        <Form.Button
-                            type="submit"
-                            content="Abschicken"
-                            onClick={ this.crudExercise } 
-                            disabled={ this.state.crudExerciseLoading }
-                            loading={ this.state.crudExerciseLoading }/>
+                        <Grid columns={2}>
+                            <Grid.Column>
+                                <Form.Button
+                                    type="submit"
+                                    content="Abschicken"
+                                    onClick={ this.crudExercise } 
+                                    disabled={ this.state.crudExerciseLoading }
+                                    loading={ this.state.crudExerciseLoading }/>
+                            </Grid.Column>
+                            <Grid.Column>
+                                {this.state.id ?    // we can only delete smth that is deleteable
+                                    <Form.Button
+                                        type="reset"
+                                        color="red"
+                                        content={ this.state.deleteTitle }
+                                        onClick={ this.deleteExercise }
+                                        disabled={ this.state.crudExerciseLoading }
+                                        loading={ this.state.crudExerciseLoading } 
+                                        style={{float: "right"}}/>
+                                    : null }
+                            </Grid.Column>
+                        </Grid>
                         <Message
                             header={ this.state.messageTitle }
                             content={ this.state.messageContent }
