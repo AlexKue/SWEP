@@ -65,16 +65,24 @@ class CRUDQueryViewComponent extends React.Component {
     updatePanes = () => {
         let panes = [];
         let i = 1;
-        for (const [id, value] of this.state.localQueryMap) {
+        for (const [queryId, value] of this.state.localQueryMap) {
             panes.push({
                 menuItem: "Query " + i,
                 render: () => {
                     return (
-                    <Tab.Pane key={id}>
+                    <Tab.Pane key={queryId}>
                         <CodeMirror
                             options={ this.state.codeMirrorOptions }
-                            value={ this.state.localQueryMap.get(id) } 
-                            onChange={ (content) => this.updateLocalQuery(id, content)}/>
+                            value={ this.state.localQueryMap.get(queryId) } 
+                            onChange={ (content) => this.updateLocalQuery(queryId, content)}/>
+                        <Grid columns={2}>
+                            <Grid.Column>
+                                <Button content="Abschicken" onClick={ () => this.crudQuery(queryId) }/>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Button color="red" content="Löschen" style={{float: "right"}} onClick={ () => this.deleteQuery(queryId) }/>
+                            </Grid.Column>
+                        </Grid>
                     </Tab.Pane>
                     )
                 }
@@ -87,6 +95,14 @@ class CRUDQueryViewComponent extends React.Component {
 
     updateLocalQuery = (queryId, value) => {
         this.state.localQueryMap.set(queryId, value);
+    }
+
+    crudQuery = (queryId) => {
+        // TODO
+    }
+
+    deleteQuery = (queryId) => {
+        // TODO
     }
 
     render() {
