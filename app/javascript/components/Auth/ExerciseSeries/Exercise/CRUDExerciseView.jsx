@@ -161,14 +161,22 @@ class CRUDExerciseViewComponent extends React.Component {
         let exerciseId = this.props.exerciseId;
         if (!exerciseId) return; // No need to fetch anything if this is a new exercise
         if (this.state.context.getExerciseById(exerciseId).description) {
-            // TODO
+            let exercise = this.state.context.getExerciseById(exerciseId);
+            this.setState({
+                title: exercise.title,
+                description: exercise.description,
+                points: exercise.totalExercisePoints,
+                initialized: true,                      // TODO:
+                queriesInitialized: true                // QUERIES
+            });
         } else { // We have to fetch everything <=> Initialize this exercise
             this.state.context.fetchExerciseInformation(exerciseId)
             .then(response => {
                 let exercise = this.state.context.getExerciseById(exerciseId);
                 this.setState({
                     title: exercise.title,
-                    description: exercise.description
+                    description: exercise.description,
+                    points: exercise.points
                 });
                 // TODO: Fetch Queries
             }).catch(error => {
