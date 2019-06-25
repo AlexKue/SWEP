@@ -125,12 +125,11 @@ export default class API {
       id,           
       oldPassword   //TODO: Refactor with proper field
     };
-    newName ? userObject.name = newName : null;
-    newMail ? userObject.email = newMail : null;
+    newName != null ? userObject.name = newName : null;
+    newMail != null? userObject.email = newMail : null;
     showInLeaderbord != null ? userObject.showInLeaderbord = showInLeaderbord : null; //TODO: REFACTOR
-    newPassword ? userObject.password = newPassword : null;
-    newPasswordConf ? userObject.password_confirmation = newPasswordConf : null;
-    console.log({user: userObject, authenticity_token: window._token});
+    newPassword != null ? userObject.password = newPassword : null;
+    newPasswordConf != null ? userObject.password_confirmation = newPasswordConf : null;
     return new Promise((resolve, reject) => {
       this.service.patch("users/" + id, {
         user: userObject,

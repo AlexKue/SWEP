@@ -106,7 +106,6 @@ class UserSettingsComponent extends React.Component {
                 error: false,
                 messageTitle: "Erfolg",
                 messageContent: "Einstellungen erfolgreich geändert.",
-                loading: false,
                 oldUserNick: prevState.newUserNick,
                 oldUserMail: prevState.newUserMail,
                 oldShowInLeaderboard: prevState.newShowInLeaderboard
@@ -118,6 +117,10 @@ class UserSettingsComponent extends React.Component {
                 messageTitle: "Fehler",
                 messageContent: error
             });
+        }).finally(() => {
+            this.setState({
+                loading: false
+            })
         });
 
     }
