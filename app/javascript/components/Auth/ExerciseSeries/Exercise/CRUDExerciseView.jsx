@@ -12,13 +12,21 @@ import {
 import CodeMirror from "react-codemirror";
 require("codemirror/mode/sql/sql");
 
+import API from '../../../API/API.jsx';
 import AuthedContext from '../../AuthedContext.jsx';
 
 const CRUDExerciseView = (props) => {
 
     const context = useContext(AuthedContext);
 
-    return <CRUDExerciseViewComponent context={context} {...props} />
+    let exercise = null;
+    let exerciseId = props.match.params.id;
+
+    if (exerciseId) {
+        exercise = context.getExerciseById(exerciseId);
+    }
+
+    return <CRUDExerciseViewComponent context={context} exercise={exercise} exerciseId={exerciseId} {...props} />
 }
 
 export default CRUDExerciseView;
