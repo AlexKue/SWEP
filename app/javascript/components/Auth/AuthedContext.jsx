@@ -109,6 +109,26 @@ export class AuthedContextProvider extends React.Component {
     getExerciseById = (Id) => {
         return this.state.exercises.get(Id);
     }
+    fetchExerciseInformation = (Id) => {
+        return new Promise((resolve, reject) => {
+            API.getExerciseInfo(Id)
+            .then(response => {
+                let exercise = response.data;
+                this.state.exercises.set(Id, new Exercise(
+                    exercise.title,
+                    exercise.text,
+                    exercise.points,
+                    null,
+                    Id
+                ));
+                resolve(true);
+            }).catch(error => {
+                reject(error);
+            }).finally(() => {
+                this.forceUpdate();
+            })
+        });
+    }
     getExercisesForCategory = (Id) => {
         return this.state.categories.get(Id).exerciseIdSet;
     }
@@ -192,7 +212,8 @@ export class AuthedContextProvider extends React.Component {
             getUserName: this.getUserName,
             updateUserName: this.updateUserName,
             isInitialized: this.isInitialized,
-            loadText: this.state.loadText
+            loadText: this.state.loadText,
+            fetchExerciseInformation: this.fetchExerciseInformation
         }
 
         return (

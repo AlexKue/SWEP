@@ -51,7 +51,6 @@ class CRUDExerciseViewComponent extends React.Component {
             title: "",
             description: "",
             id: props.exerciseId ? parseInt(props.exerciseId) : -1,                   // set null if this is a new exercise
-            context: props.context,
             history: props.history,
             codeMirrorOptions: {
                 lineNumbers: true,
@@ -66,9 +65,9 @@ class CRUDExerciseViewComponent extends React.Component {
             success: false,
             messageTitle: "",
             messageContent: "",
-            context: props.context,
             initialized: props.exerciseId ? false : true,    // It's initialized if it's new
-            loaderText: "Lade Übung"
+            loaderText: "Lade Übung",
+            context: props.context
         };
     }
 
@@ -159,13 +158,26 @@ class CRUDExerciseViewComponent extends React.Component {
     }
 
     componentDidMount() {   // Start processing of query list data
-        if (this.props.queryList) {
-            // do processing here
-        } else {
-            // Else case just sets loading true
-            this.setState({
-                queriesInitialized: true,
-                queryPanes: []
+        let exerciseId = this.props.exerciseId;
+        if (!exerciseId) return; // No need to fetch anything if this is a new exercise
+        if (this.state.context.getExerciseById(exerciseId).description) {
+            // TODO
+        } else { // We have to fetch everything <=> Initialize this exercise
+            this.state.context.fetchExerciseInformation(exerciseId)
+            .then(response => {
+                let exercise = this.state.context.getExerciseById(exerciseId);
+                this.setState({
+                    title: exercise.title,
+                    description: exercise.description
+                });
+                // TODO: Fetch Queries
+            }).catch(error => {
+                console.error(error);
+            }).finally(() => {
+                this.setState({
+                    initialized: true,
+                    queriesInitialized: true
+                });
             });
         }
     }
