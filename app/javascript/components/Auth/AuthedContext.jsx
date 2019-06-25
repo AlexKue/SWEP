@@ -10,6 +10,7 @@ export class AuthedContextProvider extends React.Component {
     state = {
         categories: null,
         exercises: null,
+        queries: null,
         totalCategoriesCount: 0,
         userName: localStorage.getItem("userName"),
         initialized: false,
@@ -86,6 +87,7 @@ export class AuthedContextProvider extends React.Component {
                         initialized: true,
                         categories: categories,
                         exercises: exercises,
+                        queries: new Map(),
                         totalCategoriesCount: totalCategoriesCount
                     });
                 });
