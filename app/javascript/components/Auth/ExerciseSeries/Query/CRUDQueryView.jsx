@@ -3,12 +3,14 @@ import {
     Loader,
     Tab,
     Button,
-    Grid
+    Grid,
+    Message
 } from "semantic-ui-react";
 import CodeMirror from "react-codemirror";
 require("codemirror/mode/sql/sql");
 
 import AuthedContext from '../../AuthedContext.jsx';
+import API from '../../../API/API.jsx';
 
 const CRUDQueryView = (props) => {
     const context = useContext(AuthedContext);
@@ -39,7 +41,13 @@ class CRUDQueryViewComponent extends React.Component {
             },
             queryPanes: [],
             localQueryMap: new Map(),
-            activeIndex: 0
+            activeIndex: 0,
+            exerciseId: props.exerciseId,
+            messageTitle: "",
+            messageContent: "",
+            successMessage: true,
+            showMessage: false,
+            loading: false
         }
     }
 
@@ -58,7 +66,8 @@ class CRUDQueryViewComponent extends React.Component {
             this.updatePanes();
         }
         this.setState({
-            activeIndex: data.activeIndex
+            activeIndex: data.activeIndex,
+            showMessage: false
         });
     }
 
@@ -75,6 +84,18 @@ class CRUDQueryViewComponent extends React.Component {
                             options={ this.state.codeMirrorOptions }
                             value={ this.state.localQueryMap.get(queryId) } 
                             onChange={ (content) => this.updateLocalQuery(queryId, content)}/>
+                        { this.state.showMessage ? this.state.successMessage ? 
+                            <Message
+                                header={ this.state.messageTitle }
+                                content={ this.state.messageContent }
+                                positive />
+                            : 
+                            <Message
+                                header={ this.state.messageTitle }
+                                content={ this.state.messageContent }
+                                negative />
+                        : null }
+                        
                         <Grid columns={2}>
                             <Grid.Column>
                                 <Button content="Abschicken" onClick={ () => this.crudQuery(queryId) }/>
@@ -98,13 +119,41 @@ class CRUDQueryViewComponent extends React.Component {
     }
 
     crudQuery = (queryId) => {
-        // TODO
+        if (queryId == -1) { // this is the not-yet-tracked query
+            API.createQuery(this.state.exerciseId, this.state.localQueryMap.get(queryId))
+            .then(response => {
+                // TODO: Add to local storage (context)
+                // TODO: Update ID
+                this.setState({
+                    messageTitle: "Erfolg",
+                    messageContent: "Die Query wurde erfolgreich hinzugefügt.",
+                    showMessage: true,
+                    successMessage: true
+                });
+            }).catch(error => {
+                this.setState({
+                    messageTitle: "Fehler",
+                    messageContent: error,
+                    showMessage: true,
+                    successMessage: false
+                })
+            }).finally(() => {
+                this.setState({
+                    loading: false
+                })
+            })
+        }
     }
 
     deleteQuery = (queryId) => {
         // TODO
     }
 
+    hideMessage = () => {
+        this.setState({
+            showMessage: false
+        });
+    }
     render() {
         if (this.state.initialized) {
             return (
