@@ -268,11 +268,13 @@ export default class API {
           points: points
         },
         authenticity_token: window._token
-      })
-    }).then(response => {
-      resolve(response);
-    }).catch(error => {
-      reject(error);
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        console.log("FEHLER HIER");
+        console.log(this.getErrorList(error));
+        reject(this.getErrorList(error));
+      });
     })
   }
   static getExerciseInfo(id) {
