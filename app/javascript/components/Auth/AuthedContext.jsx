@@ -146,6 +146,7 @@ export class AuthedContextProvider extends React.Component {
         this.forceUpdate();
     }
     addExercise = (
+        categoryId,
         title,
         description,
         totalExercisePoints,
@@ -161,6 +162,7 @@ export class AuthedContextProvider extends React.Component {
                     exerciseId,
                     queryIdSet
                 ));
+            this.getCategoryById(categoryId).addExercise(exerciseId);
             // Trigger Update
             this.forceUpdate();
     }
@@ -185,6 +187,7 @@ export class AuthedContextProvider extends React.Component {
             addCategory: this.addCategory,
             updateCategory: this.updateCategory,
             removeCategory: this.removeCategory,
+            addExercise: this.addExercise,
             setUserLoggedOut: this.props.setUserLoggedOut,
             getUserName: this.getUserName,
             updateUserName: this.updateUserName,
@@ -216,6 +219,11 @@ class Category {
         this.id = id;
         this.exerciseIdSet = exerciseIdSet;
     }
+
+    addExercise = (exerciseId) => {
+        this.totalExerciseCount += 1;
+        this.exerciseIdSet.add(exerciseId);
+    } 
 }
 
 class Exercise {

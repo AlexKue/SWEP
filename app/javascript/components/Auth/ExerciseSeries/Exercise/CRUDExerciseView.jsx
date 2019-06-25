@@ -6,7 +6,8 @@ import {
     Form,
     Divider,
     Tab,
-    Loader
+    Loader,
+    Message
 } from "semantic-ui-react";
 
 import CodeMirror from "react-codemirror";
@@ -20,13 +21,20 @@ const CRUDExerciseView = (props) => {
     const context = useContext(AuthedContext);
 
     let exercise = null;
-    let exerciseId = props.match.params.id;
+    let exerciseId = parseInt(props.match.params.exerciseId);
+    let categoryId = parseInt(props.match.params.categoryId);
 
     if (exerciseId) {
         exercise = context.getExerciseById(exerciseId);
     }
 
-    return <CRUDExerciseViewComponent context={context} exercise={exercise} exerciseId={exerciseId} {...props} />
+    return <CRUDExerciseViewComponent 
+                context={context} 
+                title={ exercise ? exercise.title : null }
+                description={ exercise ? exercise.description : null}
+                exerciseId={exerciseId}
+                categoryId={categoryId}
+                {...props} />
 }
 
 export default CRUDExerciseView;
@@ -49,7 +57,14 @@ class CRUDExerciseViewComponent extends React.Component {
             },
             queryList: [],
             queryPanes: [],
-            queriesInitialized: false
+            queriesInitialized: false,
+            crudExerciseLoading: false,
+            points: 1,
+            error: false,
+            success: false,
+            messageTitle: "",
+            messageContent: "",
+            context: props.context
         };
     }
 
@@ -63,8 +78,47 @@ class CRUDExerciseViewComponent extends React.Component {
             description: event.target.value
         });
     }
+    updatePoints = (event) => {
+        this.setState({
+            points: event.target.value
+        });
+    }
     crudExercise = () => {
-        // TODO
+        this.setState({
+            crudExerciseLoading: true
+        });
+        if (this.state.id) {    // component has ID ==> Update
+            // TODO
+        } else {
+            API.createExercise(this.props.categoryId, this.state.title, this.state.description, this.state.points)
+            .then(response => {
+                this.state.context.addExercise(
+                    this.props.categoryId,
+                    this.state.title, 
+                    this.state.description, 
+                    this.state.points, 
+                    parseInt(response.data.id), 
+                    false);
+                this.setState({
+                    id: response.data.id,
+                    error: false,
+                    success: true,
+                    messageTitle: "Erfolg",
+                    messageContent: "Die Übung wurde erfolgreich erstellt."
+                })
+            }).catch(error => {
+                this.setState({
+                    error: true,
+                    success: false,
+                    messageTitle: "Fehler",
+                    messageContent: error
+                })
+            }).finally(() => {
+                this.setState({
+                    crudExerciseLoading: false
+                });
+            });
+        }
     }
 
     handleTabChange = (event, data) => {
@@ -84,12 +138,20 @@ class CRUDExerciseViewComponent extends React.Component {
             });
         }
     }
+    hideMessage = () => {
+        this.setState({
+            error: false,
+            success: false
+        })
+    }
 
 
     render () {
         return (
             <Segment>
-                <Form>
+                <Form
+                    error={ this.state.error }
+                    success={ this.state.success }>
                     <Form.Input
                         label="Titel"
                         placeholder="Titel"
@@ -104,23 +166,49 @@ class CRUDExerciseViewComponent extends React.Component {
                             onChange={ this.updateDescription }
                             />
                     </Form.Field>
+                    <Form.Input
+                        label="Punkte"
+                        placeholder="1"
+                        value={ this.state.points }
+                        onChange={ this.updatePoints }
+                        />
                     <Form.Button
                         type="submit"
                         content="Abschicken"
-                        onClick={ this.crudExercise } />
-                    <Divider />
-                    <Form.Field>
-                        <label>Hinterlegte Queries</label>
-                        { this.state.queriesInitialized ? 
-                            <Tab 
-                                menu={{
-                                    fluid: true, 
-                                    vertical: true, 
-                                    }} 
-                                panes={ this.state.queryPanes } 
-                                onTabChange={ this.handleTabChange }/>
-                            : <Loader active style={{margin: "auto"}}>Lade Queries...</Loader> }
-                    </Form.Field>
+                        onClick={ this.crudExercise } 
+                        disabled={ this.state.crudExerciseLoading }
+                        loading={ this.state.crudExerciseLoading }/>
+                    <Message
+                        header={ this.state.messageTitle }
+                        content={ this.state.messageContent }
+                        onDismiss={ this.hideMessage }
+                        success
+                        />
+                    <Message
+                        header={ this.state.messageTitle }
+                        content={ this.state.messageContent }
+                        onDismiss={ this.hideMessage }
+                        error
+                        />
+                    { !this.state.id ?
+                        <label>Hinweis: Die Aufgabe muss erstellt werden um Queries hinzuzufügen.</label>
+                        : 
+                        <React.Fragment>
+                            <Divider />
+                            <Form.Field>
+                                <label>Hinterlegte Queries</label>
+                                { this.state.queriesInitialized ? 
+                                    <Tab 
+                                        menu={{
+                                            fluid: true, 
+                                            vertical: true, 
+                                            }} 
+                                        panes={ this.state.queryPanes } 
+                                        onTabChange={ this.handleTabChange }/>
+                                    : <Loader active style={{margin: "auto"}}>Lade Queries...</Loader> }
+                            </Form.Field>
+                        </React.Fragment>
+                    }
                 </Form>
             </Segment>
         );
