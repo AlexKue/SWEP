@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ExerciseSolverTest < ActiveSupport::TestCase
   def setup
-    @relationship = ExerciseSolver.new(user_id: users(:Alex).id, exercise_id: exercises(:one).id, query_id: queries(:one).id)
+    @relationship = ExerciseSolver.new(user_id: users(:Alex).id, exercise_id: exercises(:one).id, student_query_id: student_queries(:one).id)
   end
 
   test "should be valid" do
