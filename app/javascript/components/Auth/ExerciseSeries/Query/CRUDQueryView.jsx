@@ -108,6 +108,7 @@ class CRUDQueryViewComponent extends React.Component {
                     )
                 }
             })
+            i++;
         }
         this.setState({
             queryPanes: panes
@@ -122,8 +123,10 @@ class CRUDQueryViewComponent extends React.Component {
         if (queryId == -1) { // this is the not-yet-tracked query
             API.createQuery(this.state.exerciseId, this.state.localQueryMap.get(queryId))
             .then(response => {
-                // TODO: Add to local storage (context)
-                // TODO: Update ID
+                let newQueryId = response.data.id;
+                // TODO: Add Query to context
+                this.state.localQueryMap.set(newQueryId, this.state.localQueryMap.get(queryId));
+                this.state.localQueryMap.delete(-1);
                 this.setState({
                     messageTitle: "Erfolg",
                     messageContent: "Die Query wurde erfolgreich hinzugefügt.",
@@ -138,6 +141,7 @@ class CRUDQueryViewComponent extends React.Component {
                     successMessage: false
                 })
             }).finally(() => {
+                this.updatePanes();
                 this.setState({
                     loading: false
                 })
