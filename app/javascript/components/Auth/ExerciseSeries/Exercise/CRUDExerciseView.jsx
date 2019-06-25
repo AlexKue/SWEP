@@ -48,7 +48,7 @@ class CRUDExerciseViewComponent extends React.Component {
         this.state = {
             title: props.title ? props.title : "",
             description: props.description ? props.description : "",
-            id: props.id ? parseInt(props.id) : null,                   // set null if this is a new exercise
+            id: props.id ? parseInt(props.id) : -1,                   // set null if this is a new exercise
             context: props.context,
             history: props.history,
             codeMirrorOptions: {
@@ -122,8 +122,23 @@ class CRUDExerciseViewComponent extends React.Component {
     }
 
     handleTabChange = (event, data) => {
-        if (data.activeIndex + 1 == this.state.queryPanes.length) { // If the last element was clicked
-            // Add query Component
+        if (data.activeIndex == this.state.queryPanes.length) { // If the last element was clicked
+            // add a new query, local
+            let query = "INSERT INTO Here VALUES('Query')";
+            let queryPanesLength = this.state.queryPanes.length;
+            let newQueryList = this.state.queryList.concat([new Query(null, "INSERT INTO Here VALUES('Query')")]);
+            let newQueryPanes = this.state.queryPanes.concat([{
+                menuItem: "Query " + (this.state.queryPanes.length + 1),
+                render: () => 
+                <Tab.Pane key={Math.random()}> {/* */}
+                    <CodeMirror options={this.state.codeMirrorOptions} value={query} />
+                </Tab.Pane>
+                }]);
+            console.log(newQueryPanes);
+            this.setState({
+                queryList: newQueryList,
+                queryPanes: newQueryPanes
+            });
         }
     }
 
@@ -134,7 +149,7 @@ class CRUDExerciseViewComponent extends React.Component {
             // Else case just sets loading true
             this.setState({
                 queriesInitialized: true,
-                queryPanes: [this.addQueryButton]
+                queryPanes: []
             });
         }
     }
@@ -203,7 +218,7 @@ class CRUDExerciseViewComponent extends React.Component {
                                             fluid: true, 
                                             vertical: true, 
                                             }} 
-                                        panes={ this.state.queryPanes } 
+                                        panes={ this.state.queryPanes.concat(this.addQueryButton) } 
                                         onTabChange={ this.handleTabChange }/>
                                     : <Loader active style={{margin: "auto"}}>Lade Queries...</Loader> }
                             </Form.Field>
