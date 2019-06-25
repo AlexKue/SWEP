@@ -196,7 +196,7 @@ export class AuthedContextProvider extends React.Component {
     }
     removeExercise = (exerciseId, categoryId) => {
         this.state.exercises.delete(exerciseId);
-        this.getCategoryById(categoryId).exerciseIdSet.delete(exerciseId);
+        this.getCategoryById(categoryId).removeExercise(exerciseId);
 
         this.forceUpdate();
     }
@@ -261,6 +261,10 @@ class Category {
         this.totalExerciseCount += 1;
         this.exerciseIdSet.add(exerciseId);
     } 
+    removeExercise = (exerciseId) => {
+        this.totalExerciseCount -= 1;
+        this.exerciseIdSet.delete(exerciseId);
+    }
 }
 
 class Exercise {
