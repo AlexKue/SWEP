@@ -46,7 +46,14 @@ class CRUDExerciseViewComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        this.addQueryButton = { menuItem: "Query Hinzufügen", render: () => null };
+        this.addQueryButton = { menuItem: "Query Hinzufügen", render: () => {
+            let queryCount = this.state.queryPanes.length;
+            if (queryCount > 0) {   // There can be at most one untracked query
+                return <label>Bitte erst Query {queryCount} abschicken.</label>
+            } else {    // There's no query so far, so we don't show to submit the untracked query
+                return null;
+            }
+        }};
         this.state = {
             title: props.title ? props.title : "",
             description: props.description ? props.description : "",
@@ -57,7 +64,7 @@ class CRUDExerciseViewComponent extends React.Component {
                 lineNumbers: true,
                 mode: "sql"
             },
-            queryList: [],
+            queryMap: new Map(),
             queryPanes: [],
             queriesInitialized: false,
             crudExerciseLoading: false,
@@ -68,6 +75,12 @@ class CRUDExerciseViewComponent extends React.Component {
             messageContent: "",
             context: props.context
         };
+    }
+
+    forceUpdate = () => {
+        this.setState({
+            state: this.state
+        });
     }
 
     updateTitle = (event) => {
@@ -84,6 +97,9 @@ class CRUDExerciseViewComponent extends React.Component {
         this.setState({
             points: event.target.value
         });
+    }
+    updateQueryLocal = (queryId, query) => {
+        this.state.queryMap.set(queryId, query);
     }
     crudExercise = () => {
         this.setState({
@@ -124,22 +140,24 @@ class CRUDExerciseViewComponent extends React.Component {
     }
 
     handleTabChange = (event, data) => {
-        if (data.activeIndex == this.state.queryPanes.length) { // If the last element was clicked
+        if (data.activeIndex == this.state.queryPanes.length    // If the last element was clicked
+            && !this.state.queryMap.get(-1)) {                  // And there is no -1 Object (unsubmittet query) 
+                // This ensures that there'll be at most one untracked query. Necessary for dealing with ID's
             // add a new query, local
-            let query = "INSERT INTO Here VALUES('Query')";
-            let queryPanesLength = this.state.queryPanes.length;
-            let newQueryList = this.state.queryList.concat([new Query(null, "INSERT INTO Here VALUES('Query')")]);
+            this.state.queryMap.set(-1, "INSERT INTO Here VALUES('Query')");    // Add Query with ID -1 
             let newQueryPanes = this.state.queryPanes.concat([{
                 menuItem: "Query " + (this.state.queryPanes.length + 1),
                 render: () => 
                     <QueryComponent 
-                        key={Math.random()} 
                         options={ this.state.codeMirrorOptions }
+                        id={-1}
+                        key={-1}
+                        query={ this.state.queryMap.get(-1) }                   // Link it to state.queryMap.get(-1), so state updates will affect
+                        updateQueryLocal={ this.updateQueryLocal }
                         />
                 }]);
-            console.log(newQueryPanes);
+
             this.setState({
-                queryList: newQueryList,
                 queryPanes: newQueryPanes
             });
         }
@@ -246,15 +264,13 @@ class QueryComponent extends React.Component {
         super(props);
 
         this.state = {
-            id: props.id ? props.id : null,
+            id: props.id,
             query: props.query ? props.query : "INSERT INTO Here VALUES('Query')"
         }
     }
 
     updateQuery = (content) => {
-        this.setState({
-            query: content 
-        });
+        this.props.updateQueryLocal(this.state.id, content);
     }
 
     render() {
