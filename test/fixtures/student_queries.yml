@@ -1,0 +1,6 @@
+one: 
+  query: "SELECT * FROM table1"
+two: 
+  query: "SELECT * FROM table2"
+three: 
+  query: "SELECT * FROM table3 ORDER BY date"
