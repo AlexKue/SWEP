@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_25_104218) do
+ActiveRecord::Schema.define(version: 2019_06_25_112101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(version: 2019_06_25_104218) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "student_query_id"
+    t.boolean "solved", default: false
+    t.float "certainity", default: 0.0
     t.index ["exercise_id"], name: "index_exercise_solvers_on_exercise_id"
     t.index ["user_id", "exercise_id"], name: "index_exercise_solvers_on_user_id_and_exercise_id", unique: true
     t.index ["user_id"], name: "index_exercise_solvers_on_user_id"
