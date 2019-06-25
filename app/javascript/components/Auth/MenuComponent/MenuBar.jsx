@@ -114,7 +114,9 @@ class ExercisesMenuEntryRender extends React.Component {
         <Dropdown.Item 
           key={"exc" + exerciseId} 
           as={Link} 
-          to={"/category-" + this.props.categoryId + "/exercise-" + exerciseId}>
+          to={window._userRole === "admin" ?
+            "/category-" + this.props.categoryId + "/exercise-" + exerciseId + "/edit"
+            : "/category-" + this.props.categoryId + "/exercise-" + exerciseId}>
           { this.props.context.getExerciseById(exerciseId).title }
         </Dropdown.Item>
       )
