@@ -142,7 +142,7 @@ class CRUDExerciseViewComponent extends React.Component {
     handleTabChange = (event, data) => {
         if (data.activeIndex == this.state.queryPanes.length    // If the last element was clicked
             && !this.state.queryMap.get(-1)) {                  // And there is no -1 Object (unsubmittet query) 
-                // This ensures that there'll be at most one untracked query. Necessary for dealing with ID's
+            // This ensures that there'll be at most one untracked query. Necessary for dealing with ID's
             // add a new query, local
             this.state.queryMap.set(-1, "INSERT INTO Here VALUES('Query')");    // Add Query with ID -1 
             let newQueryPanes = this.state.queryPanes.concat([{

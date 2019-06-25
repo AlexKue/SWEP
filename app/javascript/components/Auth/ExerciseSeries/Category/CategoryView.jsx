@@ -85,7 +85,17 @@ class ExerciseListItem extends React.Component {
                 secondContent={ this.props.solved ? 
                     this.props.totalExercisePoints + "/" + this.props.totalExercisePoints
                 :   "0/" + this.props.totalExercisePoints}
-                thirdContent={ <Link to={this.props.localUrl + "/exercise-" + this.props.exerciseId}>Gehe zu <Icon name="arrow right" /></Link>} 
+                thirdContent={ 
+                    <Link to={this.props.localUrl + "/exercise-" + this.props.exerciseId 
+                    + (window._userRole === "admin" ? "/edit" : "")}>
+                        {window._userRole === "admin" ?
+                        <React.Fragment>
+                            Bearbeiten <Icon name="edit" />
+                        </React.Fragment>
+                        : 
+                        <React.Fragment>
+                            Gehe zu<Icon name="arrow right" />
+                        </React.Fragment>}</Link>} 
                 />
         )
     }

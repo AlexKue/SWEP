@@ -44,6 +44,7 @@ class AuthedComponent extends React.Component {
             <Route exact path="/category-:categoryId/edit" render={(props) => <CRUDCategoryView {...props} />} />
             <Route exact path="/category-:categoryId" render={(props) => <CategoryView {...props} />} />
             <Route exact path="/category-:categoryId/exercise-:exerciseId/" render={(props) => <ExerciseView {...props} /> } />
+            <Route exact path="/category-:categoryId/exercise-:exerciseId/edit" render={(props) => <CRUDExerciseView {...props} /> } />
             <Route exact path="/category-:categoryId/create-exercise" render={(props) => <CRUDExerciseView {...props} /> } />
             <Route exact path="/test" component={TestComponent} />
           </Container>
