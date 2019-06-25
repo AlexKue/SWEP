@@ -98,7 +98,12 @@ class CRUDCategoryViewComponent extends React.Component {
                     messageContent: "Die Änderungen wurden erfolgreich übernommen."
                 });
             }).catch(error => {
-                //TODO: IMPLEMENT proper response
+                this.setState({
+                    success: false,
+                    error: true,
+                    messageTitle: "Fehler",
+                    messageContent: error
+                });
             }).finally(() => {
                 this.resetRequestPending();
             })

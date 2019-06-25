@@ -220,7 +220,7 @@ export default class API {
         resolve(response);
       }).catch(error => {
         /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
-        reject(error);
+        reject(this.getErrorList(error));
       })
     });
   }
