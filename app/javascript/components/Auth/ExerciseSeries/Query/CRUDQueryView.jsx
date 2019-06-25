@@ -148,6 +148,27 @@ class CRUDQueryViewComponent extends React.Component {
                     loading: false
                 })
             })
+        } else { // This query is tracked, so less work
+            API.updateQuery(queryId, this.state.localQueryMap.get(queryId))
+            .then(response => {
+                this.setState({
+                    messageTitle: "Erfolg",
+                    messageContent: "Änderungen erfolgreich übernommen.",
+                    showMessage: true,
+                    successMessage: true
+                })
+            }).catch(error => {
+                this.setState({
+                    messageTitle: "Fehler",
+                    messageContent: error,
+                    showMessage: true,
+                    successMessage: false
+                })
+            }).finally(() => {
+                this.setState({
+                    loading: false
+                })
+            })
         }
     }
 

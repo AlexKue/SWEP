@@ -356,7 +356,7 @@ export default class API {
       }).then(response => {
         resolve(response);
       }).catch(error => {
-        reject(error);
+        reject(this.getErrorList(error));
       })
     });
   }
