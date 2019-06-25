@@ -143,6 +143,25 @@ export class AuthedContextProvider extends React.Component {
 
         this.forceUpdate();
     }
+    addExercise = (
+        title,
+        description,
+        totalExercisePoints,
+        exerciseId,
+        solved,
+        queryIdSet = new Set()) => {
+            this.state.exercises.set(exerciseId,
+                new Exercise(
+                    title,
+                    description,
+                    totalExercisePoints,
+                    solved,
+                    exerciseId,
+                    queryIdSet
+                ));
+            // Trigger Update
+            this.forceUpdate();
+    }
     getUserName = () => {
         return this.state.userName;
     }
@@ -203,13 +222,24 @@ class Exercise {
         description,
         totalExercisePoints,
         solved,
-        id
+        id,
+        queryIdSet = new Set()
     ) {
         this.title = title;
         this.description = description;
         this.totalExercisePoints = totalExercisePoints;
         this.solved = solved;
         this.id = id;
+        this.queryIdSet = new Set();
     }
+}
 
+class Query{
+    constructor(
+        query,
+        id
+    ) {
+        this.query = query;
+        this.id = id;
+    }
 }
