@@ -47,14 +47,30 @@ class CRUDQueryViewComponent extends React.Component {
             messageContent: "",
             successMessage: true,
             showMessage: false,
-            loading: false
+            loading: false,
+            context: props.context
         }
     }
 
-    componentDidMount() {
-        this.setState({
-            initialized: true
-        });
+    async componentDidMount() {
+        setTimeout(async () => {  // Timeout to ensure showing circle
+            for (const queryId of this.state.context.getExerciseById(this.props.exerciseId).queryIdSet) {
+                if (this.state.context.getQuery(queryId)) {
+                    this.state.localQueryMap.set(queryId, this.state.context.getQuery(queryId));
+                } else {
+                    // Fetch query, put in context and local
+                    let queryPromiseResult = await API.getQuery(queryId);
+                    let queryResult = queryPromiseResult.data;
+                    // TODO: If error (shouldn't happen)
+                    this.state.localQueryMap.set(queryResult.id, queryResult.query);
+                    this.state.context.addQuery(queryResult.id, queryResult.query);
+                }
+            }
+            this.updatePanes();
+            this.setState({
+                initialized: true
+            });
+        }, 50);
     }
 
     handleTabChange = (event, data) => {
@@ -74,7 +90,8 @@ class CRUDQueryViewComponent extends React.Component {
     updatePanes = () => {
         let panes = [];
         let i = 1;
-        for (const [queryId, value] of this.state.localQueryMap) {
+        let sortedByIdQueries = new Map([...this.state.localQueryMap.entries()].sort());
+        for (const [queryId, value] of sortedByIdQueries) {
             panes.push({
                 menuItem: "Query " + i,
                 render: () => {

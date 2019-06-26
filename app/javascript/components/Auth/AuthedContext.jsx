@@ -10,7 +10,7 @@ export class AuthedContextProvider extends React.Component {
     state = {
         categories: null,
         exercises: null,
-        queries: null,
+        queries: new Map(),
         totalCategoriesCount: 0,
         userName: localStorage.getItem("userName"),
         initialized: false,
@@ -219,6 +219,19 @@ export class AuthedContextProvider extends React.Component {
             userName: newUserName
         });
     }
+    addQuery = (queryId, query) => {
+        this.state.queries.set(queryId, query);
+
+        this.forceUpdate();
+    }
+    removeQuery = (queryId) => {
+        this.state.queries.delete(queryId);
+
+        this.forceUpdate();
+    }
+    getQuery = (queryId) => {
+        return this.state.queries.get(queryId);
+    }
 
     render() {
         const contextValue = {
@@ -239,7 +252,10 @@ export class AuthedContextProvider extends React.Component {
             loadText: this.state.loadText,
             fetchExerciseInformation: this.fetchExerciseInformation,
             updateExercise: this.updateExercise,
-            removeExercise: this.removeExercise
+            removeExercise: this.removeExercise,
+            addQuery: this.addQuery,
+            removeQuery: this.removeQuery,
+            getQuery: this.getQuery
         }
 
         return (
