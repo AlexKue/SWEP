@@ -13,6 +13,10 @@ export const CategoryView = (props) => {    // props is containing the Router co
     let context = useContext(AuthedContext);
     let categoryId = parseInt(props.match.params.categoryId);
     let category = context.getCategories().get(categoryId);
+    if (!category) {
+        props.history.push("/");    // If the category doesn't exist return to root
+        return null;
+    }
     let exercises = category.exerciseMap;
     let localUrl = props.history.location.pathname;
 
