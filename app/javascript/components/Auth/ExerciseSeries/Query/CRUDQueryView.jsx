@@ -120,7 +120,7 @@ class CRUDQueryViewComponent extends React.Component {
                                 <Button content="Abschicken" onClick={ () => this.crudQuery(queryId) }/>
                             </Grid.Column>
                             <Grid.Column>
-                                <Button color="red" content="Löschen" style={{float: "right"}} onClick={ () => this.deleteQuery(queryId) }/>
+                                <Button color="red" content="Löschen" style={{float: "right"}} onClick={ () => this.deleteQuery(queryId) } disabled/>
                             </Grid.Column>
                         </Grid>
                     </Tab.Pane>
@@ -143,7 +143,10 @@ class CRUDQueryViewComponent extends React.Component {
             API.createQuery(this.state.exerciseId, this.state.localQueryMap.get(queryId))
             .then(response => {
                 let newQueryId = response.data.id;
-                // TODO: Add Query to context
+                // Add Query to Context
+                this.state.context.addQuery(newQueryId, this.state.localQueryMap.get(queryId));
+                // Link Query with exercise
+                this.state.context.getExerciseById(this.state.exerciseId).addQuery(newQueryId);
                 this.state.localQueryMap.set(newQueryId, this.state.localQueryMap.get(queryId));
                 this.state.localQueryMap.delete(Number.MAX_SAFE_INTEGER);
                 this.setState({
@@ -168,6 +171,7 @@ class CRUDQueryViewComponent extends React.Component {
         } else { // This query is tracked, so less work
             API.updateQuery(queryId, this.state.localQueryMap.get(queryId))
             .then(response => {
+                this.state.context.updateQuery(queryId, this.state.localQueryMap.get(queryId));
                 this.setState({
                     messageTitle: "Erfolg",
                     messageContent: "Änderungen erfolgreich übernommen.",

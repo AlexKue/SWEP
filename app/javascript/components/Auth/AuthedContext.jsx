@@ -232,6 +232,11 @@ export class AuthedContextProvider extends React.Component {
     getQuery = (queryId) => {
         return this.state.queries.get(queryId);
     }
+    updateQuery = (queryId, query) => {
+        this.state.queries.set(queryId, query);
+
+        this.forceUpdate();
+    }
 
     render() {
         const contextValue = {
@@ -255,7 +260,8 @@ export class AuthedContextProvider extends React.Component {
             removeExercise: this.removeExercise,
             addQuery: this.addQuery,
             removeQuery: this.removeQuery,
-            getQuery: this.getQuery
+            getQuery: this.getQuery,
+            updateQuery: this.updateQuery
         }
 
         return (
