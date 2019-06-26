@@ -3,7 +3,7 @@ class Api::QueriesController < ApplicationController
     
     def show
         @query = Queries.find(params[:id])
-        render json: @query, status: ok
+        render json: @query, status: :ok
     end
 
     def index
