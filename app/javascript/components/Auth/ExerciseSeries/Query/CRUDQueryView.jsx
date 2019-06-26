@@ -75,10 +75,10 @@ class CRUDQueryViewComponent extends React.Component {
 
     handleTabChange = (event, data) => {
         let newActiveIndex = data.activeIndex;
-        if (newActiveIndex == this.state.queryPanes.length && !this.state.localQueryMap.has(-1)) {
+        if (newActiveIndex == this.state.queryPanes.length && !this.state.localQueryMap.has(Number.MAX_SAFE_INTEGER)) {
             // Clicked last element
             // and there's no untracked element at the moment
-            this.state.localQueryMap.set(-1, "INSERT INTO Here VALUES('QUERY')");
+            this.state.localQueryMap.set(Number.MAX_SAFE_INTEGER, "INSERT INTO Here VALUES('QUERY')");
             this.updatePanes();
         }
         this.setState({
@@ -139,13 +139,13 @@ class CRUDQueryViewComponent extends React.Component {
     }
 
     crudQuery = (queryId) => {
-        if (queryId == -1) { // this is the not-yet-tracked query
+        if (queryId == Number.MAX_SAFE_INTEGER) { // this is the not-yet-tracked query
             API.createQuery(this.state.exerciseId, this.state.localQueryMap.get(queryId))
             .then(response => {
                 let newQueryId = response.data.id;
                 // TODO: Add Query to context
                 this.state.localQueryMap.set(newQueryId, this.state.localQueryMap.get(queryId));
-                this.state.localQueryMap.delete(-1);
+                this.state.localQueryMap.delete(Number.MAX_SAFE_INTEGER);
                 this.setState({
                     messageTitle: "Erfolg",
                     messageContent: "Die Query wurde erfolgreich hinzugefügt.",
