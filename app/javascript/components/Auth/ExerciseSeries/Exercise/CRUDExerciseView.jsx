@@ -164,6 +164,15 @@ class CRUDExerciseViewComponent extends React.Component {
         }
     }
 
+    showSuccessMessage = (title, content) => {
+        this.setState({
+            messageTitle: title,
+            messageContent: content,
+            success: true,
+            error: false
+        })
+    }
+
     componentDidMount() {   // Start processing of query list data
         let exerciseId = this.props.exerciseId;
         if (!exerciseId) return; // No need to fetch anything if this is a new exercise
@@ -271,7 +280,7 @@ class CRUDExerciseViewComponent extends React.Component {
                                 <Divider />
                                 <Form.Field>
                                     <label>Hinterlegte Queries</label>
-                                    <CRUDQueryView exerciseId={ this.state.id }/>
+                                    <CRUDQueryView exerciseId={ this.state.id } showSuccessMessage={ this.showSuccessMessage }/>
                                 </Form.Field>
                             </React.Fragment>
                         }
