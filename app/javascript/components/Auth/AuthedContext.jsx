@@ -9,6 +9,8 @@ export class AuthedContextProvider extends React.Component {
     isFetching = false;
     state = {
         categories: null,
+        exercises: null,
+        queries: new Map(),
         totalCategoriesCount: 0,
         userName: localStorage.getItem("userName"),
         initialized: false,
@@ -24,6 +26,7 @@ export class AuthedContextProvider extends React.Component {
         if (!this.isFetching) {
             this.isFetching = true;             // As promises are async, we need to block further fetches
             let categories = new Map();
+            let exercises = new Map();
             let totalCategoriesCount = 0;
             let promiseExerciseList = [];
             API.getCategories()
@@ -48,25 +51,32 @@ export class AuthedContextProvider extends React.Component {
                 this.setState({
                     loadText: "Lade Aufgaben..."
                 });
-                categories.forEach((category, index) => {
+                for (let [categoryId, category] of categories) {
                     promiseExerciseList.push(new Promise((resolve, reject) => {
                         API.getExercisesForCategory(category.id)
                         .then(response => {
                             let totalExerciseCount = response.data.count;
-                            let exerciseIdListResponse = response.data.data;
-                            let exerciseIdList = [];
-                            for (const exercise of exerciseIdListResponse) {
-                                exerciseIdList.push(exercise.id);
+                            let exerciseListResponse = response.data.data;
+                            let exerciseIdSet = new Set();
+                            for (const exercise of exerciseListResponse) {
+                                exercises.set(exercise.id, new Exercise(
+                                    exercise.title,
+                                    "",
+                                    exercise.points,
+                                    false,
+                                    exercise.id
+                                ));
+                                exerciseIdSet.add(exercise.id);
                             }
                             category.totalExerciseCount = totalExerciseCount;
-                            category.exerciseIdList = exerciseIdList;
+                            category.exerciseIdSet = exerciseIdSet;
                             resolve(true);
                         }).catch(error => {
                             console.error(error);
                             reject(error);
                         })
                     }));
-                })
+                }
             })
             .catch(error => {               // This shouldn't happen, so for debug purpose we output this to console
                 console.log(error);
@@ -76,6 +86,8 @@ export class AuthedContextProvider extends React.Component {
                     this.setState({
                         initialized: true,
                         categories: categories,
+                        exercises: exercises,
+                        queries: new Map(),
                         totalCategoriesCount: totalCategoriesCount
                     });
                 });
@@ -85,11 +97,50 @@ export class AuthedContextProvider extends React.Component {
     getCategories = () => {
         return this.state.categories;
     }
+    getExercises = () => {
+        return this.state.exercises;
+    }
     isInitialized = () => {
         return this.state.initialized;
     }
     getCategoryById = (Id) => {
         return this.state.categories.get(Id);
+    }
+    getExerciseById = (Id) => {
+        return this.state.exercises.get(Id);
+    }
+    fetchExerciseInformation = (exerciseId) => {    // Fetches exercise information AND queryIds, doesn't fetch queries itself
+        return new Promise((resolve, reject) => {
+            API.getExerciseInfo(exerciseId)
+            .then(response => {
+                let exercise = response.data;
+                this.state.exercises.set(exerciseId, new Exercise(
+                    exercise.title,
+                    exercise.text,
+                    exercise.points,
+                    null,   // TODO: Set value
+                    exerciseId
+                ));
+                API.getQueries(exerciseId)
+                .then(response => {
+                    let queryIdResponseList = response.data.data;
+                    let exercise = this.getExerciseById(exerciseId);
+                    for (const query of queryIdResponseList) {
+                        exercise.addQuery(query.id);
+                    }
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            }).catch(error => {
+                reject(error);
+            }).finally(() => {
+                this.forceUpdate();
+            })
+        });
+    }
+    getExercisesForCategory = (Id) => {
+        return this.state.categories.get(Id).exerciseIdSet;
     }
     addCategory = (
         title,
@@ -124,6 +175,41 @@ export class AuthedContextProvider extends React.Component {
 
         this.forceUpdate();
     }
+    addExercise = (
+        categoryId,
+        title,
+        description,
+        totalExercisePoints,
+        exerciseId,
+        solved,
+        queryIdSet = new Set()) => {
+            this.state.exercises.set(exerciseId,
+                new Exercise(
+                    title,
+                    description,
+                    totalExercisePoints,
+                    solved,
+                    exerciseId,
+                    queryIdSet
+                ));
+            this.getCategoryById(categoryId).addExercise(exerciseId);
+            // Trigger Update
+            this.forceUpdate();
+    }
+    updateExercise = (Id, title, description, totalExercisePoints) => {
+        let exercise = this.getExerciseById(Id);
+        exercise.title = title;
+        exercise.description = description;
+        exercise.totalExercisePoints = totalExercisePoints;
+
+        this.forceUpdate();
+    }
+    removeExercise = (exerciseId, categoryId) => {
+        this.state.exercises.delete(exerciseId);
+        this.getCategoryById(categoryId).removeExercise(exerciseId);
+
+        this.forceUpdate();
+    }
     getUserName = () => {
         return this.state.userName;
     }
@@ -133,20 +219,49 @@ export class AuthedContextProvider extends React.Component {
             userName: newUserName
         });
     }
+    addQuery = (queryId, query) => {
+        this.state.queries.set(queryId, query);
+
+        this.forceUpdate();
+    }
+    removeQuery = (queryId) => {
+        this.state.queries.delete(queryId);
+
+        this.forceUpdate();
+    }
+    getQuery = (queryId) => {
+        return this.state.queries.get(queryId);
+    }
+    updateQuery = (queryId, query) => {
+        this.state.queries.set(queryId, query);
+
+        this.forceUpdate();
+    }
 
     render() {
         const contextValue = {
             getCategories: this.getCategories,
+            getExercises: this.getExercises,
+            getExercisesForCategory: this.getExercisesForCategory,
             initialize: this.initialize,
             getCategoryById: this.getCategoryById,
+            getExerciseById: this.getExerciseById,
             addCategory: this.addCategory,
             updateCategory: this.updateCategory,
             removeCategory: this.removeCategory,
+            addExercise: this.addExercise,
             setUserLoggedOut: this.props.setUserLoggedOut,
             getUserName: this.getUserName,
             updateUserName: this.updateUserName,
             isInitialized: this.isInitialized,
-            loadText: this.state.loadText
+            loadText: this.state.loadText,
+            fetchExerciseInformation: this.fetchExerciseInformation,
+            updateExercise: this.updateExercise,
+            removeExercise: this.removeExercise,
+            addQuery: this.addQuery,
+            removeQuery: this.removeQuery,
+            getQuery: this.getQuery,
+            updateQuery: this.updateQuery
         }
 
         return (
@@ -164,18 +279,57 @@ class Category {
         solvedExerciseCount,
         totalExerciseCount,
         id,
-        exerciseIdList = null           // List of the exercise IDs belonging to that category
-        // will be assigned when the category is opened the first time, as this is another request
+        exerciseIdSet = new Set()
     ) {
         this.title = title;
         this.description = description;
         this.solvedExerciseCount = solvedExerciseCount;
         this.totalExerciseCount = totalExerciseCount;
         this.id = id;
-        this.exerciseIdList = exerciseIdList;
+        this.exerciseIdSet = exerciseIdSet;
+    }
+
+    addExercise = (exerciseId) => {
+        this.totalExerciseCount += 1;
+        this.exerciseIdSet.add(exerciseId);
+    } 
+    removeExercise = (exerciseId) => {
+        this.totalExerciseCount -= 1;
+        this.exerciseIdSet.delete(exerciseId);
     }
 }
 
 class Exercise {
+    constructor(
+        title,
+        description,
+        totalExercisePoints,
+        solved,
+        id,
+        queryIdSet = new Set()
+    ) {
+        this.title = title;
+        this.description = description;
+        this.totalExercisePoints = totalExercisePoints;
+        this.solved = solved;
+        this.id = id;
+        this.queryIdSet = new Set();
+    }
 
+    addQuery = (queryId) => {
+       this. queryIdSet.add(queryId);
+    }
+    removeQuery = (queryId) => {
+        this.queryIdSet.delete(queryId);
+    }
+}
+
+class Query{
+    constructor(
+        query,
+        id
+    ) {
+        this.query = query;
+        this.id = id;
+    }
 }
