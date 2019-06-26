@@ -109,19 +109,29 @@ export class AuthedContextProvider extends React.Component {
     getExerciseById = (Id) => {
         return this.state.exercises.get(Id);
     }
-    fetchExerciseInformation = (Id) => {
+    fetchExerciseInformation = (exerciseId) => {    // Fetches exercise information AND queryIds, doesn't fetch queries itself
         return new Promise((resolve, reject) => {
-            API.getExerciseInfo(Id)
+            API.getExerciseInfo(exerciseId)
             .then(response => {
                 let exercise = response.data;
-                this.state.exercises.set(Id, new Exercise(
+                this.state.exercises.set(exerciseId, new Exercise(
                     exercise.title,
                     exercise.text,
                     exercise.points,
-                    null,
-                    Id
+                    null,   // TODO: Set value
+                    exerciseId
                 ));
-                resolve(true);
+                API.getQueries(exerciseId)
+                .then(response => {
+                    let queryIdResponseList = response.data.data;
+                    let exercise = this.getExerciseById(exerciseId);
+                    for (const query of queryIdResponseList) {
+                        exercise.addQuery(query.id);
+                    }
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
             }).catch(error => {
                 reject(error);
             }).finally(() => {
@@ -282,6 +292,13 @@ class Exercise {
         this.solved = solved;
         this.id = id;
         this.queryIdSet = new Set();
+    }
+
+    addQuery = (queryId) => {
+       this. queryIdSet.add(queryId);
+    }
+    removeQuery = (queryId) => {
+        this.queryIdSet.delete(queryId);
     }
 }
 
