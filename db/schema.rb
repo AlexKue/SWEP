@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2019_06_25_112101) do
     t.integer "exercise_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "student_query_id"
+    t.text "query"
     t.boolean "solved", default: false
     t.boolean "certain", default: true
     t.index ["exercise_id"], name: "index_exercise_solvers_on_exercise_id"
@@ -51,12 +51,6 @@ ActiveRecord::Schema.define(version: 2019_06_25_112101) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exercise_id"], name: "index_queries_on_exercise_id"
-  end
-
-  create_table "student_queries", force: :cascade do |t|
-    t.text "query"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
