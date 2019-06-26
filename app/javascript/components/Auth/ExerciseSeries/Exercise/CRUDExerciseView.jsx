@@ -52,6 +52,13 @@ class CRUDExerciseViewComponent extends React.Component {
             context: props.context,
             deleteTitle: "Löschen"
         };
+
+        if (this.props.location.hash === "#success") {  // we came from redirect of create
+            this.state.messageTitle = "Erfolg";
+            this.state.messageContent = "Die Übung wurde erfolgreich erstellt."
+            this.state.success = true;
+            this.state.error = false;
+        }
     }
 
     forceUpdate = () => {
@@ -111,21 +118,15 @@ class CRUDExerciseViewComponent extends React.Component {
                     this.state.points, 
                     parseInt(response.data.id), 
                     false);
-                this.setState({
-                    id: response.data.id,
-                    error: false,
-                    success: true,
-                    messageTitle: "Erfolg",
-                    messageContent: "Die Übung wurde erfolgreich erstellt."
-                })
+                // Change path to avoid confusion when pressing F5
+                this.props.history.push("/category-" + this.props.categoryId + "/exercise-" + response.data.id + "/edit#success");
             }).catch(error => {
                 this.setState({
                     error: true,
                     success: false,
                     messageTitle: "Fehler",
                     messageContent: error
-                })
-            }).finally(() => {
+                });
                 this.setState({
                     crudExerciseLoading: false
                 });
