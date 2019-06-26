@@ -12,7 +12,7 @@ class ExecutionBasedChecker
       query_result = execute query, dbname
       reference_result = execute reference, dbname
       score = 0 if result_eql? query_result, reference_result
-      debug = {:query => query_result, :reference => reference_result, :aim => :equality}
+      debug = {:query => query_result.entries, :reference => reference_result.entries, :aim => :equality}
     rescue PG::Error => e
       debug = {:error => e}
     end
