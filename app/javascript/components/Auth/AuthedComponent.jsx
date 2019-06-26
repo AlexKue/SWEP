@@ -12,49 +12,50 @@ import { CategoryView } from './ExerciseSeries/Category/CategoryView.jsx';
 import CRUDCategoryView from './ExerciseSeries/Category/CRUDCategoryView.jsx';
 import UserSettings from './User/UserSettings.jsx';
 import ExerciseView from './ExerciseSeries/Exercise/ExerciseView.jsx';
+import CRUDExerciseView from './ExerciseSeries/Exercise/CRUDExerciseView.jsx';
 import TestComponent from '../TestComponent.jsx';
 
 export const AuthedWrapper = (props) => {
   const context = useContext(AuthedContext);
 
-  if (context.isInitialized()) {
-    return (
-      <AuthedComponent context={context} setUserLoggedOut={props.setUserLoggedOut}/>
-    )
-  } else {
-    context.initialize();
-    return (
-      <Container>
-        <Loader active>{ context.loadText }</Loader>
-      </Container>
-    )
-  }
+  return (
+    <AuthedComponent context={context} setUserLoggedOut={props.setUserLoggedOut}/>
+  )
 }
 
 class AuthedComponent extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      userNick: "Matthias"  //TODO: Receive userNick from Server / show E-Mail
-    };
+  
+  componentDidMount() {
+    // this should be enough for React to put this element into the dom
+    // unfortunately there's no guarantee that the element is in the DOM,
+    // so we need to make a 50ms "sleep" here
+    setTimeout(() => {this.props.context.initialize()}, 50);
   }
 
   render() {
-    return (
-      <React.Fragment>
-        <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
+    if (this.props.context.isInitialized()) {
+      return (
+        <React.Fragment>
+          <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
+          <Container>
+            <Route exact path="/" component={CategoryList} />
+            <Route exact path="/edit-profile" component={UserSettings} />
+            <Route exact path="/category/create" render={(props) => <CRUDCategoryView {...props} />} />
+            <Route exact path="/category-:categoryId/edit" render={(props) => <CRUDCategoryView {...props} />} />
+            <Route exact path="/category-:categoryId" render={(props) => <CategoryView {...props} />} />
+            <Route exact path="/category-:categoryId/exercise-:exerciseId/" render={(props) => <ExerciseView {...props} /> } />
+            <Route exact path="/category-:categoryId/exercise-:exerciseId/edit" render={(props) => <CRUDExerciseView {...props} /> } />
+            <Route exact path="/category-:categoryId/create-exercise" render={(props) => <CRUDExerciseView {...props} /> } />
+            <Route exact path="/test" component={TestComponent} />
+          </Container>
+        </React.Fragment>
+      );
+    } else {
+      return (
         <Container>
-          <Route exact path="/" component={CategoryList} />
-          <Route exact path="/edit-profile" component={UserSettings} />
-          <Route exact path="/category/create" render={(props) => <CRUDCategoryView {...props} />} />
-          <Route exact path="/category-:categoryId/edit" render={(props) => <CRUDCategoryView {...props} />} />
-          <Route exact path="/category-:categoryId" render={(props) => <CategoryView {...props} />} />
-          <Route exact path="/category-:categoryId/exercise-:exerciseId/" render={(props) => <ExerciseView {...props} /> } />
-          <Route exact path="/test" component={TestComponent} />
+          <Loader active>{ this.props.context.loadText }</Loader>
         </Container>
-      </React.Fragment>
-    );
+      );
+    }
   }
 }
