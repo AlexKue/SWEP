@@ -2,7 +2,7 @@ class Api::QueriesController < ApplicationController
     before_action :admin_user
     
     def show
-        @query = Queries.find(params[:id])
+        @query = Query.find(params[:id])
         render json: @query, status: :ok
     end
 
