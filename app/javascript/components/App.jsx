@@ -22,7 +22,8 @@ class App extends React.Component {
       isLoggedIn: window._isLoggedIn,
       userName: localStorage.getItem("userName"),
       userMail: localStorage.getItem("userMail"),
-      userId: localStorage.getItem("userId")
+      userId: localStorage.getItem("userId"),
+      show404: false
     }
 
     this.setUserLoggedIn = this.setUserLoggedIn.bind(this);
@@ -54,6 +55,9 @@ class App extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoggedIn != prevState.isLoggedIn) {
+      this.setState({
+        show404: false
+      });
       this.props.history.push("/");
     }
   }
