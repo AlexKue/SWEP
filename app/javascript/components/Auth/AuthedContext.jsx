@@ -118,20 +118,25 @@ export class AuthedContextProvider extends React.Component {
                     exercise.title,
                     exercise.text,
                     exercise.points,
-                    null,   // TODO: Set value
+                    null,               // TODO: Set value
                     exerciseId
                 ));
-                API.getQueries(exerciseId)
-                .then(response => {
-                    let queryIdResponseList = response.data.data;
-                    let exercise = this.getExerciseById(exerciseId);
-                    for (const query of queryIdResponseList) {
-                        exercise.addQuery(query.id);
-                    }
+                exercise = this.getExerciseById(exerciseId);    // Override by now created exercise from context storage
+                if (window._userRole === "student") {   // if student => Process the sent query and solved state
+                    exercise.setUserQuery("TEST");      // TODO: Replace by response
                     resolve(response);
-                }).catch(error => {
-                    reject(error);
-                })
+                } else {                                // else => must be admin => add stored queries
+                    API.getQueries(exerciseId)
+                    .then(response => {
+                        let queryIdResponseList = response.data.data;
+                        for (const query of queryIdResponseList) {
+                            exercise.addQuery(query.id);
+                        }
+                        resolve(response);
+                    }).catch(error => {
+                        reject(error);
+                    })
+                }
             }).catch(error => {
                 reject(error);
             }).finally(() => {
@@ -314,13 +319,26 @@ class Exercise {
         this.solved = solved;
         this.id = id;
         this.queryIdSet = new Set();
+        this.userQuery = null;
     }
 
     addQuery = (queryId) => {
-       this. queryIdSet.add(queryId);
+       this.queryIdSet.add(queryId);
     }
     removeQuery = (queryId) => {
         this.queryIdSet.delete(queryId);
+    }
+    getUserQuery = () => {
+        return this.userQuery;
+    }
+    setUserQuery = (userQuery) => {
+        this.userQuery = userQuery;
+    }
+    isSolved = () => {
+        return this.solved;
+    }
+    setSolved = () => {
+        this.solved = true;
     }
 }
 

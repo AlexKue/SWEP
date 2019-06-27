@@ -22,7 +22,7 @@ export const CategoryView = (props) => {    // props is containing the Router co
 
     return (
         <React.Fragment>
-            <CategoryViewComponent
+            <CategoryViewComponent key={ "catv_" + categoryId }
                     title={ category.title }
                     description={ category.description }
                     exerciseIdSet={ category.exerciseIdSet }

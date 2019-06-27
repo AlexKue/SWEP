@@ -26,7 +26,7 @@ const CRUDExerciseView = (props) => {
     let exerciseId = parseInt(props.match.params.exerciseId);
     let categoryId = parseInt(props.match.params.categoryId);
 
-    return <CRUDExerciseViewComponent 
+    return <CRUDExerciseViewComponent key={"ede_" + exerciseId}
                 context={context}
                 exerciseId={exerciseId}
                 categoryId={categoryId}

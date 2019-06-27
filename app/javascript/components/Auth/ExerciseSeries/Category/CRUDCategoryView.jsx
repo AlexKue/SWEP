@@ -33,7 +33,7 @@ const CRUDCategoryView = (props) => {
         props.history.push("/404");
     } 
 
-    return <CRUDCategoryViewComponent 
+    return <CRUDCategoryViewComponent key={ "edc_" + categoryId }
         context={context}
         title={ category ? category.title : null}
         description={ category ? category.description : null } 
