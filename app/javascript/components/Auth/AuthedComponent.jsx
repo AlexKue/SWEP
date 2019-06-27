@@ -1,5 +1,5 @@
 import React , { useContext } from "react";
-import { withRouter, Route } from "react-router-dom";
+import { withRouter, Route, Switch } from "react-router-dom";
 import {
   Container,
   Loader
@@ -14,6 +14,7 @@ import UserSettings from './User/UserSettings.jsx';
 import ExerciseView from './ExerciseSeries/Exercise/ExerciseView.jsx';
 import CRUDExerciseView from './ExerciseSeries/Exercise/CRUDExerciseView.jsx';
 import TestComponent from '../TestComponent.jsx';
+import { __404 } from './Components/errors.jsx';
 
 export const AuthedWrapper = (props) => {
   const context = useContext(AuthedContext);
@@ -38,15 +39,18 @@ class AuthedComponent extends React.Component {
         <React.Fragment>
           <MenuBar setUserLoggedOut={ this.props.setUserLoggedOut } />
           <Container>
-            <Route exact path="/" component={CategoryList} />
-            <Route exact path="/edit-profile" component={UserSettings} />
-            <Route exact path="/category/create" render={(props) => <CRUDCategoryView {...props} />} />
-            <Route exact path="/category-:categoryId/edit" render={(props) => <CRUDCategoryView {...props} />} />
-            <Route exact path="/category-:categoryId" render={(props) => <CategoryView {...props} />} />
-            <Route exact path="/category-:categoryId/exercise-:exerciseId/" render={(props) => <ExerciseView {...props} /> } />
-            <Route exact path="/category-:categoryId/exercise-:exerciseId/edit" render={(props) => <CRUDExerciseView {...props} /> } />
-            <Route exact path="/category-:categoryId/create-exercise" render={(props) => <CRUDExerciseView {...props} /> } />
-            <Route exact path="/test" component={TestComponent} />
+            <Switch>
+              <Route exact path="/" component={CategoryList} />
+              <Route exact path="/edit-profile" component={UserSettings} />
+              <Route exact path="/category/create" render={(props) => <CRUDCategoryView {...props} />} />
+              <Route exact path="/category-:categoryId/edit" render={(props) => <CRUDCategoryView {...props} />} />
+              <Route exact path="/category-:categoryId" render={(props) => <CategoryView {...props} />} />
+              <Route exact path="/category-:categoryId/exercise-:exerciseId/" render={(props) => <ExerciseView {...props} /> } />
+              <Route exact path="/category-:categoryId/exercise-:exerciseId/edit" render={(props) => <CRUDExerciseView {...props} /> } />
+              <Route exact path="/category-:categoryId/create-exercise" render={(props) => <CRUDExerciseView {...props} /> } />
+              <Route exact path="/test" component={TestComponent} />
+              <Route component={__404} />
+            </Switch>
           </Container>
         </React.Fragment>
       );
