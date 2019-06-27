@@ -48,6 +48,7 @@ class AuthedComponent extends React.Component {
               <Route exact path="/category-:categoryId/exercise-:exerciseId/" render={(props) => <ExerciseView {...props} /> } />
               <Route exact path="/category-:categoryId/exercise-:exerciseId/edit" render={(props) => <CRUDExerciseView {...props} /> } />
               <Route exact path="/category-:categoryId/create-exercise" render={(props) => <CRUDExerciseView {...props} /> } />
+              <Route exact pah="/spielwiese" render={(props) => <ExerciseView type="spielwiese" {...props} /> } />
               <Route exact path="/test" component={TestComponent} />
               <Route component={__404} />
             </Switch>

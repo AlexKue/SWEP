@@ -14,6 +14,11 @@ import AuthedContext from '../../AuthedContext.jsx';
 
 const ExerciseView = (props) => {
     let context = useContext(AuthedContext);
+
+    if (props.type == "spielwiese") {
+        return <ExerciseViewComponent type="spielwiese" />
+    }
+    
     let exerciseId = parseInt(props.match.params.exerciseId);
     let categoryId = parseInt(props.match.params.categoryId);
 
@@ -45,12 +50,18 @@ class ExerciseViewComponent extends React.Component {
             initialized: false
         }
 
-        let exercise = props.context.getExerciseById(props.exerciseId);
-        if (exercise.getUserQuery()) {   // Don't show loading icon, we fetched the entire exercise already
-            this.state.title = exercise.title;
-            this.state.description = exercise.description;
-            this.state.storedQuery = exercise.getUserQuery();
-            this.state.initialized = true
+        if (props.type == "spielwiese") {
+            this.state.title = "Spielwiese";
+            this.state.description = "Dies ist die Spielwiese. Hier können Queries abgeschickt und getestet werden, ohne eine Aufgabe zu bearbeiten.";
+            this.state.initialized = true;
+        } else {
+            let exercise = props.context.getExerciseById(props.exerciseId);
+            if (exercise.getUserQuery()) {   // Don't show loading icon, we fetched the entire exercise already
+                this.state.title = exercise.title;
+                this.state.description = exercise.description;
+                this.state.storedQuery = exercise.getUserQuery();
+                this.state.initialized = true
+            }
         }
     }
 
@@ -64,6 +75,11 @@ class ExerciseViewComponent extends React.Component {
             queryLoading: true
         });
         // Implement logic for sending, receiving and updating
+        if (props.type == "spielwiese") {
+
+        } else { // this is a proper exercise
+
+        }
     }
 
     componentDidMount() {
