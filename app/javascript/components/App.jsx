@@ -7,6 +7,7 @@ import TestComponent from './TestComponent.jsx';
 import { FormWrapperContextProvider } from './Unauth/FormWrapper/FormWrapperContext.jsx';
 import { AuthedWrapper } from './Auth/AuthedComponent.jsx';
 import { AuthedContextProvider } from './Auth/AuthedContext.jsx';
+import { __404 } from './Auth/Components/errors.jsx';
 
 class App extends React.Component {
 
@@ -26,6 +27,11 @@ class App extends React.Component {
 
     this.setUserLoggedIn = this.setUserLoggedIn.bind(this);
     this.setUserLoggedOut = this.setUserLoggedOut.bind(this);
+
+    let location = this.props.location.pathname;
+    if (location != "/" && location != "/login" && location != "/register" && location != "/test") {
+      this.state.show404 = true;
+    }
   }
 
   setUserLoggedIn(loggedInState, userRole, userName, userMail, userId) {
@@ -60,6 +66,9 @@ class App extends React.Component {
         </AuthedContextProvider>
       );
     } else {
+      if (this.state.show404) { // Switch doesn't work due to FormWrapperContextProvider
+        return <__404 />
+      }
       return (
         <React.Fragment>
           <FormWrapperContextProvider>
