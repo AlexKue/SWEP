@@ -23,6 +23,10 @@ const CRUDCategoryView = (props) => {
         category = context.getCategoryById(parseInt(categoryId));
     }
 
+    if (!category) { // It doesn't exist
+        props.history.push("/404");
+    }
+
     return <CRUDCategoryViewComponent 
         context={context}
         title={ category ? category.title : null}
