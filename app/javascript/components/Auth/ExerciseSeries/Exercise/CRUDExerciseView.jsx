@@ -13,15 +13,20 @@ import {
 import API from '../../../API/API.jsx';
 import AuthedContext from '../../AuthedContext.jsx';
 import CRUDQueryView from '../Query/CRUDQueryView.jsx';
+import { __403 } from '../../Components/errors.jsx';
 
 const CRUDExerciseView = (props) => {
+
+    if (window._userRole != "admin") {
+        return <__403 />;
+    }
 
     const context = useContext(AuthedContext);
 
     let exerciseId = parseInt(props.match.params.exerciseId);
     let categoryId = parseInt(props.match.params.categoryId);
 
-    return <CRUDExerciseViewComponent 
+    return <CRUDExerciseViewComponent key={"ede_" + exerciseId}
                 context={context}
                 exerciseId={exerciseId}
                 categoryId={categoryId}
@@ -124,12 +129,12 @@ class CRUDExerciseViewComponent extends React.Component {
                     success: false,
                     messageTitle: "Fehler",
                     messageContent: error
-                })
+                });
             }).finally(() => {
                 this.setState({
                     crudExerciseLoading: false
                 });
-            });
+            })
         }
     }
     hideMessage = () => {
@@ -163,13 +168,22 @@ class CRUDExerciseViewComponent extends React.Component {
         }
     }
 
+    showSuccessMessage = (title, content) => {
+        this.setState({
+            messageTitle: title,
+            messageContent: content,
+            success: true,
+            error: false
+        })
+    }
+
     componentDidMount() {   // Start processing of query list data
         let exerciseId = this.props.exerciseId;
         if (!exerciseId) return; // No need to fetch anything if this is a new exercise
         if (!this.state.context.getExerciseById(exerciseId)) {
             // above means that there's no such exercise (otherwise it would've been pulled by initialization)
-            this.props.history.push("/category-" + this.props.categoryId);
-            return
+            this.props.history.push("/404");
+            return;
         }
         if (this.state.context.getExerciseById(exerciseId).description) {
             let exercise = this.state.context.getExerciseById(exerciseId);
@@ -270,7 +284,7 @@ class CRUDExerciseViewComponent extends React.Component {
                                 <Divider />
                                 <Form.Field>
                                     <label>Hinterlegte Queries</label>
-                                    <CRUDQueryView exerciseId={ this.state.id }/>
+                                    <CRUDQueryView exerciseId={ this.state.id } showSuccessMessage={ this.showSuccessMessage }/>
                                 </Form.Field>
                             </React.Fragment>
                         }

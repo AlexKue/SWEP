@@ -12,8 +12,14 @@ import {
 
 import AuthedContext from '../../AuthedContext.jsx';
 import API from '../../../API/API.jsx';
+import { __403 } from '../../Components/errors.jsx';
 
 const CRUDCategoryView = (props) => {
+
+    if (window._userRole != "admin") {
+        return < __403 />
+    }
+
     const context = useContext(AuthedContext);
 
     let category = null;
@@ -23,7 +29,11 @@ const CRUDCategoryView = (props) => {
         category = context.getCategoryById(parseInt(categoryId));
     }
 
-    return <CRUDCategoryViewComponent 
+    if (!category && categoryId) { // It doesn't exist but the categoryId is delivered (=> edit)
+        props.history.push("/404");
+    } 
+
+    return <CRUDCategoryViewComponent key={ "edc_" + categoryId }
         context={context}
         title={ category ? category.title : null}
         description={ category ? category.description : null } 

@@ -55,6 +55,10 @@ class MenuBarComponent extends React.Component {
               name="home"
               onClick={ this.handleMenuEvent }>Home</Menu.Item>
             <CategoriesMenuEntry />
+            <Menu.Item
+              name="Spielwiese"
+              as={ Link }
+              to="/spielwiese" />
             <Menu.Menu position="right">
               <Dropdown item simple text={"Eingeloggt als: " + this.props.context.getUserName() }>
                 <Dropdown.Menu>

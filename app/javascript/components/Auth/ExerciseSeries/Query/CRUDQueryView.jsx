@@ -15,7 +15,7 @@ import API from '../../../API/API.jsx';
 const CRUDQueryView = (props) => {
     const context = useContext(AuthedContext);
 
-    return <CRUDQueryViewComponent context={context} exerciseId={props.exerciseId} />
+    return <CRUDQueryViewComponent context={context} exerciseId={props.exerciseId} {...props} />
 }
 
 class CRUDQueryViewComponent extends React.Component {
@@ -120,7 +120,7 @@ class CRUDQueryViewComponent extends React.Component {
                                 <Button content="Abschicken" onClick={ () => this.crudQuery(queryId) }/>
                             </Grid.Column>
                             <Grid.Column>
-                                <Button color="red" content="Löschen" style={{float: "right"}} onClick={ () => this.deleteQuery(queryId) } disabled/>
+                                <Button color="red" content="Löschen" style={{float: "right"}} onClick={ () => this.deleteQuery(queryId) } />
                             </Grid.Column>
                         </Grid>
                     </Tab.Pane>
@@ -194,7 +194,28 @@ class CRUDQueryViewComponent extends React.Component {
     }
 
     deleteQuery = (queryId) => {
-        // TODO
+        if (queryId == Number.MAX_SAFE_INTEGER) {   // It's the local query
+            this.state.localQueryMap.delete(queryId);
+            this.setState({
+                activeIndex: this.state.activeIndex - 1
+            });
+            this.updatePanes();
+        } else {
+            API.deleteQuery(queryId)
+            .then(response => {
+                this.state.context.getExerciseById(this.props.exerciseId).removeQuery(queryId); // delete association from exercise
+                this.state.context.removeQuery(queryId);                                        // remove from global query storage
+                this.state.localQueryMap.delete(queryId);                                       // remove from local query storage
+                this.setState({
+                    activeIndex: this.state.activeIndex -1
+                });
+                this.updatePanes();
+                this.props.showSuccessMessage("Erfolg", "Die Query wurde erfolgreich gelöscht.");
+            }).catch(error => {
+                // This technically cannot happen
+                console.error(error);
+            })
+        }
     }
 
     hideMessage = () => {
