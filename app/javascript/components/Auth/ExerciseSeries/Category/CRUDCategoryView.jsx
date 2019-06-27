@@ -29,9 +29,9 @@ const CRUDCategoryView = (props) => {
         category = context.getCategoryById(parseInt(categoryId));
     }
 
-    if (!category) { // It doesn't exist
+    if (!category && categoryId) { // It doesn't exist but the categoryId is delivered (=> edit)
         props.history.push("/404");
-    }
+    } 
 
     return <CRUDCategoryViewComponent 
         context={context}

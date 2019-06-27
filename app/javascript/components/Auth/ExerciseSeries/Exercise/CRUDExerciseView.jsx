@@ -182,8 +182,8 @@ class CRUDExerciseViewComponent extends React.Component {
         if (!exerciseId) return; // No need to fetch anything if this is a new exercise
         if (!this.state.context.getExerciseById(exerciseId)) {
             // above means that there's no such exercise (otherwise it would've been pulled by initialization)
-            this.props.history.push("/category-" + this.props.categoryId);
-            return
+            this.props.history.push("/404");
+            return;
         }
         if (this.state.context.getExerciseById(exerciseId).description) {
             let exercise = this.state.context.getExerciseById(exerciseId);
