@@ -13,8 +13,13 @@ import {
 import API from '../../../API/API.jsx';
 import AuthedContext from '../../AuthedContext.jsx';
 import CRUDQueryView from '../Query/CRUDQueryView.jsx';
+import { __403 } from '../../Components/errors.jsx';
 
 const CRUDExerciseView = (props) => {
+
+    if (window._userRole != "admin") {
+        return <__403 />;
+    }
 
     const context = useContext(AuthedContext);
 

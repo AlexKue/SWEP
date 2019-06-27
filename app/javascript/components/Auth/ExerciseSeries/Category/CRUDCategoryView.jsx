@@ -12,8 +12,14 @@ import {
 
 import AuthedContext from '../../AuthedContext.jsx';
 import API from '../../../API/API.jsx';
+import { __403 } from '../../Components/errors.jsx';
 
 const CRUDCategoryView = (props) => {
+
+    if (window._userRole != "admin") {
+        return < __403 />
+    }
+
     const context = useContext(AuthedContext);
 
     let category = null;
