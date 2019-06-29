@@ -1,9 +1,12 @@
+require 'query_checker_helper'
+
 class Api::QueriesController < ApplicationController
+    include QueryCheckerHelper
     before_action :admin_user
     
     def show
-        @query = Queries.find(params[:id])
-        render json: @query, status: ok
+        @query = Query.find(params[:id])
+        render json: @query, status: :ok
     end
 
     def index
@@ -20,8 +23,19 @@ class Api::QueriesController < ApplicationController
  
     def create
         @query = Exercise.find(params[:exercise_id]).queries.build(query_params)
-        if @query.save
-            render json: @query, status: :created
+        query_checker = init_query_checker()
+        execution_checker = query_checker.get "ExecutionBasedChecker"
+        checking_result = execution_checker.check @query.query, @query.query
+
+        if checking_result[:debug].has_key? :error
+            render json: [checking_result[:debug][:error]], status: :unprocessable_entity
+
+        elsif checking_result[:debug][:query].empty?
+            render json: ["Die Query lieferte ein leeres Ergebnis"], status: :unprocessable_entity
+
+        elsif @query.save
+            render json: {"id"=>@query.id, "result"=>checking_result[:debug][:query]}, status: :created
+
         else
             render json: @query.errors.full_messages, status: :unprocessable_entity
         end

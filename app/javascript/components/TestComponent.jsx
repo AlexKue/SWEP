@@ -56,7 +56,9 @@ export default class TestComponent extends React.Component {
       exerciseId: "",
       exerciseTitle: "",
       exerciseText: "",
-      exercisePoints: ""
+      exercisePoints: "",
+      query: "",
+      queryId: ""
     }
   }
 
@@ -142,6 +144,14 @@ export default class TestComponent extends React.Component {
       console.log(error);
     })
   }
+  updatecategorytest = () => {
+    API.updateCategory(this.state.categoryId, this.state.categoryTitle, this.state.categoryText)
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.error(error);
+    })
+  }
   createexercisetest() {
     API.createExercise(this.state.categoryId, this.state.exerciseTitle, this.state.exerciseText, this.state.exercisePoints)
     .then(response => {
@@ -172,6 +182,54 @@ export default class TestComponent extends React.Component {
       console.log(response);
     }).catch(error => {
       console.log(error);
+    })
+  }
+  updateexercisetest = () => {
+    API.updateExercise(this.state.exerciseId, this.state.exerciseTitle, this.state.exerciseText, this.state.exercisePoints)
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.error(error);
+    })
+  }
+  createquerytest = () => {
+    API.createQuery(this.state.exerciseId, this.state.query)
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.error(error);
+    });
+  }
+  getquerytest = () => {
+    API.getQuery(this.state.queryId)
+    .then(response => {
+      console.log(response)
+    }).catch(error => {
+      console.error(error);
+    });
+  }
+  getquerylisttest = () => {
+    API.getQueries(this.state.exerciseId)
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.error(error);
+    })
+  }
+  updatequerytest = () => {
+    API.updateQuery(this.state.queryId, this.state.query)
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.error(error);
+    })
+  }
+  deletequerytest = () => {
+    API.deleteQuery(this.state.queryId)
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.error(error);
     })
   }
 
@@ -235,7 +293,16 @@ export default class TestComponent extends React.Component {
       exercisePoints: event.target.value
     })
   }
-
+  updateQuery = (event) => {
+    this.setState({
+      query: event.target.value
+    });
+  }
+  updateQueryId = (event) => {
+    this.setState({
+      queryId: event.target.value
+    })
+  }
 
 
   render() {
@@ -259,6 +326,7 @@ export default class TestComponent extends React.Component {
         <button onClick={this.getcategoriestest}>Get Categories</button>
         <button onClick={this.getcategoryinfotest}>Get Category Info</button>
         <button onClick={this.deletecategorytest}>Delete Category</button>
+        <button onClick={this.updatecategorytest}>Update Category</button>
         <br/>
         <br/>
         <input onChange={this.updateExerciseId} placeholder="Exercise ID" value={this.state.exerciseId} />
@@ -270,6 +338,17 @@ export default class TestComponent extends React.Component {
         <button onClick={this.getexerciselisttest}>Get Exercises</button>
         <button onClick={this.getexerciseinfotest}>Get Exercise Info</button>
         <button onClick={this.deleteexercisetest}>Delete Exercise</button>
+        <button onClick={this.updateexercisetest}>Update Exercise</button>
+        <br/>
+        <br/>
+        <input onChange={this.updateQueryId} placeholder="Query ID" value={this.state.queryId} />
+        <input onChange={this.updateQuery} placeholder="Query" value={this.state.query} />
+        <br/>
+        <button onClick={this.createquerytest}>Create Query</button>
+        <button onClick={this.getquerylisttest}>Get Queries</button>
+        <button onClick={this.getquerytest}>Get Query Info</button>
+        <button onClick={this.updatequerytest}>Update Query</button>
+        <button onClick={this.deletequerytest}>Delete Query</button>
         <br/>
         <br/>
         <input onChange={this.updateUserId} placeholder="User ID" value={this.state.userId} />

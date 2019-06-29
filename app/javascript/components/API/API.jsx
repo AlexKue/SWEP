@@ -125,12 +125,11 @@ export default class API {
       id,           
       oldPassword   //TODO: Refactor with proper field
     };
-    newName ? userObject.name = newName : null;
-    newMail ? userObject.email = newMail : null;
+    newName != null ? userObject.name = newName : null;
+    newMail != null? userObject.email = newMail : null;
     showInLeaderbord != null ? userObject.showInLeaderbord = showInLeaderbord : null; //TODO: REFACTOR
-    newPassword ? userObject.password = newPassword : null;
-    newPasswordConf ? userObject.password_confirmation = newPasswordConf : null;
-    console.log({user: userObject, authenticity_token: window._token});
+    newPassword != null ? userObject.password = newPassword : null;
+    newPasswordConf != null ? userObject.password_confirmation = newPasswordConf : null;
     return new Promise((resolve, reject) => {
       this.service.patch("users/" + id, {
         user: userObject,
@@ -209,7 +208,19 @@ export default class API {
   static updateCategory(id, title, description) {
     console.log("updateCateogry called: TODO, this function is currently not implemented!");
     return new Promise((resolve, reject) => {
-      resolve(null);  //TODO: Implement
+      this.service.patch("categories/" + id, {
+        category: {
+          title: title,
+          text: description
+        },
+        authenticity_token: window._token
+      }).then(response => {
+        /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
+        resolve(response);
+      }).catch(error => {
+        /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(this.getErrorList(error));
+      })
     });
   }
   static getExercisesForCategory(id, offset = 0, limit = 30) {
@@ -242,8 +253,25 @@ export default class API {
         resolve(response);
       }).catch(error => {
         /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
-        reject(error);
+        reject(this.getErrorList(error));
       })
+    })
+  }
+  static updateExercise(exerciseId, title, text, points) {
+    console.log("updateExercise Called");
+    return new Promise((resolve, reject) => {
+      this.service.patch("exercises/" + exerciseId, {
+        exercise: {
+          title: title,
+          text: text,
+          points: points
+        },
+        authenticity_token: window._token
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(this.getErrorList(error));
+      });
     })
   }
   static getExerciseInfo(id) {
@@ -272,6 +300,76 @@ export default class API {
         resolve(response);
       }).catch(error => {
         /* IMPLEMENT LOGIC FOR PROCESSING ERRORS HERE */
+        reject(error);
+      })
+    })
+  }
+  static createQuery(exerciseId, query) {
+    console.log("Create Query called");
+    return new Promise((resolve, reject) => {
+      this.service.post("exercises/" + exerciseId + "/queries", {
+        query: {
+          query: query
+        },
+        authenticity_token: window._token
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error.response);
+      })
+    })
+  }
+  static getQuery(queryId) {
+    console.log("getQuery called");
+    return new Promise((resolve, reject) => {
+      this.service.get("queries/" + queryId, {
+        authenticity_token: window._token
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  }
+  static getQueries(exerciseId, offset = 0, limit = 30) {
+    console.log("Get Queries called");
+    return new Promise((resolve, reject) => {
+      this.service.get("exercises/" + exerciseId + "/queries", {
+        offset: offset,
+        limit: limit,
+        authenticity_token: window._token
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      });
+    })
+  }
+  static updateQuery(queryId, newQuery) {
+    console.log("Update Queries Called");
+    return new Promise((resolve, reject) => {
+      this.service.patch("queries/" + queryId, {
+        query: {
+          query: newQuery
+        },
+        authenticity_token: window._token
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(this.getErrorList(error));
+      })
+    });
+  }
+  static deleteQuery(queryId) {
+    console.log("Delete Queries called");
+    return new Promise((resolve, reject) => {
+      this.service.delete("queries/" + queryId, {
+        data: {
+          authenticity_token: window._token
+        }
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
         reject(error);
       })
     })

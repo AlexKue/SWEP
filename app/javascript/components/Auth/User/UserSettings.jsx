@@ -106,7 +106,6 @@ class UserSettingsComponent extends React.Component {
                 error: false,
                 messageTitle: "Erfolg",
                 messageContent: "Einstellungen erfolgreich geändert.",
-                loading: false,
                 oldUserNick: prevState.newUserNick,
                 oldUserMail: prevState.newUserMail,
                 oldShowInLeaderboard: prevState.newShowInLeaderboard
@@ -118,6 +117,10 @@ class UserSettingsComponent extends React.Component {
                 messageTitle: "Fehler",
                 messageContent: error
             });
+        }).finally(() => {
+            this.setState({
+                loading: false
+            })
         });
 
     }
@@ -162,28 +165,38 @@ class UserSettingsComponent extends React.Component {
                     <Form.Input
                         label="Nickname"
                         value={ this.state.newUserNick }
-                        onChange={ this.updateUserNick } />
+                        onChange={ this.updateUserNick }
+                        icon="user"
+                        iconPosition="left" />
                     <Form.Input
                         label="E-Mail Adresse"
                         value={ this.state.newUserMail }
-                        onChange={ this.updateUserMail } />
+                        onChange={ this.updateUserMail } 
+                        icon="at"
+                        iconPosition="left" />
                     <Form.Input
                         label="Altes Passwort"
                         value={ this.state.oldUserPass }
                         onChange={ this.updateOldUserPass } 
                         type="password"
-                        placeholder="Passwort" />
+                        placeholder="Altes Passwort" 
+                        icon="key"
+                        iconPosition="left"/>
                     <Form.Input
                         label="Neues Passwort"
                         value={ this.state.newUserPass }
                         onChange={ this.updateUserPass } 
-                        placeholder="Passwort"
-                        type="password" />
+                        placeholder="Neues Passwort wiederholen"
+                        type="password"  
+                        icon="key"
+                        iconPosition="left"/>
                     <Form.Input
                         value={ this.state.newUserPassConf }
                         onChange={ this.updateUserPassConf } 
                         placeholder="Passwort wiederholen"
-                        type="password" />
+                        type="password"  
+                        icon="key"
+                        iconPosition="left"/>
                     <Form.Checkbox
                         label="In Rangliste anzeigen?"
                         checked={ this.state.newShowInLeaderboard }
