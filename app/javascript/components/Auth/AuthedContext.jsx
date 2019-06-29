@@ -95,10 +95,10 @@ export class AuthedContextProvider extends React.Component {
         }
     }
     getCategories = () => {
-        return this.state.categories;
+        return new Map([...this.state.categories.entries()].sort());
     }
     getExercises = () => {
-        return this.state.exercises;
+        return new Map([...this.state.exercises.entries()].sort());
     }
     isInitialized = () => {
         return this.state.initialized;
