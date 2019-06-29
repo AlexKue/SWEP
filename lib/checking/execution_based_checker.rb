@@ -12,7 +12,7 @@ class ExecutionBasedChecker
       query_result = execute query, dbname
       reference_result = execute reference, dbname
       score = 0 if result_eql? query_result, reference_result
-      debug = {:query => query_result.entries, :reference => reference_result.entries, :aim => :equality}
+      debug = {:query => entries(query_result), :reference => entries(reference_result), :aim => :equality}
     rescue PG::Error => e
       debug = {:error => e}
     end
@@ -46,6 +46,17 @@ class ExecutionBasedChecker
       con.close if con
     end
     rs
+  end
+
+  def entries result
+      if !result.entries.empty?
+        arr = []
+        arr.append result.fields
+        result.each_row do |row|
+          arr.append row
+        end
+        arr
+      end
   end
 
 end
