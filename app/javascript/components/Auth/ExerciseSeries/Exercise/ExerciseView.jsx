@@ -11,6 +11,7 @@ import { Controlled as CodeMirror } from "react-codemirror2";
 require('codemirror/mode/sql/sql');
 
 import AuthedContext from '../../AuthedContext.jsx';
+import API from "../../../API/API.jsx";
 
 const ExerciseView = (props) => {
     let context = useContext(AuthedContext);
@@ -75,10 +76,19 @@ class ExerciseViewComponent extends React.Component {
             queryLoading: true
         });
         // Implement logic for sending, receiving and updating
-        if (props.type == "spielwiese") {
-
+        if (this.props.type == "spielwiese") {
+            // TODO
         } else { // this is a proper exercise
-
+            API.solveExercise(this.props.exerciseId, this.state.storedQuery)
+            .then(response => {
+                // TODO: Show success message and table
+            }).catch(error => {
+                // TODO: Show error
+            }).finally(() => {
+                this.setState({
+                    queryLoading: false
+                });
+            })
         }
     }
     forceUpdate = () => {

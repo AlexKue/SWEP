@@ -304,6 +304,20 @@ export default class API {
       })
     })
   }
+  static solveExercise(exerciseId, query) {
+    console.log("solveExercise called");
+    return new Promise((resolve, reject) => {
+      this.service.post("exercises/" + exerciseId + "/solve", {
+        id: exerciseId,
+        query: query,
+        authenticity_token: window._token
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
   static createQuery(exerciseId, query) {
     console.log("Create Query called");
     return new Promise((resolve, reject) => {

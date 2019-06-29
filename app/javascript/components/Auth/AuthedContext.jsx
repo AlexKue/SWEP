@@ -41,8 +41,8 @@ export class AuthedContextProvider extends React.Component {
                     new Category(
                         category.title,
                         category.text,
-                        0,              // TODO: Server is not sending this information so far
-                        0,              // TODO: Server is not sending this information so far
+                        category.solved_count,
+                        category.max_count, 
                         category.id
                     ));
                 });
@@ -63,7 +63,7 @@ export class AuthedContextProvider extends React.Component {
                                     exercise.title,
                                     "",
                                     exercise.points,
-                                    false,
+                                    false,  // TODO
                                     exercise.id
                                 ));
                                 exerciseIdSet.add(exercise.id);
@@ -113,12 +113,12 @@ export class AuthedContextProvider extends React.Component {
         return new Promise((resolve, reject) => {
             API.getExerciseInfo(exerciseId)
             .then(response => {
-                let exercise = response.data;
+                let exercise = response.data.exercise;
                 this.state.exercises.set(exerciseId, new Exercise(
                     exercise.title,
                     exercise.text,
                     exercise.points,
-                    null,               // TODO: Set value
+                    response.data.solved,
                     exerciseId
                 ));
                 exercise = this.getExerciseById(exerciseId);    // Override by now created exercise from context storage
