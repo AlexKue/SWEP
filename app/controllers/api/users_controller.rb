@@ -41,7 +41,9 @@ class Api::UsersController < ApplicationController
 
     # PATCH /api/users/:id
     def update
-        if @user.update_attributes(user_params)
+        if !current_user.authenticate(params[:password])
+            head :unauthorized
+        elsif @user.update_attributes(user_params)
             head :no_content
         else
             render json: @user.errors.full_messages, status: :unprocessable_entity
@@ -50,7 +52,7 @@ class Api::UsersController < ApplicationController
 
     private
         def user_params
-            params.require(:user).permit(:name, :email, :password, :password_confirmation)
+            params.require(:user).permit(:name, :email, :password, :password_confirmation, :hide_in_ranking)
         end
 
         def correct_user
