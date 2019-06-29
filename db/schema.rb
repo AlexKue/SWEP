@@ -28,8 +28,7 @@ ActiveRecord::Schema.define(version: 2019_06_25_112101) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "query"
-    t.boolean "solved", default: false
-    t.boolean "certain", default: true
+    t.boolean "solved"
     t.index ["exercise_id"], name: "index_exercise_solvers_on_exercise_id"
     t.index ["user_id", "exercise_id"], name: "index_exercise_solvers_on_user_id_and_exercise_id", unique: true
     t.index ["user_id"], name: "index_exercise_solvers_on_user_id"
