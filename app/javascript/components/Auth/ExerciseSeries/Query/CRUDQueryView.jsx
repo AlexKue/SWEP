@@ -6,8 +6,9 @@ import {
     Grid,
     Message
 } from "semantic-ui-react";
-import CodeMirror from "react-codemirror";
-require("codemirror/mode/sql/sql");
+
+import {Controlled as CodeMirror} from "react-codemirror2";
+require('codemirror/mode/sql/sql');
 
 import AuthedContext from '../../AuthedContext.jsx';
 import API from '../../../API/API.jsx';
@@ -98,9 +99,11 @@ class CRUDQueryViewComponent extends React.Component {
                     return (
                     <Tab.Pane key={queryId}>
                         <CodeMirror
+                            value={ this.state.localQueryMap.get(queryId) }
                             options={ this.state.codeMirrorOptions }
-                            value={ this.state.localQueryMap.get(queryId) } 
-                            onChange={ (content) => this.updateLocalQuery(queryId, content)}/>
+                            onBeforeChange={ (editor, data, value) => {
+                                this.updateLocalQuery(queryId, value);
+                            }}/>
                         { this.state.showMessage ? this.state.successMessage ? 
                             <Message
                                 header={ this.state.messageTitle }
@@ -136,6 +139,7 @@ class CRUDQueryViewComponent extends React.Component {
 
     updateLocalQuery = (queryId, value) => {
         this.state.localQueryMap.set(queryId, value);
+        this.forceUpdate();
     }
 
     crudQuery = (queryId) => {
@@ -222,6 +226,11 @@ class CRUDQueryViewComponent extends React.Component {
         this.setState({
             showMessage: false
         });
+    }
+    forceUpdate = () => {
+        this.setState({
+            state: this.state
+        })
     }
     render() {
         if (this.state.initialized) {
