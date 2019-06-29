@@ -95,10 +95,10 @@ export class AuthedContextProvider extends React.Component {
         }
     }
     getCategories = () => {
-        return this.state.categories;
+        return new Map([...this.state.categories.entries()].sort(intComparator));
     }
     getExercises = () => {
-        return this.state.exercises;
+        return new Map([...this.state.exercises.entries()].sort(intComparator));
     }
     isInitialized = () => {
         return this.state.initialized;
@@ -342,12 +342,9 @@ class Exercise {
     }
 }
 
-class Query{
-    constructor(
-        query,
-        id
-    ) {
-        this.query = query;
-        this.id = id;
-    }
+const intComparator = (x, y) => {
+    let a = x[0], b = y[0];
+    if (a < b) return -1;
+    else if (a > b) return 1;
+    return 0; 
 }
