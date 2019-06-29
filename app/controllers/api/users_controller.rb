@@ -52,7 +52,7 @@ class Api::UsersController < ApplicationController
 
     private
         def user_params
-            params.require(:user).permit(:name, :email, :password, :password_confirmation)
+            params.require(:user).permit(:name, :email, :password, :password_confirmation, :hide_in_ranking)
         end
 
         def correct_user
