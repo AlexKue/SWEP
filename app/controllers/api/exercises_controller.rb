@@ -71,13 +71,20 @@ class Api::ExercisesController < ApplicationController
         @exercise = Exercise.find(params[:id])
         query = params[:query]
 
-        correct = true
-        @exercise.queries.each do |reference|
-            result = @checker.correct?(query, reference.query)
-            if result.nil? && correct != false
-                correct = nil
-            elsif !result
-                correct = false
+        if @exercise.queries.empty?
+            correct = nil
+        else
+            correct = true
+
+            # check each reference
+            @exercise.queries.each do |reference|
+                result = @checker.correct?(query, reference.query)
+                # Only set to nil if previously not marked as false
+                if result.nil? && correct
+                    correct = nil
+                elsif result == false
+                    correct = false
+                end
             end
         end
 
