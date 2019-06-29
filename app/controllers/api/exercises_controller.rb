@@ -6,9 +6,15 @@ class Api::ExercisesController < ApplicationController
     def show
         solved = false
         @exercise = Exercise.find(params[:id])
+
+        # Admins don't solve exercises
         if(current_user.admin?)
             render json: { exercise: @exercise }, status: :ok
+        end
+
         @solution = ExerciseSolver.find_by(user_id: current_user.id, exercise_id: @exercise.id)
+
+        # No Entry means Student didn't try an exercise
         if @solution.nil?
             solved = false
         else
