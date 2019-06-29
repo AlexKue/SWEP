@@ -32,9 +32,9 @@ class Api::UsersControllerTest < ActionDispatch::IntegrationTest
   test "should accept successful edit" do
     log_in_as @user
     email = "test@newmail.de"
-
     patch api_user_path(@user), 
     params: {
+      password: "password",
       user: {
         email: email,
         password: "",
