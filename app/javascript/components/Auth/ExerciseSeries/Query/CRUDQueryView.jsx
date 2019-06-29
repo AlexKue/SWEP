@@ -6,8 +6,9 @@ import {
     Grid,
     Message
 } from "semantic-ui-react";
-import CodeMirror from "react-codemirror";
-require("codemirror/mode/sql/sql");
+
+import {Controlled as CodeMirror} from "react-codemirror2";
+require('codemirror/mode/sql/sql');
 
 import AuthedContext from '../../AuthedContext.jsx';
 import API from '../../../API/API.jsx';
@@ -90,7 +91,7 @@ class CRUDQueryViewComponent extends React.Component {
     updatePanes = () => {
         let panes = [];
         let i = 1;
-        let sortedByIdQueries = new Map([...this.state.localQueryMap.entries()].sort());
+        let sortedByIdQueries = new Map([...this.state.localQueryMap.entries()].sort(intComparator));
         for (const [queryId, value] of sortedByIdQueries) {
             panes.push({
                 menuItem: "Query " + i,
@@ -98,9 +99,11 @@ class CRUDQueryViewComponent extends React.Component {
                     return (
                     <Tab.Pane key={queryId}>
                         <CodeMirror
+                            value={ this.state.localQueryMap.get(queryId) }
                             options={ this.state.codeMirrorOptions }
-                            value={ this.state.localQueryMap.get(queryId) } 
-                            onChange={ (content) => this.updateLocalQuery(queryId, content)}/>
+                            onBeforeChange={ (editor, data, value) => {
+                                this.updateLocalQuery(queryId, value);
+                            }}/>
                         { this.state.showMessage ? this.state.successMessage ? 
                             <Message
                                 header={ this.state.messageTitle }
@@ -108,11 +111,9 @@ class CRUDQueryViewComponent extends React.Component {
                                 onDismiss={ this.hideMessage }
                                 positive />
                             : 
-                            <Message
-                                header={ this.state.messageTitle }
-                                content={ this.state.messageContent }
-                                onDismiss={ this.hideMessage }
-                                negative />
+                            <CodeMirror
+                                options={{ readOnly: true, mode: "sql"}}
+                                value={ this.state.messageContent } />
                         : null }
                         
                         <Grid columns={2}>
@@ -136,6 +137,7 @@ class CRUDQueryViewComponent extends React.Component {
 
     updateLocalQuery = (queryId, value) => {
         this.state.localQueryMap.set(queryId, value);
+        this.forceUpdate();
     }
 
     crudQuery = (queryId) => {
@@ -156,9 +158,10 @@ class CRUDQueryViewComponent extends React.Component {
                     successMessage: true
                 });
             }).catch(error => {
+                let data = error.data;
                 this.setState({
                     messageTitle: "Fehler",
-                    messageContent: error,
+                    messageContent: data.join("\n"),    // in case there are more than one error message in that array
                     showMessage: true,
                     successMessage: false
                 })
@@ -223,6 +226,11 @@ class CRUDQueryViewComponent extends React.Component {
             showMessage: false
         });
     }
+    forceUpdate = () => {
+        this.setState({
+            state: this.state
+        })
+    }
     render() {
         if (this.state.initialized) {
             return (
@@ -238,6 +246,13 @@ class CRUDQueryViewComponent extends React.Component {
             return <Loader active inline="centered">Lade Queries...</Loader>
         }
     }
+}
+
+const intComparator = (x, y) => {
+    let a = x[0], b = y[0];
+    if (a < b) return -1;
+    else if (a > b) return 1;
+    return 0; 
 }
 
 export default CRUDQueryView;

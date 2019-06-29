@@ -128,6 +128,7 @@ class CRUDCategoryViewComponent extends React.Component {
                     response.data.id
                 );
                 this.setState({
+                    id: response.data.id,
                     success: true,
                     error: false,
                     messageTitle: "Erfolg",

@@ -7,8 +7,8 @@ import {
 } from "semantic-ui-react";
 
 // Import Statements for CodeMirror and SQL Syntax Highlighting
-import CodeMirror from "react-codemirror";
-require("codemirror/mode/sql/sql");
+import { Controlled as CodeMirror } from "react-codemirror2";
+require('codemirror/mode/sql/sql');
 
 import AuthedContext from '../../AuthedContext.jsx';
 
@@ -81,6 +81,11 @@ class ExerciseViewComponent extends React.Component {
 
         }
     }
+    forceUpdate = () => {
+        this.setState({
+            state: this.state
+        });
+    }
 
     componentDidMount() {
         let exerciseId = this.props.exerciseId;
@@ -118,7 +123,7 @@ class ExerciseViewComponent extends React.Component {
                             <CodeMirror
                                 value={ this.state.storedQuery }
                                 options={ this.state.codeMirrorOptions }
-                                onChange={ this.updateQuery }/>
+                                onBeforeChange={ (editor, data, value) => this.updateQuery(value) }/>
                             <Button 
                                 content="Abschicken"
                                 onClick={ this.sendQuery }
