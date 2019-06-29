@@ -1,3 +1,4 @@
 one: 
-  user: Alex
+  user: Mark
   exercise: one
+  solved: true
