@@ -111,11 +111,9 @@ class CRUDQueryViewComponent extends React.Component {
                                 onDismiss={ this.hideMessage }
                                 positive />
                             : 
-                            <Message
-                                header={ this.state.messageTitle }
-                                content={ this.state.messageContent }
-                                onDismiss={ this.hideMessage }
-                                negative />
+                            <CodeMirror
+                                options={{ readOnly: true, mode: "sql"}}
+                                value={ this.state.messageContent } />
                         : null }
                         
                         <Grid columns={2}>
@@ -160,9 +158,10 @@ class CRUDQueryViewComponent extends React.Component {
                     successMessage: true
                 });
             }).catch(error => {
+                let data = error.data;
                 this.setState({
                     messageTitle: "Fehler",
-                    messageContent: error,
+                    messageContent: data.join("\n"),    // in case there are more than one error message in that array
                     showMessage: true,
                     successMessage: false
                 })
