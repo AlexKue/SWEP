@@ -4,8 +4,22 @@ class Api::ExercisesController < ApplicationController
     before_action :admin_user, only: [:create, :destroy, :update]
 
     def show
+        solved = false
         @exercise = Exercise.find(params[:id])
-        render json: @exercise, status: :ok
+        if(current_user.admin?)
+            render json: { exercise: @exercise }, status: :ok
+        @solution = ExerciseSolver.find_by(user_id: current_user.id, exercise_id: @exercise.id)
+        if @solution.nil?
+            solved = false
+        else
+            solved = @solution.solved
+        end
+        
+        render json: {
+            exercise: @exercise,
+            solved: solved
+        }, status: :ok
+
     end
 
     def index
@@ -47,35 +61,26 @@ class Api::ExercisesController < ApplicationController
     end
 
     def solve
+        @checker = init_query_checker
         @exercise = Exercise.find(params[:id])
-        @query = StudentQuery.create(query_params)
-        if @query.valid?
-            @query.save
+        query = params[:query]
 
-            correct = QueryChecker.new.correct?(@query.query, @exercise.queries.first.query) ? true : false
-            solution = ExerciseSolver.where(user_id: current_user.id, 
-                                            exercise_id: @exercise.id).first_or_create( user_id: current_user.id, 
-                                                                                        exercise_id: @exercise.id, 
-                                                                                        student_query_id: @query.id, 
-                                                                                        solved: correct, 
-                                                                                        certainity: 1)
-            render json: solution, status: :created 
-        else 
-            render json: @query.errors.full_messages, status: :unprocessable_entity
-        end 
+        correct = true
+        @exercise.queries.each do |reference|
+            result = @checker.correct?(query, reference.query)
+            if result.nil? && correct != false
+                correct = nil
+            elsif !result
+                correct = false
+            end
+        end
+
+        result = ExerciseSolver.where(user_id: current_user.id, exercise_id: @exercise.id).first_or_create(user_id: current_user.id, exercise_id: @exercise.id, solved: correct, query: query)
+        render json: {solved: correct}, status: :ok
     end
-
-
 
     private
         def exercise_params
             params.require(:exercise).permit(:title, :text, :points)
-        end
-
-        def query_params
-            params.require(:query).permit(:query)
-        end
-
-
-            
+        end 
 end
