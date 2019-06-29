@@ -7,6 +7,7 @@ import TestComponent from './TestComponent.jsx';
 import { FormWrapperContextProvider } from './Unauth/FormWrapper/FormWrapperContext.jsx';
 import { AuthedWrapper } from './Auth/AuthedComponent.jsx';
 import { AuthedContextProvider } from './Auth/AuthedContext.jsx';
+import { __404 } from './Auth/Components/errors.jsx';
 
 class App extends React.Component {
 
@@ -21,11 +22,17 @@ class App extends React.Component {
       isLoggedIn: window._isLoggedIn,
       userName: localStorage.getItem("userName"),
       userMail: localStorage.getItem("userMail"),
-      userId: localStorage.getItem("userId")
+      userId: localStorage.getItem("userId"),
+      show404: false
     }
 
     this.setUserLoggedIn = this.setUserLoggedIn.bind(this);
     this.setUserLoggedOut = this.setUserLoggedOut.bind(this);
+
+    let location = this.props.location.pathname;
+    if (location != "/" && location != "/login" && location != "/register" && location != "/test") {
+      this.state.show404 = true;
+    }
   }
 
   setUserLoggedIn(loggedInState, userRole, userName, userMail, userId) {
@@ -48,6 +55,9 @@ class App extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoggedIn != prevState.isLoggedIn) {
+      this.setState({
+        show404: false
+      });
       this.props.history.push("/");
     }
   }
@@ -60,6 +70,9 @@ class App extends React.Component {
         </AuthedContextProvider>
       );
     } else {
+      if (this.state.show404) { // Switch doesn't work due to FormWrapperContextProvider
+        return <__404 />
+      }
       return (
         <React.Fragment>
           <FormWrapperContextProvider>

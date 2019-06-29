@@ -12,8 +12,14 @@ import {
 
 import AuthedContext from '../../AuthedContext.jsx';
 import API from '../../../API/API.jsx';
+import { __403 } from '../../Components/errors.jsx';
 
 const CRUDCategoryView = (props) => {
+
+    if (window._userRole != "admin") {
+        return < __403 />
+    }
+
     const context = useContext(AuthedContext);
 
     let category = null;
@@ -23,7 +29,11 @@ const CRUDCategoryView = (props) => {
         category = context.getCategoryById(parseInt(categoryId));
     }
 
-    return <CRUDCategoryViewComponent 
+    if (!category && categoryId) { // It doesn't exist but the categoryId is delivered (=> edit)
+        props.history.push("/404");
+    } 
+
+    return <CRUDCategoryViewComponent key={ "edc_" + categoryId }
         context={context}
         title={ category ? category.title : null}
         description={ category ? category.description : null } 
@@ -90,14 +100,24 @@ class CRUDCategoryViewComponent extends React.Component {
         if (this.state.id) {    // Component was opened for edit
             API.updateCategory(this.state.id, this.state.title, this.state.description)
             .then(response => {
-                // TODO: IMPLEMENT proper response
                 this.state.context.updateCategory(this.state.id, this.state.title, this.state.description);
+                this.setState({
+                    success: true,
+                    error: false,
+                    messageTitle: "Erfolg",
+                    messageContent: "Die Änderungen wurden erfolgreich übernommen."
+                });
             }).catch(error => {
-                //TODO: IMPLEMENT proper response
+                this.setState({
+                    success: false,
+                    error: true,
+                    messageTitle: "Fehler",
+                    messageContent: error
+                });
             }).finally(() => {
                 this.resetRequestPending();
             })
-        } else {
+        } else {    // Component needs to be created
             API.createCategory(this.state.title, this.state.description)
             .then(response => {
                 this.state.context.addCategory(
@@ -105,8 +125,7 @@ class CRUDCategoryViewComponent extends React.Component {
                     this.state.description,
                     0,
                     0,
-                    response.data.id,
-                    null
+                    response.data.id
                 );
                 this.setState({
                     success: true,

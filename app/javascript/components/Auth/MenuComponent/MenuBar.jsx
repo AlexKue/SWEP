@@ -55,6 +55,10 @@ class MenuBarComponent extends React.Component {
               name="home"
               onClick={ this.handleMenuEvent }>Home</Menu.Item>
             <CategoriesMenuEntry />
+            <Menu.Item
+              name="Spielwiese"
+              as={ Link }
+              to="/spielwiese" />
             <Menu.Menu position="right">
               <Dropdown item simple text={"Eingeloggt als: " + this.props.context.getUserName() }>
                 <Dropdown.Menu>
@@ -81,7 +85,7 @@ const CategoriesMenuEntry = () => {
   return (
     <Dropdown item simple text="Übungsserien">
       <Dropdown.Menu>
-        <CategoriesMenuEntryRender categories={ context.getCategories() }/>
+        <CategoriesMenuEntryRender categories={ context.getCategories() } context={ context }/>
       </Dropdown.Menu>
     </Dropdown>
   );
@@ -94,14 +98,35 @@ class CategoriesMenuEntryRender extends React.Component {
         <Dropdown.Item key={"usm" + category.id} as={Link} to={"/category-" + category.id}>
           <i className='dropdown icon' />
           <span className='text'>{ category.title }</span>
-          <Dropdown.Menu>
-            <Dropdown.Item as={Link} to="/static">TODO: EXERCISES</Dropdown.Item>
-          </Dropdown.Menu>
+          { category.exerciseIdSet.size > 0 ? 
+            <Dropdown.Menu>
+              <ExercisesMenuEntryRender exerciseIdSet={category.exerciseIdSet} categoryId={category.id} context={ this.props.context }/> 
+            </Dropdown.Menu>
+            : null}
         </Dropdown.Item>
       )
     });
 
     return categoryMenuEntries;
+  }
+}
+
+class ExercisesMenuEntryRender extends React.Component {
+  render() {
+    let exerciseMenuEntries = [...this.props.exerciseIdSet].map(exerciseId => {
+      return (
+        <Dropdown.Item 
+          key={"exc" + exerciseId} 
+          as={Link} 
+          to={window._userRole === "admin" ?
+            "/category-" + this.props.categoryId + "/exercise-" + exerciseId + "/edit"
+            : "/category-" + this.props.categoryId + "/exercise-" + exerciseId}>
+          { this.props.context.getExerciseById(exerciseId).title }
+        </Dropdown.Item>
+      )
+    });
+
+    return exerciseMenuEntries;
   }
 }
 
