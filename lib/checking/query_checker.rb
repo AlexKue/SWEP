@@ -5,7 +5,7 @@ class QueryChecker
   end
 
   def get checker_type
-    hierarchy.each do |checker|
+    @hierarchy.each do |checker|
       return checker if checker.class.to_s.eql? checker_type
     end
     nil
