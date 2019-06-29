@@ -4,6 +4,13 @@ class QueryChecker
     @hierarchy = []
   end
 
+  def get checker_type
+    @hierarchy.each do |checker|
+      return checker if checker.class.to_s.eql? checker_type
+    end
+    nil
+  end
+
   ##
   # Runs checking objects on the query and returns whether the query was correct.
   # There are three possible return values: +true+, +false+ and +nil+.
