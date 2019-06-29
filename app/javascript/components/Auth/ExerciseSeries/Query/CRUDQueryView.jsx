@@ -90,7 +90,7 @@ class CRUDQueryViewComponent extends React.Component {
     updatePanes = () => {
         let panes = [];
         let i = 1;
-        let sortedByIdQueries = new Map([...this.state.localQueryMap.entries()].sort());
+        let sortedByIdQueries = new Map([...this.state.localQueryMap.entries()].sort(intComparator));
         for (const [queryId, value] of sortedByIdQueries) {
             panes.push({
                 menuItem: "Query " + i,
@@ -238,6 +238,13 @@ class CRUDQueryViewComponent extends React.Component {
             return <Loader active inline="centered">Lade Queries...</Loader>
         }
     }
+}
+
+const intComparator = (x, y) => {
+    let a = x[0], b = y[0];
+    if (a < b) return -1;
+    else if (a > b) return 1;
+    return 0; 
 }
 
 export default CRUDQueryView;
