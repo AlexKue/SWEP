@@ -27,7 +27,7 @@ class Api::CategoriesController < ApplicationController
                 solved_count: solved_count
             }
         end
-
+        response[:count] =  Category.count
         render json: response, status: :ok
     end
 
