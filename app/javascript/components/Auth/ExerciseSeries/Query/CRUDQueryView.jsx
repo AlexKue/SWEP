@@ -4,7 +4,8 @@ import {
     Tab,
     Button,
     Grid,
-    Message
+    Message,
+    Table
 } from "semantic-ui-react";
 
 import {Controlled as CodeMirror} from "react-codemirror2";
@@ -12,6 +13,7 @@ require('codemirror/mode/sql/sql');
 
 import AuthedContext from '../../AuthedContext.jsx';
 import API from '../../../API/API.jsx';
+import QueryResponseTable from '../../Components/QueryResponseTable.jsx';
 
 const CRUDQueryView = (props) => {
     const context = useContext(AuthedContext);
@@ -105,11 +107,14 @@ class CRUDQueryViewComponent extends React.Component {
                                 this.updateLocalQuery(queryId, value);
                             }}/>
                         { this.state.showMessage ? this.state.successMessage ? 
-                            <Message
-                                header={ this.state.messageTitle }
-                                content={ this.state.messageContent }
-                                onDismiss={ this.hideMessage }
-                                positive />
+                            <React.Fragment>
+                                <Message
+                                    header={ this.state.messageTitle }
+                                    content={ this.state.messageContent }
+                                    onDismiss={ this.hideMessage }
+                                    positive />
+                                { this.state.queryResponseTable }
+                            </React.Fragment>
                             : 
                             <CodeMirror
                                 options={{ readOnly: true, mode: "sql"}}
@@ -179,7 +184,8 @@ class CRUDQueryViewComponent extends React.Component {
                     messageTitle: "Erfolg",
                     messageContent: "Änderungen erfolgreich übernommen.",
                     showMessage: true,
-                    successMessage: true
+                    successMessage: true,
+                    queryResponseTable: <QueryResponseTable tableArray={ response.data.result } />
                 })
             }).catch(error => {
                 let data = error.data;
@@ -221,7 +227,9 @@ class CRUDQueryViewComponent extends React.Component {
                 // This technically cannot happen
                 console.error(error);
             })
-        }
+        }<Table.Row>
+        
+        </Table.Row> 
     }
 
     hideMessage = () => {
