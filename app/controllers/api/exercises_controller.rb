@@ -10,22 +10,21 @@ class Api::ExercisesController < ApplicationController
         # Admins don't solve exercises
         if(current_user.admin?)
             render json: { exercise: @exercise }, status: :ok
+        else 
+            @solution = ExerciseSolver.find_by(user_id: current_user.id, exercise_id: @exercise.id)
+
+            # No Entry means Student didn't try an exercise
+            if @solution.nil?
+                solved = false
+            else
+                solved = @solution.solved
+            end
+            
+            render json: {
+                exercise: @exercise,
+                solved: solved
+            }, status: :ok
         end
-
-        @solution = ExerciseSolver.find_by(user_id: current_user.id, exercise_id: @exercise.id)
-
-        # No Entry means Student didn't try an exercise
-        if @solution.nil?
-            solved = false
-        else
-            solved = @solution.solved
-        end
-        
-        render json: {
-            exercise: @exercise,
-            solved: solved
-        }, status: :ok
-
     end
 
     def index
