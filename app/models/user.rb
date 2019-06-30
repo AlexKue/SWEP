@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   has_many :exercise_solvers
-  has_many :exercises,  through: :exercise_solvers,
-                        dependent: :destroy
+  has_many :exercise,            through: :exercise_solvers,
+                                dependent: :destroy
   before_save :downcase_email
   validates :name,  presence: true,
                     length: { maximum: 50}

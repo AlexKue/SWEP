@@ -94,13 +94,14 @@ const CategoriesMenuEntry = () => {
 class CategoriesMenuEntryRender extends React.Component {
   render() {
     let categoryMenuEntries = [...this.props.categories].map(([id, category]) => {
+      let exerciseIdSet = category.getExerciseIdSet();
       return (
         <Dropdown.Item key={"usm" + category.id} as={Link} to={"/category-" + category.id}>
           <i className='dropdown icon' />
           <span className='text'>{ category.title }</span>
           { category.exerciseIdSet.size > 0 ? 
             <Dropdown.Menu>
-              <ExercisesMenuEntryRender exerciseIdSet={category.exerciseIdSet} categoryId={category.id} context={ this.props.context }/> 
+              <ExercisesMenuEntryRender exerciseIdSet={exerciseIdSet} categoryId={category.id} context={ this.props.context }/> 
             </Dropdown.Menu>
             : null}
         </Dropdown.Item>

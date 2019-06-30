@@ -12,10 +12,23 @@ class Api::CategoriesController < ApplicationController
         limit = params[:limit].nil? ? 30 : params[:limit].to_i
         
         @categories = Category.offset(offset).limit(limit)
-        render json: {
-            count: Category.count,
-            data: @categories.as_json
-        }, status: :ok
+
+        #Build response hash
+        response = {data: []}
+        @categories.each do |cat|
+            solved_count =  ExerciseSolver.where(user_id: current_user.id, solved: true)
+                            .joins("INNER JOIN exercises ON exercises.id = exercise_solvers.exercise_id 
+                                    AND exercises.category_id = #{cat.id}").uniq.count
+            response[:data] << {
+                id: cat.id,
+                title: cat.title,
+                text: cat.text,
+                max_count: cat.exercises.count,
+                solved_count: solved_count
+            }
+        end
+        response[:count] =  Category.count
+        render json: response, status: :ok
     end
 
     def create

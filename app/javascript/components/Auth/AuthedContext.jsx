@@ -41,8 +41,8 @@ export class AuthedContextProvider extends React.Component {
                     new Category(
                         category.title,
                         category.text,
-                        0,              // TODO: Server is not sending this information so far
-                        0,              // TODO: Server is not sending this information so far
+                        category.solved_count,
+                        category.max_count, 
                         category.id
                     ));
                 });
@@ -62,8 +62,8 @@ export class AuthedContextProvider extends React.Component {
                                 exercises.set(exercise.id, new Exercise(
                                     exercise.title,
                                     "",
-                                    exercise.points,
-                                    false,
+                                    exercise.points, 
+                                    exercise.solved,
                                     exercise.id
                                 ));
                                 exerciseIdSet.add(exercise.id);
@@ -95,10 +95,10 @@ export class AuthedContextProvider extends React.Component {
         }
     }
     getCategories = () => {
-        return new Map([...this.state.categories.entries()].sort(intComparator));
+        return new Map([...this.state.categories.entries()].sort(intMapComparator));
     }
     getExercises = () => {
-        return new Map([...this.state.exercises.entries()].sort(intComparator));
+        return new Map([...this.state.exercises.entries()].sort(intMapComparator));
     }
     isInitialized = () => {
         return this.state.initialized;
@@ -113,12 +113,12 @@ export class AuthedContextProvider extends React.Component {
         return new Promise((resolve, reject) => {
             API.getExerciseInfo(exerciseId)
             .then(response => {
-                let exercise = response.data;
+                let exercise = response.data.exercise;
                 this.state.exercises.set(exerciseId, new Exercise(
                     exercise.title,
                     exercise.text,
                     exercise.points,
-                    null,               // TODO: Set value
+                    response.data.solved,
                     exerciseId
                 ));
                 exercise = this.getExerciseById(exerciseId);    // Override by now created exercise from context storage
@@ -292,15 +292,32 @@ class Category {
         this.totalExerciseCount = totalExerciseCount;
         this.id = id;
         this.exerciseIdSet = exerciseIdSet;
+        this.sorted = false;
     }
 
     addExercise = (exerciseId) => {
         this.totalExerciseCount += 1;
         this.exerciseIdSet.add(exerciseId);
+        this.sorted = false;
     } 
     removeExercise = (exerciseId) => {
         this.totalExerciseCount -= 1;
         this.exerciseIdSet.delete(exerciseId);
+        this.sorted = false;
+    }
+    getExerciseIdSet = () => {
+        if (this.sorted) {
+            return this.exerciseIdSet;
+        } else {
+            let arraySet = [...this.exerciseIdSet].sort(intComparator);
+            let sortedSet = new Set();
+            for (const id of arraySet) {
+                sortedSet.add(id);
+            }
+            this.exerciseIdSet = sortedSet;
+            this.sorted = true;
+            return this.exerciseIdSet;
+        }
     }
 }
 
@@ -342,9 +359,12 @@ class Exercise {
     }
 }
 
-const intComparator = (x, y) => {
-    let a = x[0], b = y[0];
+const intMapComparator = (x, y) => {
+    return intComparator(x[0], y[0]);
+}
+
+const intComparator = (a, b) => {
     if (a < b) return -1;
     else if (a > b) return 1;
-    return 0; 
+    return 0;
 }

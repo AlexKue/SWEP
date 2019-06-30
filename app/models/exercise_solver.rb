@@ -4,5 +4,5 @@ class ExerciseSolver < ApplicationRecord
 
     validates :user_id, presence: true
     validates :exercise_id, presence: true
-
+    validates :query, presence: true
 end

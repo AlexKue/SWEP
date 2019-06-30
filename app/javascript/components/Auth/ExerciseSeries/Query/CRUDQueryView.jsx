@@ -182,9 +182,10 @@ class CRUDQueryViewComponent extends React.Component {
                     successMessage: true
                 })
             }).catch(error => {
+                let data = error.data;
                 this.setState({
                     messageTitle: "Fehler",
-                    messageContent: error,
+                    messageContent: data.join("\n"),
                     showMessage: true,
                     successMessage: false
                 })
@@ -200,7 +201,8 @@ class CRUDQueryViewComponent extends React.Component {
         if (queryId == Number.MAX_SAFE_INTEGER) {   // It's the local query
             this.state.localQueryMap.delete(queryId);
             this.setState({
-                activeIndex: this.state.activeIndex - 1
+                activeIndex: this.state.activeIndex - 1,
+                showMessage: false
             });
             this.updatePanes();
         } else {
@@ -210,7 +212,8 @@ class CRUDQueryViewComponent extends React.Component {
                 this.state.context.removeQuery(queryId);                                        // remove from global query storage
                 this.state.localQueryMap.delete(queryId);                                       // remove from local query storage
                 this.setState({
-                    activeIndex: this.state.activeIndex -1
+                    activeIndex: this.state.activeIndex -1,
+                    showMessage: false
                 });
                 this.updatePanes();
                 this.props.showSuccessMessage("Erfolg", "Die Query wurde erfolgreich gelöscht.");
