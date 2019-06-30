@@ -95,10 +95,10 @@ export class AuthedContextProvider extends React.Component {
         }
     }
     getCategories = () => {
-        return new Map([...this.state.categories.entries()].sort(intComparator));
+        return new Map([...this.state.categories.entries()].sort(intMapComparator));
     }
     getExercises = () => {
-        return new Map([...this.state.exercises.entries()].sort(intComparator));
+        return new Map([...this.state.exercises.entries()].sort(intMapComparator));
     }
     isInitialized = () => {
         return this.state.initialized;
@@ -292,15 +292,32 @@ class Category {
         this.totalExerciseCount = totalExerciseCount;
         this.id = id;
         this.exerciseIdSet = exerciseIdSet;
+        this.sorted = false;
     }
 
     addExercise = (exerciseId) => {
         this.totalExerciseCount += 1;
         this.exerciseIdSet.add(exerciseId);
+        this.sorted = false;
     } 
     removeExercise = (exerciseId) => {
         this.totalExerciseCount -= 1;
         this.exerciseIdSet.delete(exerciseId);
+        this.sorted = false;
+    }
+    getExerciseIdSet = () => {
+        if (this.sorted) {
+            return this.exerciseIdSet;
+        } else {
+            let arraySet = [...this.exerciseIdSet].sort(intComparator);
+            let sortedSet = new Set();
+            for (const id of arraySet) {
+                sortedSet.add(id);
+            }
+            this.exerciseIdSet = sortedSet;
+            this.sorted = true;
+            return this.exerciseIdSet;
+        }
     }
 }
 
@@ -342,9 +359,12 @@ class Exercise {
     }
 }
 
-const intComparator = (x, y) => {
-    let a = x[0], b = y[0];
+const intMapComparator = (x, y) => {
+    return intComparator(x[0], y[0]);
+}
+
+const intComparator = (a, b) => {
     if (a < b) return -1;
     else if (a > b) return 1;
-    return 0; 
+    return 0;
 }

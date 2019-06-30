@@ -6,6 +6,7 @@ import {
     Icon
 } from "semantic-ui-react";
 
+import { __404 } from '../../Components/errors.jsx';
 import AuthedContext from '../../AuthedContext.jsx';
 import ThreeColumnTable, { ThreeColumnTableRow } from '../../Components/ThreeColumnTable.jsx';
 
@@ -14,18 +15,18 @@ export const CategoryView = (props) => {    // props is containing the Router co
     let categoryId = parseInt(props.match.params.categoryId);
     let category = context.getCategories().get(categoryId);
     if (!category) {
-        props.history.push("/404");    // If the category doesn't exist return to root
-        return null;
+        return <__404 />;
     }
     let exercises = category.exerciseMap;
     let localUrl = props.history.location.pathname;
+    let exerciseIdSet = category.getExerciseIdSet();
 
     return (
         <React.Fragment>
             <CategoryViewComponent key={ "catv_" + categoryId }
                     title={ category.title }
                     description={ category.description }
-                    exerciseIdSet={ category.exerciseIdSet }
+                    exerciseIdSet={ exerciseIdSet }
                     localUrl={ localUrl }
                     context={ context }
                     {...props} />
