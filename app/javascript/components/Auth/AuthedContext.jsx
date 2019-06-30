@@ -59,7 +59,6 @@ export class AuthedContextProvider extends React.Component {
                             let exerciseListResponse = response.data.data;
                             let exerciseIdSet = new Set();
                             for (const exercise of exerciseListResponse) {
-                                console.log(exercise);
                                 exercises.set(exercise.id, new Exercise(
                                     exercise.title,
                                     "",
