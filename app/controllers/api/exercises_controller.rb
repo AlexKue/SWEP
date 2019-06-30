@@ -50,6 +50,7 @@ class Api::ExercisesController < ApplicationController
                 title: ex.title,
                 category_id: ex.category_id,
                 solved: solved,
+                points: ex.points
             }
         end
         response[:count] = @category.exercises.count
