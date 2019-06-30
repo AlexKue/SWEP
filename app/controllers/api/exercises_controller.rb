@@ -34,10 +34,28 @@ class Api::ExercisesController < ApplicationController
 
         @category = Category.find(params[:category_id])
         @exercises = @category.exercises.offset(offset).limit(limit)
-        render json: {
-            count: @category.exercises.count,
-            data: @exercises.as_json
-        }, status: :ok
+
+        # Build response hash
+        response = {data: []}
+        @exercises.each do |ex|
+            result = ExerciseSolver.where(user_id: current_user.id, exercise_id: ex.id)
+            if result.nil?
+                solved = false
+            else
+                solved = result.solved
+            end
+
+            response[:data] << {
+                id: ex.id,
+                text: ex.text,
+                title: ex.title,
+                category_id: ex.category_id,
+                solved: solved,
+            }
+        end
+        response[:count] = @category.exercises.count
+
+        render json: response, status: :ok
     end
 
     def create
