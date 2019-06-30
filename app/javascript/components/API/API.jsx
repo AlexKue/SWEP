@@ -370,7 +370,7 @@ export default class API {
       }).then(response => {
         resolve(response);
       }).catch(error => {
-        reject(this.getErrorList(error));
+        reject(error.response);
       })
     });
   }
