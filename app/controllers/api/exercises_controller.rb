@@ -38,10 +38,9 @@ class Api::ExercisesController < ApplicationController
         # Build response hash
         response = {data: []}
         @exercises.each do |ex|
-            result = ExerciseSolver.where(user_id: current_user.id, exercise_id: ex.id)
-            if result.nil?
-                solved = false
-            else
+            solved = false
+            result = ExerciseSolver.find_by(user_id: current_user.id, exercise_id: ex.id)
+            if !result.nil?
                 solved = result.solved
             end
 
