@@ -92,7 +92,18 @@ class Api::ExercisesController < ApplicationController
             correct = nil
         else
             correct = true
-
+            execution_based_checker = @checker.get "ExecutionBasedChecker"
+            if !execution_based_checker.nil?
+                execution_based_result = execution_based_checker.check(query, query) # there's still no other convenience method to get the result table
+                if execution_based_result[:debug].has_key? :query
+                    result_table = execution_based_result[:debug][:query]
+                else
+                    result_table = []
+                end
+              
+            else
+                result_table = []
+            end
             # check each reference
             @exercise.queries.each do |reference|
                 result = @checker.correct?(query, reference.query)
@@ -106,7 +117,7 @@ class Api::ExercisesController < ApplicationController
         end
 
         result = ExerciseSolver.where(user_id: current_user.id, exercise_id: @exercise.id).first_or_create(user_id: current_user.id, exercise_id: @exercise.id, solved: correct, query: query)
-        render json: {solved: correct}, status: :ok
+        render json: {solved: correct, result: result_table}, status: :ok
     end
 
     private
