@@ -15,6 +15,19 @@ module QueryCheckerHelper
     query_checker
   end
 
+  ##
+  # Returns the SQL table containing the result of the given query as a (2D) list.
+  # In case the query was incorrect or there is no data for this query, the return value is an empty list.
+  def get_result_table query
+    execution_checker = ExecutionBasedChecker.new
+    checking_result = execution_checker.check query, query
+    if checking_result[:debug].has_key? :query
+      result_table = checking_result[:debug][:query]
+    else
+      result_table = []
+    end
+    result_table
+  end
 
   def check_admin_query query
     execution_checker = ExecutionBasedChecker.new
