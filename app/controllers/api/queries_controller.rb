@@ -29,7 +29,7 @@ class Api::QueriesController < ApplicationController
             render json: [checking_result[:debug][:error]], status: :unprocessable_entity
 
         elsif checking_result[:debug][:query].empty?
-            render json: ["Die Query lieferte ein leeres Ergebnis"], status: :unprocessable_entity
+            render json: ["ERROR: Die Query lieferte ein leeres Ergebnis. Die Query wurde nicht gespeichert."], status: :unprocessable_entity
 
         elsif @query.save
             render json: {"id"=>@query.id, "result"=>checking_result[:debug][:query]}, status: :created
@@ -54,7 +54,7 @@ class Api::QueriesController < ApplicationController
             render json: [checking_result[:debug][:error]], status: :unprocessable_entity
 
         elsif checking_result[:debug][:query].empty?
-            render json: ["Die Query lieferte ein leeres Ergebnis"], status: :unprocessable_entity
+            render json: ["Die Query lieferte ein leeres Ergebnis. Die Änderungen wurden nicht übernommen."], status: :unprocessable_entity
 
         elsif @query.update_attributes(query_params)
             render json: {"id"=>@query.id, "result"=>checking_result[:debug][:query]}, status: :ok
