@@ -123,7 +123,7 @@ export class AuthedContextProvider extends React.Component {
                 ));
                 exercise = this.getExerciseById(exerciseId);    // Override by now created exercise from context storage
                 if (window._userRole === "student") {   // if student => Process the sent query and solved state
-                    exercise.setUserQuery("TEST");      // TODO: Replace by response
+                    exercise.setUserQuery(response.data.query);      // TODO: Replace by response
                     resolve(response);
                 } else {                                // else => must be admin => add stored queries
                     API.getQueries(exerciseId)
@@ -319,6 +319,12 @@ class Category {
             return this.exerciseIdSet;
         }
     }
+    incrementSolvedCount = () => {
+        this.solvedExerciseCount++;
+    }
+    decrementSolvedCount = () => {
+        this.solvedExerciseCount--;
+    }
 }
 
 class Exercise {
@@ -354,8 +360,8 @@ class Exercise {
     isSolved = () => {
         return this.solved;
     }
-    setSolved = () => {
-        this.solved = true;
+    setSolved = (solved) => {
+        this.solved = solved;
     }
 }
 

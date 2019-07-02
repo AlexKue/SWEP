@@ -29,8 +29,10 @@ class ExecutionBasedChecker
     return false if query_result.nfields != reference_result.nfields
     
     # result tables must not have any different elements
-    return false if not (query_result.filter do |row| !reference_result.include? row end).empty?
-    return false if not (reference_result.filter do |row| !query_result.include? row end).empty?
+    query_diff_reference = query_result.filter do |row| !reference_result.include? row end
+    reference_diff_query = reference_result.filter do |row| !query_result.include? row end
+    return false if not query_diff_reference.empty?
+    return false if not reference_diff_query.empty?
   
     true
   end

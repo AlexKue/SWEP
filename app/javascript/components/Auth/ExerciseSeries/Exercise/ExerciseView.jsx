@@ -12,6 +12,7 @@ require('codemirror/mode/sql/sql');
 
 import AuthedContext from '../../AuthedContext.jsx';
 import API from "../../../API/API.jsx";
+import QueryResponseTable from '../../Components/QueryResponseTable.jsx';
 
 const ExerciseView = (props) => {
     let context = useContext(AuthedContext);
@@ -46,7 +47,8 @@ class ExerciseViewComponent extends React.Component {
                 mode: "sql"
             },
             queryLoading: false,
-            queryResult: <h1>Hier k&ouml;nnte ihr Result stehen.</h1>,
+            queryResult: <p>Das Resultat wird bei Abschicken hier angezeigt.</p>,
+            solved: false,
             context: props.context,
             initialized: false
         }
@@ -61,6 +63,7 @@ class ExerciseViewComponent extends React.Component {
                 this.state.title = exercise.title;
                 this.state.description = exercise.description;
                 this.state.storedQuery = exercise.getUserQuery();
+                this.state.solved = exercise.isSolved();
                 this.state.initialized = true
             }
         }
@@ -81,9 +84,20 @@ class ExerciseViewComponent extends React.Component {
         } else { // this is a proper exercise
             API.solveExercise(this.props.exerciseId, this.state.storedQuery)
             .then(response => {
-                // TODO: Show success message and table
+                let exercise = this.state.context.getExerciseById(this.props.exerciseId);
+                if (!exercise.isSolved()) { // First time we're solving this exercise => Set this (otherwise it'll be initialized)
+                    exercise.setSolved(response.data.solved);
+                    let category = this.state.context.getCategoryById(this.props.categoryId);
+                    category.incrementSolvedCount();
+                }
+                this.setState({
+                    solved: response.data.solved,
+                    queryResult: <QueryResponseTable tableArray={ response.data.result } />
+                });
+                // TODO: Update in Context
             }).catch(error => {
-                // TODO: Show error
+                // Shouldn't happen
+                console.error(error);
             }).finally(() => {
                 this.setState({
                     queryLoading: false
@@ -106,7 +120,8 @@ class ExerciseViewComponent extends React.Component {
                 this.setState({
                     title: exercise.title,
                     description: exercise.description,
-                    storedQuery: exercise.getUserQuery()
+                    storedQuery: exercise.getUserQuery(),
+                    solved: exercise.solved
                 });
             }).catch(error => {
                 console.error(error);
@@ -140,6 +155,13 @@ class ExerciseViewComponent extends React.Component {
                                 loading={ this.state.queryLoading }/>
                         </Grid.Column>
                     </Grid.Row>
+                    {
+                        this.state.solved ?
+                        <Grid.Row>
+                            <Grid.Column><p>Die Aufgabe wurde erfolgreich gelöst.</p></Grid.Column>
+                        </Grid.Row>
+                        : null
+                    }
                     <Grid.Row>
                         <Grid.Column>
                             { this.state.queryResult }

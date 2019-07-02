@@ -19,10 +19,17 @@ class Api::ExercisesController < ApplicationController
             else
                 solved = @solution.solved
             end
-            
+
+            if solved
+                query = @solution.query
+            else
+                query = nil
+            end
+
             render json: {
                 exercise: @exercise,
-                solved: solved
+                solved: solved,
+                query: query
             }, status: :ok
         end
     end
@@ -92,6 +99,8 @@ class Api::ExercisesController < ApplicationController
             correct = nil
         else
             correct = true
+            
+            result_table = get_result_table query
 
             # check each reference
             @exercise.queries.each do |reference|
@@ -106,7 +115,11 @@ class Api::ExercisesController < ApplicationController
         end
 
         result = ExerciseSolver.where(user_id: current_user.id, exercise_id: @exercise.id).first_or_create(user_id: current_user.id, exercise_id: @exercise.id, solved: correct, query: query)
-        render json: {solved: correct}, status: :ok
+        if correct
+            result.update_attributes({query: query, solved: correct})
+        # else ...
+        end
+        render json: {solved: correct, result: result_table}, status: :ok
     end
 
     private

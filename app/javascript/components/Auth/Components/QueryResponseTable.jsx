@@ -7,8 +7,7 @@ const QueryResponseTable = (props) => {
     let tableArray = props.tableArray;
 
     if (tableArray.length == 0) {
-        return null;
-        // TODO: Warning
+        return "Es wurden keine Einträge gefunden.";
     } else { // Process data
         // array[0] = table head
         // array[i] = table row [column1, column2, ..., columnn] (i of 0,...,n)
