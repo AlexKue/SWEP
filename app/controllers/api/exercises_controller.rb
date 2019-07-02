@@ -108,6 +108,10 @@ class Api::ExercisesController < ApplicationController
         end
 
         result = ExerciseSolver.where(user_id: current_user.id, exercise_id: @exercise.id).first_or_create(user_id: current_user.id, exercise_id: @exercise.id, solved: correct, query: query)
+        if correct
+            result.update_attributes({query: query, solved: correct})
+        # else ...
+        end
         render json: {solved: correct, result: result_table}, status: :ok
     end
 
