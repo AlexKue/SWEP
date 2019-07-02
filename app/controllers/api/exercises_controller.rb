@@ -95,6 +95,8 @@ class Api::ExercisesController < ApplicationController
         @exercise = Exercise.find(params[:id])
         query = params[:query]
 
+        result_table = []
+
         if @exercise.queries.empty?
             correct = nil
         else
