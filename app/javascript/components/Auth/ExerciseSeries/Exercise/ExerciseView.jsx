@@ -63,6 +63,7 @@ class ExerciseViewComponent extends React.Component {
                 this.state.title = exercise.title;
                 this.state.description = exercise.description;
                 this.state.storedQuery = exercise.getUserQuery();
+                this.state.solved = exercise.isSolved();
                 this.state.initialized = true
             }
         }
