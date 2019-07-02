@@ -52,7 +52,7 @@ class Login extends React.Component {
     API.loginUser(this.state.userID, this.state.userPass)
     .then(response => {
       let data = response.data;
-      this.props.setUserLoggedIn(true, data.role, data.name, data.email, data.id);
+      this.props.setUserLoggedIn(true, data.role, data.name, data.email, data.id, data.hide_in_ranking);
     }).catch(error => {
       console.log(error);
       this.setState({

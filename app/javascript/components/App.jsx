@@ -35,12 +35,13 @@ class App extends React.Component {
     }
   }
 
-  setUserLoggedIn(loggedInState, userRole, userName, userMail, userId) {
+  setUserLoggedIn(loggedInState, userRole, userName, userMail, userId, hideInRanking) {
     window._isLoggedIn = loggedInState;
     window._userRole = userRole;
     localStorage.setItem("userName", userName);
     localStorage.setItem("userMail", userMail);
     localStorage.setItem("userId", userId);
+    localStorage.setItem("hideInRanking", hideInRanking);
     this.setState({
       isLoggedIn: loggedInState
     });

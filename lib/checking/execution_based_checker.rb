@@ -57,8 +57,9 @@ class ExecutionBasedChecker
         result.each_row do |row|
           arr.append row
         end
-        arr
+        return arr
       end
+      result.entries
   end
 
 end
