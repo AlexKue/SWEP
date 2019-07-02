@@ -138,12 +138,7 @@ export default class API {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
-        // TODO: replace with previous version
-        if (error.response.data) {
-          reject(this.getErrorList(error));
-        } else {
-          reject(null);
-        }
+        reject(this.getErrorList(error));
       })
     })
   }

@@ -42,7 +42,15 @@ class Api::UsersController < ApplicationController
     # PATCH /api/users/:id
     def update
         if !current_user.authenticate(params[:password])
-            head :unauthorized
+            response = []
+
+            if params[:password].blank?
+                response << "Please provide your old password!"
+            else
+                response << "Your provided old password is invalid!"
+            end
+
+            render json: response, status: :unauthorized
         elsif @user.update_attributes(user_params)
             head :no_content
         else
