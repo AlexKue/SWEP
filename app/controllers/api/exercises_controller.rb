@@ -19,10 +19,17 @@ class Api::ExercisesController < ApplicationController
             else
                 solved = @solution.solved
             end
-            
+
+            if solved
+                query = @solution.query
+            else
+                query = nil
+            end
+
             render json: {
                 exercise: @exercise,
-                solved: solved
+                solved: solved,
+                query: query
             }, status: :ok
         end
     end
