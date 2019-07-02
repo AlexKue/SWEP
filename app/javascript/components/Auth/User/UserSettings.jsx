@@ -28,8 +28,8 @@ class UserSettingsComponent extends React.Component {
             oldUserPass: "",                                    // need to provide for security
             newUserPass: "",
             newUserPassConf: "",
-            oldShowInLeaderboard: false,     // TODO: Update when received from server
-            newShowInLeaderboard: false,    // TODO: Update when received from server
+            oldHideInRanking: localStorage.getItem("hideInRanking") === "true",     // TODO: Update when received from server
+            newHideInRanking: localStorage.getItem("hideInRanking") === "true",    // TODO: Update when received from server
             deleteUserTitle: "Account löschen",
             changed: false,
             loading: false,
@@ -43,7 +43,7 @@ class UserSettingsComponent extends React.Component {
         this.updateUserMail = this.updateUserMail.bind(this);
         this.updateUserPass = this.updateUserPass.bind(this);
         this.updateUserPassConf = this.updateUserPassConf.bind(this);
-        this.updateShowInLeaderboard = this.updateShowInLeaderboard.bind(this);
+        this.updateHideInRanking = this.updateHideInRanking.bind(this);
         this.saveSettings = this.saveSettings.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
         this.resetDeleteButton = this.resetDeleteButton.bind(this);
@@ -75,9 +75,9 @@ class UserSettingsComponent extends React.Component {
             changed: true
         });
     }
-    updateShowInLeaderboard() {
+    updateHideInRanking() {
         this.setState((prevState) => ({ 
-            newShowInLeaderboard: !prevState.newShowInLeaderboard,
+            newHideInRanking: !prevState.newHideInRanking,
             changed: true
         }));
     }
@@ -90,17 +90,17 @@ class UserSettingsComponent extends React.Component {
         this.setState({
             loading: true
         });
-        // TODO: Make a real call
         let state = this.state;
         API.updateUser(localStorage.getItem("userId"),
             state.oldUserPass,
             state.newUserNick != state.oldUserNick ? state.newUserNick : null,
             state.newUserMail != state.oldUserMail ? state.newUserMail : null,
-            state.newShowInLeaderboard != state.oldShowInLeaderboard ? state.newShowInLeaderboard : null,
+            state.newHideInRanking != state.oldHideInRanking ? state.newHideInRanking : null,
             state.newUserPass != "" ? state.newUserPass : null,
             state.newUserPassConf != "" ? state.newUserPassConf : null)
         .then(response => {
             this.props.context.updateUserName(state.newUserNick);
+            localStorage.setItem("hideInRanking", state.newHideInRanking);
             this.setState((prevState) => ({
                 success: true,
                 error: false,
@@ -108,7 +108,7 @@ class UserSettingsComponent extends React.Component {
                 messageContent: "Einstellungen erfolgreich geändert.",
                 oldUserNick: prevState.newUserNick,
                 oldUserMail: prevState.newUserMail,
-                oldShowInLeaderboard: prevState.newShowInLeaderboard
+                oldHideInRanking: prevState.newHideInRanking
             }));
         }).catch(error => {
             this.setState({
@@ -198,9 +198,9 @@ class UserSettingsComponent extends React.Component {
                         icon="key"
                         iconPosition="left"/>
                     <Form.Checkbox
-                        label="In Rangliste anzeigen?"
-                        checked={ this.state.newShowInLeaderboard }
-                        onChange={ this.updateShowInLeaderboard }
+                        label="In Rangliste verstecken?"
+                        checked={ this.state.newHideInRanking }
+                        onChange={ this.updateHideInRanking }
                         toggle />
                     <Grid columns={2}>
                         <Grid.Column>

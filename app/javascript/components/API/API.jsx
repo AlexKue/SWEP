@@ -119,26 +119,31 @@ export default class API {
       })
     })
   }
-  static updateUser(id, oldPassword, newName = null, newMail = null, showInLeaderbord = null, newPassword = null, newPasswordConf = null) {
+  static updateUser(id, oldPassword, newName = null, newMail = null, hideInRanking = null, newPassword = null, newPasswordConf = null) {
     console.log("updateUser called");
     let userObject = {
-      id,           
-      oldPassword   //TODO: Refactor with proper field
+      id
     };
     newName != null ? userObject.name = newName : null;
     newMail != null? userObject.email = newMail : null;
-    showInLeaderbord != null ? userObject.showInLeaderbord = showInLeaderbord : null; //TODO: REFACTOR
+    hideInRanking != null ? userObject.hide_in_ranking = hideInRanking : null;
     newPassword != null ? userObject.password = newPassword : null;
     newPasswordConf != null ? userObject.password_confirmation = newPasswordConf : null;
     return new Promise((resolve, reject) => {
       this.service.patch("users/" + id, {
         user: userObject,
-        authenticity_token: window._token
+        authenticity_token: window._token,
+        password: oldPassword
       }).then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
-        reject(this.getErrorList(error));
+        // TODO: replace with previous version
+        if (error.response.data) {
+          reject(this.getErrorList(error));
+        } else {
+          reject(null);
+        }
       })
     })
   }
