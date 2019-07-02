@@ -319,6 +319,12 @@ class Category {
             return this.exerciseIdSet;
         }
     }
+    incrementSolvedCount = () => {
+        this.solvedExerciseCount++;
+    }
+    decrementSolvedCount = () => {
+        this.solvedExerciseCount--;
+    }
 }
 
 class Exercise {
@@ -354,8 +360,8 @@ class Exercise {
     isSolved = () => {
         return this.solved;
     }
-    setSolved = () => {
-        this.solved = true;
+    setSolved = (solved) => {
+        this.solved = solved;
     }
 }
 
