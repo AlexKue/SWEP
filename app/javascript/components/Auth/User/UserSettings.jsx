@@ -20,24 +20,29 @@ class UserSettingsComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        let context = props.context;
+
         this.state = {
-            oldUserNick: localStorage.getItem("userName"),
-            newUserNick: localStorage.getItem("userName"),
-            oldUserMail: localStorage.getItem("userMail"),
-            newUserMail: localStorage.getItem("userMail"),
+            oldUserNick: context.getUserName(),
+            newUserNick: context.getUserName(),
+            oldUserMail: context.getUserMail(),
+            newUserMail: context.getUserMail(),
             oldUserPass: "",                                    // need to provide for security
             newUserPass: "",
             newUserPassConf: "",
-            oldHideInRanking: localStorage.getItem("hideInRanking") === "true",     // TODO: Update when received from server
-            newHideInRanking: localStorage.getItem("hideInRanking") === "true",    // TODO: Update when received from server
+            oldHideInRanking: context.getHideInRanking(),
+            newHideInRanking: context.getHideInRanking(),
             deleteUserTitle: "Account löschen",
             changed: false,
             loading: false,
             messageTitle: "",
             messageContent: "",
             success: false,
-            error: false
+            error: false,
+            context: context
         }
+
+        console.log(context.getHideInRanking());
 
         this.updateUserNick = this.updateUserNick.bind(this);
         this.updateUserMail = this.updateUserMail.bind(this);
@@ -91,7 +96,7 @@ class UserSettingsComponent extends React.Component {
             loading: true
         });
         let state = this.state;
-        API.updateUser(localStorage.getItem("userId"),
+        API.updateUser(state.context.getUserId(),
             state.oldUserPass,
             state.newUserNick != state.oldUserNick ? state.newUserNick : null,
             state.newUserMail != state.oldUserMail ? state.newUserMail : null,
@@ -99,8 +104,8 @@ class UserSettingsComponent extends React.Component {
             state.newUserPass != "" ? state.newUserPass : null,
             state.newUserPassConf != "" ? state.newUserPassConf : null)
         .then(response => {
-            this.props.context.updateUserName(state.newUserNick);
-            localStorage.setItem("hideInRanking", state.newHideInRanking);
+            state.context.setUserName(state.newUserNick);
+            state.context.setHideInRanking(state.newHideInRanking);
             this.setState((prevState) => ({
                 success: true,
                 error: false,
@@ -133,7 +138,7 @@ class UserSettingsComponent extends React.Component {
             this.setState({
                 loading: true
             });
-            API.deleteUser(localStorage.getItem("userId"))
+            API.deleteUser(this.state.getUserId())
             .then(response => {
                 this.props.context.setUserLoggedOut();
             }).catch(error => {

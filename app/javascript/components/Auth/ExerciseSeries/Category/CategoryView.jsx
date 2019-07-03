@@ -30,7 +30,7 @@ export const CategoryView = (props) => {    // props is containing the Router co
                     localUrl={ localUrl }
                     context={ context }
                     {...props} />
-            { window._userRole === "admin" ?
+            { context.getUserRole() === "admin" ?
                 <Grid columns={2} stackable>
                     <Grid.Column>
                         <Button 
@@ -68,7 +68,8 @@ class CategoryViewComponent extends React.Component {
                 solved={ exercise.solved }
                 exerciseId={ exercise.id }
                 localUrl= { this.props.localUrl }
-                key={ "excl" + exercise.id } />
+                key={ "excl" + exercise.id } 
+                context={ context } />
             });
         return (
             <ThreeColumnTable
@@ -81,27 +82,25 @@ class CategoryViewComponent extends React.Component {
     }
 }
 
-class ExerciseListItem extends React.Component {
+const ExerciseListItem = (props) => {
 
-    render() {
-        return (
-            <ThreeColumnTableRow
-                firstContent={ this.props.title }
-                secondContent={ this.props.solved ? 
-                    this.props.totalExercisePoints + "/" + this.props.totalExercisePoints
-                :   "0/" + this.props.totalExercisePoints}
-                thirdContent={ 
-                    <Link to={this.props.localUrl + "/exercise-" + this.props.exerciseId 
-                    + (window._userRole === "admin" ? "/edit" : "")}>
-                        {window._userRole === "admin" ?
-                        <React.Fragment>
-                            Bearbeiten <Icon name="edit" />
-                        </React.Fragment>
-                        : 
-                        <React.Fragment>
-                            Gehe zu<Icon name="arrow right" />
-                        </React.Fragment>}</Link>} 
-                />
-        )
-    }
+    return (
+        <ThreeColumnTableRow
+            firstContent={ props.title }
+            secondContent={ props.solved ? 
+                props.totalExercisePoints + "/" + props.totalExercisePoints
+            :   "0/" + props.totalExercisePoints}
+            thirdContent={ 
+                <Link to={props.localUrl + "/exercise-" + props.exerciseId 
+                + (props.context.getUserRole() === "admin" ? "/edit" : "")}>
+                    {props.context.getUserRole() === "admin" ?
+                    <React.Fragment>
+                        Bearbeiten <Icon name="edit" />
+                    </React.Fragment>
+                    : 
+                    <React.Fragment>
+                        Gehe zu<Icon name="arrow right" />
+                    </React.Fragment>}</Link>} 
+            />
+    );
 }

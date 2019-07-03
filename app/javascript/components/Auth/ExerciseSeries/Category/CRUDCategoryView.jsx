@@ -16,11 +16,12 @@ import { __403 } from '../../Components/errors.jsx';
 
 const CRUDCategoryView = (props) => {
 
-    if (window._userRole != "admin") {
+    const context = useContext(AuthedContext);
+
+    if (context.getUserRole() != "admin") {
         return < __403 />
     }
 
-    const context = useContext(AuthedContext);
 
     let category = null;
     let categoryId = props.match.params.categoryId;
