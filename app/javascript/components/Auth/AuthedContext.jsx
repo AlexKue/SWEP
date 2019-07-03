@@ -13,8 +13,12 @@ export class AuthedContextProvider extends React.Component {
         queries: new Map(),
         totalCategoriesCount: 0,
         userName: localStorage.getItem("userName"),
+        userMail: localStorage.getItem("userMail"),
+        userRole: window._userRole,
+        hideInRanking: localStorage.getItem("hideInRanking") === "true",
+        userId: parseInt(localStorage.getItem("userId")),
         initialized: false,
-        loadText: "Starte..."
+        loadText: "Starte...",
     }
 
     forceUpdate = () => {
@@ -122,8 +126,8 @@ export class AuthedContextProvider extends React.Component {
                     exerciseId
                 ));
                 exercise = this.getExerciseById(exerciseId);    // Override by now created exercise from context storage
-                if (window._userRole === "student") {   // if student => Process the sent query and solved state
-                    exercise.setUserQuery("TEST");      // TODO: Replace by response
+                if (this.getUserRole() === "student") {         // if student => Process the sent query and solved state
+                    exercise.setUserQuery(response.data.query);      // TODO: Replace by response
                     resolve(response);
                 } else {                                // else => must be admin => add stored queries
                     API.getQueries(exerciseId)
@@ -218,7 +222,7 @@ export class AuthedContextProvider extends React.Component {
     getUserName = () => {
         return this.state.userName;
     }
-    updateUserName = (newUserName) => {
+    setUserName = (newUserName) => {
         localStorage.setItem("userName", newUserName);
         this.setState({
             userName: newUserName
@@ -242,6 +246,24 @@ export class AuthedContextProvider extends React.Component {
 
         this.forceUpdate();
     }
+    getUserRole = () => {
+        return this.state.userRole;
+    }
+    getUserMail = () => {
+        return this.state.userMail;
+    }
+    getHideInRanking = () => {
+        return this.state.hideInRanking;
+    }
+    setHideInRanking = (hideInRanking) => {
+        localStorage.setItem("hideInRanking", hideInRanking);
+        this.setState({
+            hideInRanking: hideInRanking
+        });
+    }
+    getUserId = () => {
+        return this.state.userId;
+    }
 
     render() {
         const contextValue = {
@@ -257,7 +279,7 @@ export class AuthedContextProvider extends React.Component {
             addExercise: this.addExercise,
             setUserLoggedOut: this.props.setUserLoggedOut,
             getUserName: this.getUserName,
-            updateUserName: this.updateUserName,
+            setUserName: this.setUserName,
             isInitialized: this.isInitialized,
             loadText: this.state.loadText,
             fetchExerciseInformation: this.fetchExerciseInformation,
@@ -266,7 +288,12 @@ export class AuthedContextProvider extends React.Component {
             addQuery: this.addQuery,
             removeQuery: this.removeQuery,
             getQuery: this.getQuery,
-            updateQuery: this.updateQuery
+            updateQuery: this.updateQuery,
+            getUserRole: this.getUserRole,
+            getUserMail: this.getUserMail,
+            getHideInRanking: this.getHideInRanking,
+            setHideInRanking: this.setHideInRanking,
+            getUserId: this.getUserId
         }
 
         return (

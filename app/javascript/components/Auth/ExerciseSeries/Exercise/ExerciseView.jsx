@@ -63,6 +63,7 @@ class ExerciseViewComponent extends React.Component {
                 this.state.title = exercise.title;
                 this.state.description = exercise.description;
                 this.state.storedQuery = exercise.getUserQuery();
+                this.state.solved = exercise.isSolved();
                 this.state.initialized = true
             }
         }
@@ -84,9 +85,11 @@ class ExerciseViewComponent extends React.Component {
             API.solveExercise(this.props.exerciseId, this.state.storedQuery)
             .then(response => {
                 let exercise = this.state.context.getExerciseById(this.props.exerciseId);
-                exercise.setSolved(response.data.solved);
-                let category = this.state.context.getCategoryById(this.props.categoryId);
-                category.incrementSolvedCount();
+                if (!exercise.isSolved()) { // First time we're solving this exercise => Set this (otherwise it'll be initialized)
+                    exercise.setSolved(response.data.solved);
+                    let category = this.state.context.getCategoryById(this.props.categoryId);
+                    category.incrementSolvedCount();
+                }
                 this.setState({
                     solved: response.data.solved,
                     queryResult: <QueryResponseTable tableArray={ response.data.result } />

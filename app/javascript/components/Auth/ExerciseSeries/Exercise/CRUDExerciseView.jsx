@@ -17,11 +17,11 @@ import { __403 } from '../../Components/errors.jsx';
 
 const CRUDExerciseView = (props) => {
 
-    if (window._userRole != "admin") {
+    const context = useContext(AuthedContext);
+    
+    if (context.getUserRole() != "admin") {
         return <__403 />;
     }
-
-    const context = useContext(AuthedContext);
 
     let exerciseId = parseInt(props.match.params.exerciseId);
     let categoryId = parseInt(props.match.params.categoryId);
