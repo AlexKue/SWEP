@@ -86,6 +86,7 @@ const ExerciseListItem = (props) => {
 
     return (
         <ThreeColumnTableRow
+            status={ props.solved }
             firstContent={ props.title }
             secondContent={ props.solved ? 
                 props.totalExercisePoints + "/" + props.totalExercisePoints
