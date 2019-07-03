@@ -27,21 +27,23 @@ class Api::QueriesController < ApplicationController
         checker = init_query_checker()
         checking_result = check_admin_query @query.query
 
+        answer = {"id"=>@query.id}
+        
         if checking_result[:debug].has_key? :error
             render json: [checking_result[:debug][:error]], status: :unprocessable_entity
 
         elsif checking_result[:debug][:query].empty?
-            render json: ["ERROR: Die Query lieferte ein leeres Ergebnis. Die Query wurde nicht gespeichert."], status: :unprocessable_entity
+            answer["warning"] = "Die Query lieferte ein leeres Ergebnis."
 
         # warn if the currently entered query conflicts with previous reference queries
-        elsif !(conflict_queries = @exercise.queries.filter do |prev_reference| (checker.correct?(prev_reference.query, @query.query)==false) end).empty?
-            render json: {error: ["ERROR: Die eingebene Query verursacht einen Konflikt mit den bisherigen. Die Query wurde nicht gespeichert."], details: conflict_queries}, status: :unprocessable_entity
+        elsif !(conflict_queries = @exercise.queries.filter do |prev_reference| (checker.correct?(prev_reference.query, query_params[:query])==false) end).empty?
+            answer["warning"] = "Die eingebene Query verursacht einen Konflikt mit den bisherigen."
+            answer["details"] = conflict_queries
+        end
 
-        elsif @query.save
-            render json: {"id"=>@query.id, "result"=>checking_result[:debug][:query]}, status: :created
-
-        else
-            render json: @query.errors.full_messages, status: :unprocessable_entity
+        if @query.update_attributes(query_params)
+            answer["result"] = checking_result[:debug][:query]
+            render json: answer, status: :ok
         end
     end
 
@@ -52,24 +54,29 @@ class Api::QueriesController < ApplicationController
         head :no_content
     end
 
+
     def update
         @query = Query.find(params[:id]) # this still contains the old query
         @exercise = Exercise.find(@query.exercise_id)
         checker = init_query_checker()
         checking_result = check_admin_query query_params[:query] # this is the newly entered query
 
-        byebug
+        answer = {"id"=>@query.id}
         if checking_result[:debug].has_key? :error
             render json: [checking_result[:debug][:error]], status: :unprocessable_entity
 
         elsif checking_result[:debug][:query].empty?
-            render json: ["Die Query lieferte ein leeres Ergebnis. Die Änderungen wurden nicht übernommen."], status: :unprocessable_entity
+            answer["warning"] = "Die Query lieferte ein leeres Ergebnis."
 
         # warn if the currently entered query conflicts with previous reference queries
         elsif !(conflict_queries = @exercise.queries.filter do |prev_reference| (checker.correct?(prev_reference.query, query_params[:query])==false) end).empty?
-            render json: {error: ["ERROR: Die eingebene Query verursacht einen Konflikt mit den bisherigen. Die Query wurde nicht gespeichert."], details: conflict_queries}, status: :unprocessable_entity
-        elsif @query.update_attributes(query_params)
-            render json: {"id"=>@query.id, "result"=>checking_result[:debug][:query]}, status: :ok
+            answer["warning"] = "Die eingebene Query verursacht einen Konflikt mit den bisherigen."
+            answer["details"] = conflict_queries
+        end
+
+        if @query.update_attributes(query_params)
+            answer["result"] = checking_result[:debug][:query]
+            render json: answer, status: :ok
         else
             render json: @query.errors.full_messages, status: :unprocessable_entity
         end
