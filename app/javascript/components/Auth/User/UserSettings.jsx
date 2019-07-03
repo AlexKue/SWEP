@@ -202,11 +202,14 @@ class UserSettingsComponent extends React.Component {
                         type="password"  
                         icon="key"
                         iconPosition="left"/>
-                    <Form.Checkbox
-                        label="In Rangliste verstecken?"
-                        checked={ this.state.newHideInRanking }
-                        onChange={ this.updateHideInRanking }
-                        toggle />
+                    { this.state.context.getUserRole() === "student" ?  // why should the admin even show up in the scoreboard?
+                        <Form.Checkbox
+                            label="In Rangliste verstecken?"
+                            checked={ this.state.newHideInRanking }
+                            onChange={ this.updateHideInRanking }
+                            toggle />
+                        : null
+                    }
                     <Grid columns={2}>
                         <Grid.Column>
                             { this.state.changed ? 
