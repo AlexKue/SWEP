@@ -1,8 +1,15 @@
 require 'test_helper'
 
 class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
+
+  def setup
+    @admin = users(:Alex)
+    @mark = users(:Mark)
+    @matthias = users(:Matthias)
+  end
+
   test "should add exercise to a category" do
-    log_in_as(users(:Alex))
+    log_in_as @admin
     assert_difference "Exercise.count", 1 do
       post api_category_exercises_path(categories(:sfw_queries)), 
       params: { 
@@ -17,7 +24,7 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should solve an exercise and update solution" do
-    log_in_as(users(:Matthias))
+    log_in_as @matthias
       post solve_api_exercise_path(exercises(:one)),
       params: {
         query: "SELECT * FROM table1"
@@ -34,7 +41,7 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not add exercise as non-admin" do
-    log_in_as(users(:Mark))
+    log_in_as @mark
     post api_category_exercises_path(categories(:sfw_queries)), 
     params: { 
       exercise: {  
@@ -49,7 +56,7 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
   test "should edit exercise as admin" do
     @exercise = exercises(:one)
 
-    log_in_as users(:Alex)
+    log_in_as @admin
     patch api_exercise_path(@exercise),
      params: {
      exercise: {
@@ -60,4 +67,14 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
       @exercise.reload
       assert_equal @exercise.title, "New Title"
   end
+
+  test "should index uncertain queries" do
+    log_in_as @admin
+    get api_exercises_index_uncertain_solutions_path
+
+    body = JSON.parse response.body
+
+    assert_equal @matthias.id, body.first["user_id"] 
+    assert_equal exercises(:two).id, body.first["exercise_id"] 
+  end 
 end
