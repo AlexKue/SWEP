@@ -1,7 +1,7 @@
 class Api::ExercisesController < ApplicationController
 
     before_action :logged_in_user
-    before_action :admin_user, only: [:create, :destroy, :update]
+    before_action :admin_user, only: [:create, :destroy, :update, :update_uncertain, :index_uncertain]
 
     def show
         solved = false
@@ -95,6 +95,7 @@ class Api::ExercisesController < ApplicationController
         @exercise = Exercise.find(params[:id])
         query = params[:query]
 
+        # Always set solutions for exercises without references to uncertain
         if @exercise.queries.empty?
             correct = nil
         else
@@ -121,6 +122,36 @@ class Api::ExercisesController < ApplicationController
         end
         render json: {solved: correct, result: result_table}, status: :ok
     end
+
+    # index of uncertain student-query solutions 
+    def index_uncertain
+        offset = params[:offset].to_i
+        limit = params[:limit].nil? ? 30 : params[:limit].to_i
+        @uncertain_solutions = ExerciseSolver.where(solved: nil).offset(offset).limit(limit)
+
+        response = []
+        unless @uncertain_solutions.empty?
+            @uncertain_solutions.each do |solution|
+                response << {
+                    user_id: solution.user_id,
+                    exercise_id: solution.exercise_id,
+                    student_query: solution.query
+                }
+            end
+        end    
+        render json: response, status: :ok
+    end
+
+    # Manually set a uncertain solution as (not) solved
+    def update_uncertain
+        @solution = ExerciseSolver.find_by(exercise_id: params[:id], user_id: params[:user_id])
+        if  @solution.update(solved: params[:solved])
+            head :no_content
+        else
+            render json: @solution.errors.full_messages, status: :unprocessable_entity
+        end
+    end
+
 
     private
         def exercise_params
