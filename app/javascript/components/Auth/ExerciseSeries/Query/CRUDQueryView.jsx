@@ -160,7 +160,8 @@ class CRUDQueryViewComponent extends React.Component {
                     messageTitle: "Erfolg",
                     messageContent: "Die Query wurde erfolgreich hinzugefügt.",
                     showMessage: true,
-                    successMessage: true
+                    successMessage: true,
+                    queryResponseTable: <QueryResponseTable tableArray={ response.data.result } />
                 });
             }).catch(error => {
                 let data = error.data;
