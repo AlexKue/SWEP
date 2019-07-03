@@ -4,7 +4,7 @@ import {
 } from "semantic-ui-react";
 
 const QueryResponseTable = (props) => {
-    let tableArray = props.tableArray;
+    let tableArray = [...props.tableArray]; // as it's in-place edition, we have to copy it
 
     if (tableArray.length == 0) {
         return "Es wurden keine Einträge gefunden.";
