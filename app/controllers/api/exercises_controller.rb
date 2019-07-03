@@ -100,20 +100,10 @@ class Api::ExercisesController < ApplicationController
         if @exercise.queries.empty?
             correct = nil
         else
-            correct = true
-            
             result_table = get_result_table query
 
-            # check each reference
-            @exercise.queries.each do |reference|
-                result = @checker.correct?(query, reference.query)
-                # Only set to nil if previously not marked as false
-                if result.nil? && correct
-                    correct = nil
-                elsif result == false
-                    correct = false
-                end
-            end
+            correct = (@exercise.queries.filter do |reference| @checker.correct?(query, reference.query) end).any?
+            
         end
 
         result = ExerciseSolver.where(user_id: current_user.id, exercise_id: @exercise.id).first_or_create(user_id: current_user.id, exercise_id: @exercise.id, solved: correct, query: query)
