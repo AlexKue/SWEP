@@ -59,6 +59,9 @@ class Api::UsersController < ApplicationController
     end
 
     def ranking
+        offset = params[:offset].to_i
+        limit = params[:limit].nil? ? 30 : params[:limit].to_i
+
         query =    "SELECT u.name, SUM(e.points), rank() OVER (
                                         ORDER BY SUM(e.points) DESC)
                     FROM users u, exercise_solvers e_s, exercises e
@@ -68,7 +71,7 @@ class Api::UsersController < ApplicationController
                     AND u.hide_in_ranking = false
                     GROUP BY u.id"
                     
-        list = ExerciseSolver.connection.select_all(query).to_hash
+        list = ExerciseSolver.connection.select_all(query).offset(offset).limit(limit).to_hash
         render json: list, status: :ok
     end
 
