@@ -30,7 +30,7 @@ export const CategoryView = (props) => {    // props is containing the Router co
                     localUrl={ localUrl }
                     context={ context }
                     {...props} />
-            { context.getUserRole() === "admin" ?
+            { context.isUserAdmin() ?
                 <Grid columns={2} stackable>
                     <Grid.Column>
                         <Button 
@@ -86,7 +86,7 @@ const ExerciseListItem = (props) => {
 
     return (
         <ThreeColumnTableRow
-            student={ props.context.getUserRole() === "student" }
+            student={ props.context.isUserStudent() }
             status={ props.solved }
             firstContent={ props.title }
             secondContent={ props.solved ? 
@@ -94,8 +94,8 @@ const ExerciseListItem = (props) => {
             :   "0/" + props.totalExercisePoints}
             thirdContent={ 
                 <Link to={props.localUrl + "/exercise-" + props.exerciseId 
-                + (props.context.getUserRole() === "admin" ? "/edit" : "")}>
-                    {props.context.getUserRole() === "admin" ?
+                + (props.context.isUserAdmin() ? "/edit" : "")}>
+                    {props.context.isUserAdmin() ?
                     <React.Fragment>
                         Bearbeiten <Icon name="edit" />
                     </React.Fragment>

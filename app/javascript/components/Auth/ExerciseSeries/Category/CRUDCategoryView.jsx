@@ -18,7 +18,7 @@ const CRUDCategoryView = (props) => {
 
     const context = useContext(AuthedContext);
 
-    if (context.getUserRole() != "admin") {
+    if (!context.isUserAdmin()) {
         return < __403 />
     }
 

@@ -19,7 +19,7 @@ const CategoryList = (props) => {
     return (
         <React.Fragment>
             <CategoryRender categories={ context.getCategories() }/>
-            { context.getUserRole() === "admin" ?
+            { context.isUserAdmin() ?
                 <Button 
                     as={ Link }
                     to="/category/create"

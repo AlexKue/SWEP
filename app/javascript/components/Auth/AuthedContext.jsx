@@ -126,7 +126,7 @@ export class AuthedContextProvider extends React.Component {
                     exerciseId
                 ));
                 exercise = this.getExerciseById(exerciseId);    // Override by now created exercise from context storage
-                if (this.getUserRole() === "student") {         // if student => Process the sent query and solved state
+                if (this.isUserStudent()) {         // if student => Process the sent query and solved state
                     exercise.setUserQuery(response.data.query);      // TODO: Replace by response
                     resolve(response);
                 } else {                                // else => must be admin => add stored queries
@@ -246,8 +246,11 @@ export class AuthedContextProvider extends React.Component {
 
         this.forceUpdate();
     }
-    getUserRole = () => {
-        return this.state.userRole;
+    isUserAdmin = () => {
+        return this.state.userRole === "admin";
+    }
+    isUserStudent = () => {
+        return this.state.userRole === "student";
     }
     getUserMail = () => {
         return this.state.userMail;
@@ -289,11 +292,12 @@ export class AuthedContextProvider extends React.Component {
             removeQuery: this.removeQuery,
             getQuery: this.getQuery,
             updateQuery: this.updateQuery,
-            getUserRole: this.getUserRole,
             getUserMail: this.getUserMail,
             getHideInRanking: this.getHideInRanking,
             setHideInRanking: this.setHideInRanking,
-            getUserId: this.getUserId
+            getUserId: this.getUserId,
+            isUserAdmin: this.isUserAdmin,
+            isUserStudent: this.isUserStudent
         }
 
         return (
