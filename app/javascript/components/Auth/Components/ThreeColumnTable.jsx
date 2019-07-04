@@ -32,7 +32,7 @@ export class ThreeColumnTableRow extends React.Component {
     
     render() {
         return (
-            <Table.Row positive={ this.props.status === true } negative={ this.props.status === false } warning={ this.props.status === null }>
+            <Table.Row positive={ this.props.status === true } negative={ this.props.status === false && this.props.student } warning={ this.props.status === null }>
                 <Table.Cell>
                     { this.props.status === true ?
                         <Icon color="green" name="checkmark" />

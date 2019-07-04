@@ -86,6 +86,7 @@ const ExerciseListItem = (props) => {
 
     return (
         <ThreeColumnTableRow
+            student={ props.context.getUserRole() === "student" }
             status={ props.solved }
             firstContent={ props.title }
             secondContent={ props.solved ? 
