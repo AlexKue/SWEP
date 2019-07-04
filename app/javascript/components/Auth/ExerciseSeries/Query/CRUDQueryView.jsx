@@ -156,12 +156,23 @@ class CRUDQueryViewComponent extends React.Component {
                 this.state.context.getExerciseById(this.state.exerciseId).addQuery(newQueryId);
                 this.state.localQueryMap.set(newQueryId, this.state.localQueryMap.get(queryId));
                 this.state.localQueryMap.delete(Number.MAX_SAFE_INTEGER);
-                this.setState({
-                    messageTitle: "Erfolg",
-                    messageContent: "Die Query wurde erfolgreich hinzugefügt.",
-                    showMessage: true,
-                    successMessage: true
-                });
+                if (response.data.warning) { // Warning detected => Success Message with warning
+                    this.setState({
+                        messageTitle: "Erfolg - Achtung",
+                        messageContent: response.data.warning + " Die Query wurde gespeichert.",
+                        showMessage: true,
+                        successMessage: true,
+                        queryResponseTable: <QueryResponseTable tableArray={ response.data.result } />
+                    });
+                } else {
+                    this.setState({
+                        messageTitle: "Erfolg",
+                        messageContent: "Die Query wurde erfolgreich hinzugefügt.",
+                        showMessage: true,
+                        successMessage: true,
+                        queryResponseTable: <QueryResponseTable tableArray={ response.data.result } />
+                    });
+                }
             }).catch(error => {
                 let data = error.data;
                 this.setState({
@@ -180,6 +191,9 @@ class CRUDQueryViewComponent extends React.Component {
             API.updateQuery(queryId, this.state.localQueryMap.get(queryId))
             .then(response => {
                 this.state.context.updateQuery(queryId, this.state.localQueryMap.get(queryId));
+                if (response.data.warning) {
+                    showWarning(response.data.warning, response.data.result);
+                }
                 this.setState({
                     messageTitle: "Erfolg",
                     messageContent: "Änderungen erfolgreich übernommen.",
@@ -201,6 +215,16 @@ class CRUDQueryViewComponent extends React.Component {
                 })
             })
         }
+    }
+
+    showWarning = (warning, tableArray) => {
+        this.setState({
+            messageTitle: "Erfolg - Achtung",
+            messageContent: warning,
+            showMessage: true,
+            successMessage: true,
+            queryResponseTable: <QueryResponseTable tableArray={ tableArray} />
+        });
     }
 
     deleteQuery = (queryId) => {

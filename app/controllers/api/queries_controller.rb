@@ -27,7 +27,7 @@ class Api::QueriesController < ApplicationController
         checker = init_query_checker()
         checking_result = check_admin_query @query.query
 
-        answer = {"id"=>@query.id}
+        answer = {}
         
         if checking_result[:debug].has_key? :error
             render json: [checking_result[:debug][:error]], status: :unprocessable_entity
@@ -43,6 +43,7 @@ class Api::QueriesController < ApplicationController
 
         if @query.update_attributes(query_params)
             answer["result"] = checking_result[:debug][:query]
+            answer["id"] = @query.id
             render json: answer, status: :ok
         end
     end
@@ -61,7 +62,7 @@ class Api::QueriesController < ApplicationController
         checker = init_query_checker()
         checking_result = check_admin_query query_params[:query] # this is the newly entered query
 
-        answer = {"id"=>@query.id}
+        answer = {"id"=params[:id]}
         if checking_result[:debug].has_key? :error
             render json: [checking_result[:debug][:error]], status: :unprocessable_entity
 
