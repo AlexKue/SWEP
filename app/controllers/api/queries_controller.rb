@@ -63,6 +63,9 @@ class Api::QueriesController < ApplicationController
         checking_result = check_admin_query query_params[:query] # this is the newly entered query
 
         answer = {"id"=>params[:id]}
+        # create a list of all (unique) reference_queries (excluding the one to be updated) as strings
+        reference_queries = (@exercise.queries.map do |reference_query| reference_query.query end).uniq.difference [@query.query]
+
         if checking_result[:debug].has_key? :error
             render json: [checking_result[:debug][:error]], status: :unprocessable_entity
             return
@@ -70,7 +73,7 @@ class Api::QueriesController < ApplicationController
             answer["warning"] = "Die Query lieferte ein leeres Ergebnis."
 
         # warn if the currently entered query conflicts with previous reference queries
-        elsif !(conflict_queries = @exercise.queries.filter do |prev_reference| (checker.correct?(prev_reference.query, query_params[:query])==false) end).empty?
+        elsif !(conflict_queries = reference_queries.filter do |prev_reference| (checker.correct?(prev_reference.query, query_params[:query])==false) end).empty?
             answer["warning"] = "Die eingebene Query verursacht einen Konflikt mit den bisherigen."
             answer["details"] = conflict_queries
         end
