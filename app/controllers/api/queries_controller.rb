@@ -41,7 +41,7 @@ class Api::QueriesController < ApplicationController
             answer["details"] = conflict_queries
         end
 
-        if @query.update_attributes(query_params)
+        if @query.save
             answer["result"] = checking_result[:debug][:query]
             answer["id"] = @query.id
             render json: answer, status: :ok
