@@ -95,6 +95,8 @@ class Api::ExercisesController < ApplicationController
         @exercise = Exercise.find(params[:id])
         query = params[:query]
 
+        result_table = []
+        
         # Always set solutions for exercises without references to uncertain
         if @exercise.queries.empty?
             correct = nil

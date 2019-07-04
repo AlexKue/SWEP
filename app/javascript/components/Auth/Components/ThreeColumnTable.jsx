@@ -1,7 +1,8 @@
 import React from "react";
 import { 
     Table,
-    Segment
+    Segment,
+    Icon
 } from "semantic-ui-react";
 
 export default class ThreeColumnTable extends React.Component {
@@ -31,8 +32,16 @@ export class ThreeColumnTableRow extends React.Component {
     
     render() {
         return (
-            <Table.Row>
-                <Table.Cell>{ this.props.firstContent }</Table.Cell>
+            <Table.Row positive={ this.props.status === true } negative={ this.props.status === false && this.props.student } warning={ this.props.status === null }>
+                <Table.Cell>
+                    { this.props.status === true ?
+                        <Icon color="green" name="checkmark" />
+                        : null}
+                    { this.props.status === null ?
+                        <Icon color="yellow" name="question" /> 
+                        : null }
+                    { this.props.firstContent }
+                </Table.Cell>
                 <Table.Cell collapsing textAlign="right">{ this.props.secondContent}</Table.Cell>
                 <Table.Cell collapsing>{ this.props.thirdContent }</Table.Cell>
             </Table.Row>
