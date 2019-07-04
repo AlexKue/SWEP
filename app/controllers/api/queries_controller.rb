@@ -31,6 +31,7 @@ class Api::QueriesController < ApplicationController
         
         if checking_result[:debug].has_key? :error
             render json: [checking_result[:debug][:error]], status: :unprocessable_entity
+            return
 
         elsif checking_result[:debug][:query].empty?
             answer["warning"] = "Die Query lieferte ein leeres Ergebnis."
