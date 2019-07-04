@@ -1,6 +1,6 @@
 class Api::UsersController < ApplicationController
 
-    before_action :logged_in_user, only: [:index, :show, :destroy, :update]
+    before_action :logged_in_user, only: [:index, :show, :destroy, :update, :ranking]
     before_action :correct_user, only: [:destroy, :update]
 
     # GET /api/users/:id
@@ -56,6 +56,16 @@ class Api::UsersController < ApplicationController
         else
             render json: @user.errors.full_messages, status: :unprocessable_entity
         end
+    end
+
+    def ranking
+        query =    "SELECT u.name, SUM(e.points)
+                    FROM users u, exercise_solvers e_s, exercises e
+                    WHERE u.id = e_s.user_id
+                    AND e.id = e_s.exercise_id 
+                    GROUP BY u.id"
+        list = ExerciseSolver.connection.select_all(query).to_hash
+        render json: list, status: :ok
     end
 
     private
