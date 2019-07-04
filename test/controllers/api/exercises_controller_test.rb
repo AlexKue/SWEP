@@ -77,4 +77,19 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @matthias.id, body.first["user_id"] 
     assert_equal exercises(:two).id, body.first["exercise_id"] 
   end 
+
+  test "should update uncertain query" do
+    log_in_as @admin
+    relation = exercise_solvers(:two)
+    exercise = exercises(:two)
+
+    assert relation.solved.nil?
+    post update_uncertain_solution_api_exercise_path(exercise), params: {
+      user_id: relation.user_id,
+      solved: true
+    }
+    
+    relation.reload
+    assert relation.solved
+  end
 end
