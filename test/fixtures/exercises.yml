@@ -11,3 +11,9 @@ two:
   points: 1.5
   text: MyText2
   category: sfw_queries
+
+three:
+  title: "test3"
+  points: 3
+  text: MyText3
+  category: sfw_queries
