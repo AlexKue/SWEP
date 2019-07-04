@@ -59,11 +59,14 @@ class Api::UsersController < ApplicationController
     end
 
     def ranking
-        query =    "SELECT u.name, SUM(e.points)
+        query =    "SELECT u.name as Name, SUM(e.points) as Gesamtpunkt, rank() OVER (
+                                        ORDER BY SUM(e.points) DESC) as Rang
                     FROM users u, exercise_solvers e_s, exercises e
-                    WHERE u.id = e_s.user_id
-                    AND e.id = e_s.exercise_id 
+                    WHERE e_s.user_id = u.id
+                    AND e_s.exercise_id = e.id
+                    AND e_s.solved = true
                     GROUP BY u.id"
+                    
         list = ExerciseSolver.connection.select_all(query).to_hash
         render json: list, status: :ok
     end
