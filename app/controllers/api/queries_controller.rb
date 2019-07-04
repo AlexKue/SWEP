@@ -38,7 +38,6 @@ class Api::QueriesController < ApplicationController
         # warn if the currently entered query conflicts with previous reference queries
         elsif !(conflict_queries = @exercise.queries.filter do |prev_reference| (checker.correct?(prev_reference.query, query_params[:query])==false) end).empty?
             answer["warning"] = "Die eingebene Query verursacht einen Konflikt mit den bisherigen."
-            answer["details"] = conflict_queries
         end
 
         if @query.save
@@ -75,7 +74,6 @@ class Api::QueriesController < ApplicationController
         # warn if the currently entered query conflicts with previous reference queries
         elsif !(conflict_queries = reference_queries.filter do |prev_reference| (checker.correct?(prev_reference.query, query_params[:query])==false) end).empty?
             answer["warning"] = "Die eingebene Query verursacht einen Konflikt mit den bisherigen."
-            answer["details"] = conflict_queries
         end
 
         if @query.update_attributes(query_params)
