@@ -72,7 +72,7 @@ class Api::QueriesController < ApplicationController
             answer["warning"] = "Die Query lieferte ein leeres Ergebnis."
 
         # warn if the currently entered query conflicts with previous reference queries
-        elsif !(conflict_queries = reference_queries.filter do |prev_reference| (checker.correct?(prev_reference.query, query_params[:query])==false) end).empty?
+        elsif !(conflict_queries = reference_queries.filter do |prev_reference| (checker.correct?(prev_reference, query_params[:query])==false) end).empty?
             answer["warning"] = "Die eingebene Query verursacht einen Konflikt mit den bisherigen."
         end
 
