@@ -59,12 +59,13 @@ class Api::UsersController < ApplicationController
     end
 
     def ranking
-        query =    "SELECT u.name as Name, SUM(e.points) as Gesamtpunkt, rank() OVER (
-                                        ORDER BY SUM(e.points) DESC) as Rang
+        query =    "SELECT u.name, SUM(e.points), rank() OVER (
+                                        ORDER BY SUM(e.points) DESC)
                     FROM users u, exercise_solvers e_s, exercises e
                     WHERE e_s.user_id = u.id
                     AND e_s.exercise_id = e.id
                     AND e_s.solved = true
+                    AND u.hide_in_ranking = false
                     GROUP BY u.id"
                     
         list = ExerciseSolver.connection.select_all(query).to_hash
