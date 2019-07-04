@@ -62,7 +62,7 @@ class Api::QueriesController < ApplicationController
         checker = init_query_checker()
         checking_result = check_admin_query query_params[:query] # this is the newly entered query
 
-        answer = {"id"=params[:id]}
+        answer = {"id"=>params[:id]}
         if checking_result[:debug].has_key? :error
             render json: [checking_result[:debug][:error]], status: :unprocessable_entity
 
