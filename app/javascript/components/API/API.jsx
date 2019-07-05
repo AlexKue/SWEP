@@ -388,4 +388,20 @@ export default class API {
       })
     })
   }
+  static updateUncertainSolution(userId, exerciseId, solved) {
+    console.log("Update Uncertaion Solution called");
+    return new Promise((resolve, reject) => {
+      this.service.post("exercises/" + exerciseId + "/update-uncertain-solution", {
+        data: {
+          authenticity_token: window._token,
+          user_id: userId,
+          solved: solved
+        }
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  }
 }
