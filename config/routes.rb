@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'main#index'
   
   namespace :api, defaults: { format: 'json'} do
+    post "/playground", to: "static_pages#playground" 
     resources :users, except: [:new, :edit]
     resources :categories, except: [:new, :edit] do
       resources :exercises, except: [:new, :edit], shallow: true do
