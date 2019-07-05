@@ -1,7 +1,7 @@
 class Api::ExercisesController < ApplicationController
 
     before_action :logged_in_user
-    before_action :admin_user, only: [:create, :destroy, :update, :update_uncertain, :index_uncertain]
+    before_action :admin_user, only: [:create, :destroy, :update, :update_uncertain, :index_uncertain, :show_uncertain]
 
     def show
         solved = false
