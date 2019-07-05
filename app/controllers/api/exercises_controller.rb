@@ -147,8 +147,21 @@ class Api::ExercisesController < ApplicationController
         end
     end
 
-    # Show 
+    # Show uncertain solutions of one exercise
     def show_uncertain
+        offset = params[:offset].to_i
+        limit = params[:limit].nil? ? 30 : params[:limit].to_i
+
+        response = []
+        @uncertain_solutions = ExerciseSolver.where(solved: nil, exercise_id: params[:id]).offset(offset).limit(limit)
+
+        @uncertain_solutions.each do |solution|
+            response << {
+                user_id: solution.user_id,
+                student_query: solution.query
+            }
+        end  
+        render json: response, status: :ok 
     end
 
 
