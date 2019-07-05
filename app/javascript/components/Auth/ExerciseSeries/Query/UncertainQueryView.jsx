@@ -33,7 +33,7 @@ class UncertainQueryViewComponent extends React.Component {
     componentDidMount() {
         API.getUncertainSolutionList()
         .then(response => {
-            let exerciseIdList = response.data.exercises;
+            let exerciseIdList = response.data.exercises.sort(intComparator);
             let panes = [];
             for (let exerciseId of exerciseIdList) {
                 panes.push({
@@ -41,7 +41,7 @@ class UncertainQueryViewComponent extends React.Component {
                     render: () => {
                         return (
                             <Tab.Pane>
-                                <UncertainQueryViewTabComponent exerciseId={ exerciseId } context={ this.state.context }/>
+                                <UncertainQueryViewTabComponent key={ "ucqvtc_" + exerciseId }exerciseId={ exerciseId } context={ this.state.context }/>
                             </Tab.Pane>
                         );
                     }
@@ -73,7 +73,8 @@ class UncertainQueryViewTabComponent extends React.Component {
             initialized: false,
             context: props.context,
             exerciseId: props.exerciseId,
-            queryList: []
+            queryList: [],
+            queryMap: new Map()
         }
     }
 
@@ -97,18 +98,22 @@ class UncertainQueryViewTabComponent extends React.Component {
         API.getUncertainSolutionListForExercise(exerciseId)
         .then(response => {
             let queryObjectArray = response.data;
+            let queryMap = new Map();
             let queryList = queryObjectArray.map(queryObject => {
-                return <UncertainQueryListItem 
+                queryMap.set(queryObject.user_id, 
+                        <UncertainQueryListItem 
                             key={"uqli_" + exerciseId + "_" + queryObject.user_id} 
                             exerciseId={ exerciseId }
                             userId={ queryObject.user_id }
-                            studentQuery={ queryObject.student_query } />
+                            studentQuery={ queryObject.student_query } />);
+                return queryMap.get(queryObject.user_id);
             });
             this.setState({
+                queryMap: queryMap,
                 queryList: queryList
             });
         }).catch(error => {
-
+            console.error(error);
         }).finally(() => {
             this.setState({ initialized: true });
         });
@@ -120,8 +125,12 @@ class UncertainQueryViewTabComponent extends React.Component {
         } else {
             return (
                 <React.Fragment>
-                    <Segment>{ this.state.context.getExerciseById(this.state.exerciseId).description }</Segment>
-                    <List divided items={ this.state.queryList } />
+                    <p>{ this.state.context.getExerciseById(this.state.exerciseId).description }</p>
+                    { this.state.queryList.length > 0 ? 
+                        <List divided items={ this.state.queryList } />
+                        :
+                        <p>Es gibt hier keine ungecheckten Queries mehr.</p>
+                    }
                 </React.Fragment>
             );
         }
@@ -137,7 +146,9 @@ class UncertainQueryListItem extends React.Component {
             exerciseId: props.exerciseId,
             userId: props.userId,
             studentQuery: props.studentQuery,
-            loading: false
+            loading: false,
+            unchanged: true,
+            solved: null
         }
     }
 
@@ -145,27 +156,43 @@ class UncertainQueryListItem extends React.Component {
         this.setState({ loading: true });
         API.updateUncertainSolution(this.state.userId, this.state.exerciseId, solved)
         .then(response => {
-            console.log(response);
+            this.setState({
+                unchanged: false,
+                solved: solved
+            })
         }).catch(error => {
             console.error(error);
+            this.setState({
+                loading: false
+            })
         }).finally(() => {
-            this.setState({ loading: false });
+            this.setState({loading: false})
         })
     }
     render() {
         return (
-            <List.Item>
+            <List.Item key={"uqlicomponent_" + this.state.exerciseId + "_" + this.state.userId}>
                 <CodeMirror
                     options={{lineNumbers: true, readOnly: true, mode: "sql"}}
                     value={ this.state.studentQuery } />
-                <Button.Group>
-                    <Button onClick={ () => { this.setSolved(true) }} positive loading={ this.state.loading } disabled={ this.state.loading }>Korrekt</Button>
-                    <Button.Or text='/'/>
-                    <Button onClick={ () => { this.setSolved(false) }} negative loading={ this.state.loading } disabled={ this.state.loading }>Inkorrekt</Button>
-                </Button.Group>
+                { this.state.unchanged ?
+                    <Button.Group>
+                        <Button onClick={ () => { this.setSolved(true) }} positive loading={ this.state.loading } disabled={ this.state.loading }>Korrekt</Button>
+                        <Button.Or text='/'/>
+                        <Button onClick={ () => { this.setSolved(false) }} negative loading={ this.state.loading } disabled={ this.state.loading }>Inkorrekt</Button>
+                    </Button.Group>
+                    :
+                    <p>Die Query wurde erfolgreich als { this.state.solved ? " korrekt " : " inkorrekt " } übernommen.</p>
+                }
             </List.Item>
         );
     }
+}
+
+const intComparator = (a, b) => {
+    if (a < b) return -1;
+    else if (a > b) return 1;
+    return 0;
 }
 
 export default UncertainQueryView;
