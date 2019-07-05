@@ -69,9 +69,10 @@ class Api::UsersController < ApplicationController
                     AND e_s.exercise_id = e.id
                     AND e_s.solved = true
                     AND u.hide_in_ranking = false
-                    GROUP BY u.id"
-                    
-        list = ExerciseSolver.connection.select_all(query).offset(offset).limit(limit).to_hash
+                    GROUP BY u.id
+                    OFFSET #{offset} LIMIT #{limit}"
+ 
+        list = ExerciseSolver.connection.select_all(query).to_hash
         render json: list, status: :ok
     end
 
