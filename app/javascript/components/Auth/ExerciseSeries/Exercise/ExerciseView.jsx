@@ -55,7 +55,9 @@ class ExerciseViewComponent extends React.Component {
             initialized: false,
             animation: "tada",
             duration: 500,
-            visible: true
+            visibleRed: true,
+            visibleYellow: true,
+            visibleGreen: true
         }
 
         if (props.type == "spielwiese") {
@@ -93,12 +95,27 @@ class ExerciseViewComponent extends React.Component {
                 if (!exercise.isSolved()) { // First time we're solving this exercise => Set this (otherwise it'll be initialized)
                     exercise.setSolved(response.data.solved);
                     let category = this.state.context.getCategoryById(this.props.categoryId);
-                    category.incrementSolvedCount();
+                    if (response.data.solved) category.incrementSolvedCount();  // We may have uncertainty, so we don't increment yet
+                }
+                let solved = response.data.solved;
+                if (solved === false) {
+                    this.setState(prevState => ({
+                        solved: false,
+                        visibleRed: !prevState.visibleRed
+                    }));
+                } else if (solved === null) {
+                    this.setState(prevState => ({
+                        solved: null,
+                        visibleYellow: !prevState.visibleYellow
+                    }));
+                } else if (solved === true) {
+                    this.setState(prevState => ({
+                        solved: true,
+                        visibleGreen: !prevState.visibleGreen
+                    }));
                 }
                 this.setState(prevState => ({
-                    solved: response.data.solved,
-                    queryResult: <QueryResponseTable tableArray={ response.data.result } />,
-                    visible: !prevState.visible
+                    queryResult: <QueryResponseTable tableArray={ response.data.result } />
                 }));
                 // TODO: Update in Context
             }).catch(error => {
@@ -142,27 +159,15 @@ class ExerciseViewComponent extends React.Component {
     solutionIndicator = () => {
         return (
             <React.Fragment>
-                { this.state.solved === false ?
-                    <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visible }>
-                        <Icon name='times circle' size="big" color="red"/>
-                    </Transition>
-                    :
+                <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visibleRed }>
                     <Icon name={ this.state.solved === false ? 'times circle' : 'circle outline' } size="big" color="red"/>
-                }
-                { this.state.solved === null ?
-                    <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visible }>
-                        <Icon name='question circle' size="big" color="yellow"/>
-                    </Transition>
-                    :
-                    <Icon name={ this.state.solved === null  ? 'question circle' : 'circle outline' } size="big" color="yellow"/>
-                }
-                { this.state.solved === true ?
-                    <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visible }>
-                        <Icon name='check circle' size="big" color="green"/>
-                    </Transition>
-                    :
-                    <Icon name={ this.state.solved === true  ? 'check circle' : 'circle outline' } size="big" color="green"/>
-                }
+                </Transition>
+                <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visibleYello }>
+                    <Icon name={ this.state.solved === null ? 'question circle' : 'circle outline' } size="big" color="yellow"/>
+                </Transition>
+                <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visibleGreen }>
+                    <Icon name={ this.state.solved === true ? 'check circle' : 'circle outline' } size="big" color="green"/>
+                </Transition>
             </React.Fragment>
         );
     }
@@ -203,13 +208,6 @@ class ExerciseViewComponent extends React.Component {
                                 loading={ this.state.queryLoading }/>
                         </Grid.Column>
                     </Grid.Row>
-                    {
-                        this.state.solved ?
-                        <Grid.Row>
-                            <Grid.Column><p>Die Aufgabe wurde erfolgreich gelöst.</p></Grid.Column>
-                        </Grid.Row>
-                        : null
-                    }
                     <Grid.Row>
                         <Grid.Column>
                             { this.state.queryResult }
