@@ -59,7 +59,11 @@ class UncertainQueryViewComponent extends React.Component {
         if (!this.state.initialized) {
             return <Loader active inline="centered">Lade Aufgaben mit unsicheren Queries...</Loader> 
         } else {
-            return <Tab menu={{fluid: true, vertical: true}} panes={ this.state.panes } />
+            if (this.state.panes.length > 0) {
+                return <Tab menu={{fluid: true, vertical: true}} panes={ this.state.panes } />
+            } else {
+                return <p>Es gibt derzeit keine zu validierenden Lösungen.</p>
+            }
         }
     }
 }
