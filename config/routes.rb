@@ -9,8 +9,8 @@ Rails.application.routes.draw do
       resources :exercises, except: [:new, :edit], shallow: true do
         post :solve, on: :member
         resources :queries, except: [:new, :edit], shallow: true
-        post 'uncertain-solution', on: :member, to: 'exercises#update_uncertain'
-        get 'uncertain-solution', on: :member, to: 'exercises#show_uncertain'
+        post 'uncertain-solutions', on: :member, to: 'exercises#update_uncertain'
+        get 'uncertain-solutions', on: :member, to: 'exercises#show_uncertain'
       end
     end
   
