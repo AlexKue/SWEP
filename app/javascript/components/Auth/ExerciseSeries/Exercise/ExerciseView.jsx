@@ -88,7 +88,7 @@ class ExerciseViewComponent extends React.Component {
                 if (!exercise.isSolved()) { // First time we're solving this exercise => Set this (otherwise it'll be initialized)
                     exercise.setSolved(response.data.solved);
                     let category = this.state.context.getCategoryById(this.props.categoryId);
-                    category.incrementSolvedCount();
+                    if (response.data.solved) category.incrementSolvedCount();  // We may have uncertainty, so we don't increment yet
                 }
                 this.setState({
                     solved: response.data.solved,
