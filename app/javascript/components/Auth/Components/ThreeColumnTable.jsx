@@ -5,6 +5,8 @@ import {
     Icon
 } from "semantic-ui-react";
 
+import LineBreakComponent from './LineBreakComponent.jsx';
+
 export default class ThreeColumnTable extends React.Component {
 
     render() {
@@ -15,7 +17,9 @@ export default class ThreeColumnTable extends React.Component {
                         <Table.HeaderCell colSpan="3">
                         { this.props.title }
                         { this.props.withDescription ? 
-                        <Segment style={{fontWeight: "normal"}}>{ this.props.description }</Segment>
+                        <Segment style={{fontWeight: "normal"}}>
+                            <LineBreakComponent text={this.props.description} />
+                        </Segment>
                         : null}
                         </Table.HeaderCell>
                     </Table.Row>
