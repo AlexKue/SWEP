@@ -388,6 +388,17 @@ export default class API {
       })
     })
   }
+  static getUncertainSolutionList(offset = 0, limit = 30) {
+    console.log("Get Uncertain Solution List called");
+    return new Promise((resolve, reject) => {
+      this.service.get("exercises/index-uncertain-solutions")
+      .then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  }
   static updateUncertainSolution(userId, exerciseId, solved) {
     console.log("Update Uncertaion Solution called");
     return new Promise((resolve, reject) => {
