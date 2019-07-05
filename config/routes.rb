@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   root 'main#index'
   
   namespace :api, defaults: { format: 'json'} do
-    get        "/users/ranking", to: "users#ranking" 
+    get    "/users/ranking",  to: "users#ranking" 
+    post   "/auth",           to: "sessions#create"
+    delete "/logout",         to: "sessions#destroy"
 
     resources :users, except: [:new, :edit]
     resources :categories, except: [:new, :edit] do
@@ -12,9 +14,6 @@ Rails.application.routes.draw do
         resources :queries, except: [:new, :edit], shallow: true
       end
     end
-  
-    post       "/auth",         to: "sessions#create"
-    delete     "/logout",       to: "sessions#destroy"
   end
 
   get '*path', to: 'main#index', contraints: ->(req) do
