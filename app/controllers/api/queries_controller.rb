@@ -45,6 +45,8 @@ class Api::QueriesController < ApplicationController
             answer["result"] = checking_result[:debug][:query]
             answer["id"] = @query.id
             render json: answer, status: :ok
+        else
+            render json: @query.errors.full_messages, status: :unprocessable_entity
         end
     end
 
