@@ -20,8 +20,8 @@ class Api::ExercisesController < ApplicationController
                 solved = @solution.solved
             end
 
-            if solved || @exercise.queries.empty? # if this exercise is free text
-                query = @solution.query
+            if solved || @exercise.queries.empty? && !@solution.nil? # if this exercise is free text
+                query = @solution.query # if the student tried, there's a query
             else
                 query = nil
             end
