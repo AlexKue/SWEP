@@ -73,9 +73,8 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
     get api_exercises_index_uncertain_solutions_path
 
     body = JSON.parse response.body
-
-    assert_equal @matthias.id, body.first["user_id"] 
-    assert_equal exercises(:two).id, body.first["exercise_id"] 
+    assert body["exercises"].include?(exercises(:two).id)
+    assert_not body["exercises"].include?(exercises(:one).id)
   end 
 
   test "should update uncertain query" do
@@ -91,5 +90,11 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
     
     relation.reload
     assert relation.solved
+  end
+
+  test "test" do
+    log_in_as @admin
+    get api_exercises_index_uncertain_solutions_path
+    puts response.body
   end
 end
