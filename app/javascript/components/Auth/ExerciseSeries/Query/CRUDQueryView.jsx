@@ -107,7 +107,6 @@ class CRUDQueryViewComponent extends React.Component {
                             onBeforeChange={ (editor, data, value) => {
                                 this.updateLocalQuery(queryId, value);
                             }}/>
-                            { console.log(this.state.showMessage + " " + this.state.successMessage + " " + this.state.warningMessage) }
                         { this.state.showMessage ? (this.state.successMessage || this.state.warningMessage ) ? 
                             <React.Fragment>
                                 <Message
@@ -150,6 +149,16 @@ class CRUDQueryViewComponent extends React.Component {
     }
 
     crudQuery = (queryId) => {
+        if (this.state.localQueryMap.get(queryId) === "") { // if query is empty don't do anything
+            this.setState({
+                messageTitle: "Fehler",
+                messageContent: "Die Query darf nicht leer sein.",
+                showMessage: true,
+                successMessage: false,
+                warningMessage: false
+            });
+            return
+        }
         if (queryId == Number.MAX_SAFE_INTEGER) { // this is the not-yet-tracked query
             API.createQuery(this.state.exerciseId, this.state.localQueryMap.get(queryId))
             .then(response => {
@@ -191,7 +200,6 @@ class CRUDQueryViewComponent extends React.Component {
                 }
             }).catch(error => {
                 let data = error.data;
-                console.error(data);
                 this.setState({
                     messageTitle: "Fehler",
                     messageContent: data.join("\n"),
