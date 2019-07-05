@@ -33,7 +33,7 @@ class UncertainQueryViewComponent extends React.Component {
     componentDidMount() {
         API.getUncertainSolutionList()
         .then(response => {
-            let exerciseIdList = response.data.exercises;
+            let exerciseIdList = response.data.exercises.sort(intComparator);
             let panes = [];
             for (let exerciseId of exerciseIdList) {
                 panes.push({
@@ -41,7 +41,7 @@ class UncertainQueryViewComponent extends React.Component {
                     render: () => {
                         return (
                             <Tab.Pane>
-                                <UncertainQueryViewTabComponent exerciseId={ exerciseId } context={ this.state.context }/>
+                                <UncertainQueryViewTabComponent key={ "ucqvtc_" + exerciseId }exerciseId={ exerciseId } context={ this.state.context }/>
                             </Tab.Pane>
                         );
                     }
@@ -108,7 +108,7 @@ class UncertainQueryViewTabComponent extends React.Component {
                 queryList: queryList
             });
         }).catch(error => {
-
+            console.error(error);
         }).finally(() => {
             this.setState({ initialized: true });
         });
@@ -154,7 +154,7 @@ class UncertainQueryListItem extends React.Component {
     }
     render() {
         return (
-            <List.Item>
+            <List.Item key={"uqlicomponent_" + this.state.exerciseId + "_" + this.state.userId}>
                 <CodeMirror
                     options={{lineNumbers: true, readOnly: true, mode: "sql"}}
                     value={ this.state.studentQuery } />
@@ -166,6 +166,12 @@ class UncertainQueryListItem extends React.Component {
             </List.Item>
         );
     }
+}
+
+const intComparator = (a, b) => {
+    if (a < b) return -1;
+    else if (a > b) return 1;
+    return 0;
 }
 
 export default UncertainQueryView;
