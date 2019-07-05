@@ -399,15 +399,24 @@ export default class API {
       })
     })
   }
+  static getUncertainSolutionListForExercise(exerciseId) {
+    console.log("Get Uncertain Solution List for exercise called");
+    return new Promise((resolve, reject) => {
+      this.service.get("exercises/" + exerciseId + "/uncertain-solutions")
+      .then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  }
   static updateUncertainSolution(userId, exerciseId, solved) {
     console.log("Update Uncertaion Solution called");
     return new Promise((resolve, reject) => {
       this.service.post("exercises/" + exerciseId + "/uncertain-solutions", {
-        data: {
-          authenticity_token: window._token,
-          user_id: userId,
-          solved: solved
-        }
+        authenticity_token: window._token,
+        user_id: userId,
+        solved: solved
       }).then(response => {
         resolve(response);
       }).catch(error => {
