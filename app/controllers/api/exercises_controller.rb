@@ -129,18 +129,11 @@ class Api::ExercisesController < ApplicationController
     def index_uncertain
         offset = params[:offset].to_i
         limit = params[:limit].nil? ? 30 : params[:limit].to_i
-        @uncertain_solutions = ExerciseSolver.where(solved: nil).offset(offset).limit(limit)
 
-        response = []
-        unless @uncertain_solutions.empty?
-            @uncertain_solutions.each do |solution|
-                response << {
-                    user_id: solution.user_id,
-                    exercise_id: solution.exercise_id,
-                    student_query: solution.query
-                }
-            end
-        end    
+        # Returns (plucks) unique exercise_ids which are marked as uncertain
+        uncertain_solutions = ExerciseSolver.where(solved: nil).offset(offset).limit(limit).pluck(:exercise_id).uniq
+
+        response = {exercises: uncertain_solutions}
         render json: response, status: :ok
     end
 
@@ -153,6 +146,11 @@ class Api::ExercisesController < ApplicationController
             render json: @solution.errors.full_messages, status: :unprocessable_entity
         end
     end
+
+    # Show 
+    def show_uncertain
+    end
+
 
 
     private
