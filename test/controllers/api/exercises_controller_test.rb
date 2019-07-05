@@ -83,7 +83,7 @@ class Api::ExercisesControllerTest < ActionDispatch::IntegrationTest
     exercise = exercises(:two)
 
     assert relation.solved.nil?
-    post uncertain_solutions_api_exercise_path(exercise), params: {
+    patch uncertain_solutions_api_exercise_path(exercise), params: {
       user_id: relation.user_id,
       solved: true
     }
