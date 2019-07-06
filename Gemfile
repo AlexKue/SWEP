@@ -21,6 +21,10 @@ gem 'webpacker'
 gem 'react-rails'
 gem 'semantic-ui-sass'
 
+# Thin Webserver Gem
+gem 'thin'
+
+# JSON Gem
 gem 'json'
 
 # Use CoffeeScript for .coffee assets and views
