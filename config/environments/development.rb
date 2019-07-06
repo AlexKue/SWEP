@@ -58,4 +58,10 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # log to STDOUT (https://stackoverflow.com/questions/19437764/how-to-make-thin-webserver-print-log-to-stdout)
+  # fix missing method silence https://github.com/rails/sprockets-rails/issues/376#issuecomment-287560399
+  logger           = ActiveSupport::Logger.new(STDOUT)
+  logger.formatter = config.log_formatter
+  config.logger = ActiveSupport::TaggedLogging.new(logger)
 end
