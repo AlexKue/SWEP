@@ -3,7 +3,9 @@ import {
     Grid,
     Header,
     Button,
-    Loader
+    Loader,
+    Icon,
+    Transition
 } from "semantic-ui-react";
 
 // Import Statements for CodeMirror and SQL Syntax Highlighting
@@ -50,7 +52,12 @@ class ExerciseViewComponent extends React.Component {
             queryResult: <p>Das Resultat wird bei Abschicken hier angezeigt.</p>,
             solved: false,
             context: props.context,
-            initialized: false
+            initialized: false,
+            animation: "tada",
+            duration: 500,
+            visibleRed: true,
+            visibleYellow: true,
+            visibleGreen: true
         }
 
         if (props.type == "spielwiese") {
@@ -88,12 +95,28 @@ class ExerciseViewComponent extends React.Component {
                 if (!exercise.isSolved()) { // First time we're solving this exercise => Set this (otherwise it'll be initialized)
                     exercise.setSolved(response.data.solved);
                     let category = this.state.context.getCategoryById(this.props.categoryId);
-                    category.incrementSolvedCount();
+                    if (response.data.solved) category.incrementSolvedCount();  // We may have uncertainty, so we don't increment yet
                 }
-                this.setState({
-                    solved: response.data.solved,
+                let solved = response.data.solved;
+                if (solved === false) {
+                    this.setState(prevState => ({
+                        solved: false,
+                        visibleRed: !prevState.visibleRed
+                    }));
+                } else if (solved === null) {
+                    this.setState(prevState => ({
+                        solved: null,
+                        visibleYellow: !prevState.visibleYellow
+                    }));
+                } else if (solved === true) {
+                    this.setState(prevState => ({
+                        solved: true,
+                        visibleGreen: !prevState.visibleGreen
+                    }));
+                }
+                this.setState(prevState => ({
                     queryResult: <QueryResponseTable tableArray={ response.data.result } />
-                });
+                }));
                 // TODO: Update in Context
             }).catch(error => {
                 // Shouldn't happen
@@ -133,6 +156,31 @@ class ExerciseViewComponent extends React.Component {
         }
     }
 
+    solutionIndicator = () => {
+        return (
+            <React.Fragment>
+                <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visibleRed }>
+                    <Icon name={ this.state.solved === false ? 'times circle' : 'circle outline' } size="big" color="red"/>
+                </Transition>
+                <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visibleYello }>
+                    <Icon name={ this.state.solved === null ? 'question circle' : 'circle outline' } size="big" color="yellow"/>
+                </Transition>
+                <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visibleGreen }>
+                    <Icon name={ this.state.solved === true ? 'check circle' : 'circle outline' } size="big" color="green"/>
+                </Transition>
+            </React.Fragment>
+        );
+    }
+    /* 
+    SELECT * FROM studenten where
+    name='Xenokrates' or
+    name='Jonas' or
+    name='Schopenhauer' or
+    name='Carnap' or
+    name='Theophrastos' or
+    name='Feuerbach' or
+    name='Matthias Derp'
+    */
     render() {
         if (this.state.initialized) {
             return (
@@ -141,6 +189,11 @@ class ExerciseViewComponent extends React.Component {
                         <Grid.Column>
                             <Header as="h2" dividing>{ this.state.title }</Header>
                             <p>{ this.state.description }</p>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column>
+                            { this.solutionIndicator() }
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
@@ -155,13 +208,6 @@ class ExerciseViewComponent extends React.Component {
                                 loading={ this.state.queryLoading }/>
                         </Grid.Column>
                     </Grid.Row>
-                    {
-                        this.state.solved ?
-                        <Grid.Row>
-                            <Grid.Column><p>Die Aufgabe wurde erfolgreich gelöst.</p></Grid.Column>
-                        </Grid.Row>
-                        : null
-                    }
                     <Grid.Row>
                         <Grid.Column>
                             { this.state.queryResult }
