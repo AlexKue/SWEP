@@ -13,6 +13,7 @@ require('codemirror/mode/sql/sql');
 import AuthedContext from '../../AuthedContext.jsx';
 import API from "../../../API/API.jsx";
 import QueryResponseTable from '../../Components/QueryResponseTable.jsx';
+import LineBreakComponent from "../../Components/LineBreakComponent.jsx";
 
 const ExerciseView = (props) => {
     let context = useContext(AuthedContext);
@@ -140,7 +141,7 @@ class ExerciseViewComponent extends React.Component {
                     <Grid.Row>
                         <Grid.Column>
                             <Header as="h2" dividing>{ this.state.title }</Header>
-                            <p>{ this.state.description }</p>
+                            <LineBreakComponent text={ this.state.description } />
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
