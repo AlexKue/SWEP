@@ -6,12 +6,15 @@ Rails.application.routes.draw do
     get    "/users/ranking",  to: "users#ranking" 
     post   "/auth",           to: "sessions#create"
     delete "/logout",         to: "sessions#destroy"
+    get 'exercises/index-uncertain-solutions', to: 'exercises#index_uncertain'
 
     resources :users, except: [:new, :edit]
     resources :categories, except: [:new, :edit] do
       resources :exercises, except: [:new, :edit], shallow: true do
         post :solve, on: :member
         resources :queries, except: [:new, :edit], shallow: true
+        patch 'uncertain-solutions', on: :member, to: 'exercises#update_uncertain'
+        get 'uncertain-solutions', on: :member, to: 'exercises#show_uncertain'
       end
     end
   end
