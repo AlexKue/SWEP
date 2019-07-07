@@ -59,6 +59,12 @@ class MenuBarComponent extends React.Component {
               name="Spielwiese"
               as={ Link }
               to="/spielwiese" />
+            { this.props.context.isUserAdmin() ?
+              <Menu.Item
+                name="uncertain-solutions"
+                as={ Link }
+                to="/uncertain-solutions">Lösungen Validieren</Menu.Item>
+            : null}
             <Menu.Menu position="right">
               <Dropdown item simple text={"Eingeloggt als: " + this.props.context.getUserName() }>
                 <Dropdown.Menu>

@@ -2,3 +2,9 @@ one:
   user: Mark
   exercise: one
   solved: true
+  query: "SELECT * FROM studenten"
+  
+two: 
+  user: Matthias
+  exercise: two
+  query: "SELECT * FROM assistenten"

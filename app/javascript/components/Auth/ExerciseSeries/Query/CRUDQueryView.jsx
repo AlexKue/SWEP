@@ -261,9 +261,7 @@ class CRUDQueryViewComponent extends React.Component {
                 // This technically cannot happen
                 console.error(error);
             })
-        }<Table.Row>
-        
-        </Table.Row> 
+        }
     }
 
     hideMessage = () => {
