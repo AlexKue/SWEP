@@ -102,7 +102,8 @@ class Api::ExercisesController < ApplicationController
         else
             result_table = get_result_table query
 
-            correct = (@exercise.queries.filter do |reference| @checker.correct?(query, reference.query) end).any?
+            correct = (@exercise.queries.map do |reference| @checker.correct?(query, reference.query) end).reduce do |x,y| x||y end
+            #correct = (@exercise.queries.filter do |reference| @checker.correct?(query, reference.query) end).any?
             
         end
 
