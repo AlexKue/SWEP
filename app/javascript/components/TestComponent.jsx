@@ -232,6 +232,23 @@ export default class TestComponent extends React.Component {
       console.error(error);
     })
   }
+  getscoreboardtest = () => {
+    API.getScoreboard()
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.error(error);
+    })
+  }
+  
+  getuncertainsolutionlisttest = () => {
+    API.getUncertainSolutionList()
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.error(error);
+    })
+  }
 
   updateName(event) {
     this.setState({
@@ -357,6 +374,11 @@ export default class TestComponent extends React.Component {
         <button onClick={this.deleteuserbyidtest}>Delete User</button>
         <br/>
         <br/>
+        <button onClick={this.getscoreboardtest}>Get Scoreboard</button>
+        <br/>
+        <br/>
+        <button onClick={this.getuncertainsolutionlisttest}>Get Uncertain Solution List</button>
+        <br />
         <h1>Fehlerliste:</h1>
         <div>{ this.state.errorList }</div>
       </React.Fragment>

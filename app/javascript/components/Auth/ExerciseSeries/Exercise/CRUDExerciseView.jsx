@@ -45,7 +45,6 @@ class CRUDExerciseViewComponent extends React.Component {
             description: "",
             id: props.exerciseId ? parseInt(props.exerciseId) : null,                   // set null if this is a new exercise
             history: props.history,
-            queriesInitialized: props.exerciseId ? false : true,    // It's initialized if it's new
             crudExerciseLoading: false,
             points: 1,
             error: false,
@@ -185,14 +184,13 @@ class CRUDExerciseViewComponent extends React.Component {
             this.props.history.push("/404");
             return;
         }
-        if (this.state.context.getExerciseById(exerciseId).description) {
+        if (this.state.context.isExerciseInitialized(exerciseId)) { // If the exercise is initialized
             let exercise = this.state.context.getExerciseById(exerciseId);
             this.setState({
                 title: exercise.title,
                 description: exercise.description,
                 points: exercise.totalExercisePoints,
-                initialized: true,                      // TODO:
-                queriesInitialized: true                // QUERIES
+                initialized: true,                      
             });
         } else { // We have to fetch everything <=> Initialize this exercise
             this.state.context.fetchExerciseInformation(exerciseId)
@@ -208,8 +206,7 @@ class CRUDExerciseViewComponent extends React.Component {
                 console.error(error);
             }).finally(() => {
                 this.setState({
-                    initialized: true,
-                    queriesInitialized: true
+                    initialized: true
                 });
             });
         }

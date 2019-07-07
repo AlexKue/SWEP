@@ -49,6 +49,7 @@ class CRUDQueryViewComponent extends React.Component {
             messageTitle: "",
             messageContent: "",
             successMessage: true,
+            warningMessage: false,
             showMessage: false,
             loading: false,
             context: props.context
@@ -106,13 +107,15 @@ class CRUDQueryViewComponent extends React.Component {
                             onBeforeChange={ (editor, data, value) => {
                                 this.updateLocalQuery(queryId, value);
                             }}/>
-                        { this.state.showMessage ? this.state.successMessage ? 
+                        { this.state.showMessage ? (this.state.successMessage || this.state.warningMessage ) ? 
                             <React.Fragment>
                                 <Message
+                                    color={ this.state.warningMessage ? 'yellow' : null /* Due to some bug in react 'warning' doesn't work here */ }
                                     header={ this.state.messageTitle }
                                     content={ this.state.messageContent }
                                     onDismiss={ this.hideMessage }
-                                    positive />
+                                    positive={ this.state.successMessage }
+                                     />
                                 { this.state.queryResponseTable }
                             </React.Fragment>
                             : 
@@ -146,6 +149,16 @@ class CRUDQueryViewComponent extends React.Component {
     }
 
     crudQuery = (queryId) => {
+        if (this.state.localQueryMap.get(queryId) === "") { // if query is empty don't do anything
+            this.setState({
+                messageTitle: "Fehler",
+                messageContent: "Die Query darf nicht leer sein.",
+                showMessage: true,
+                successMessage: false,
+                warningMessage: false
+            });
+            return
+        }
         if (queryId == Number.MAX_SAFE_INTEGER) { // this is the not-yet-tracked query
             API.createQuery(this.state.exerciseId, this.state.localQueryMap.get(queryId))
             .then(response => {
@@ -156,20 +169,19 @@ class CRUDQueryViewComponent extends React.Component {
                 this.state.context.getExerciseById(this.state.exerciseId).addQuery(newQueryId);
                 this.state.localQueryMap.set(newQueryId, this.state.localQueryMap.get(queryId));
                 this.state.localQueryMap.delete(Number.MAX_SAFE_INTEGER);
-                this.setState({
-                    messageTitle: "Erfolg",
-                    messageContent: "Die Query wurde erfolgreich hinzugefügt.",
-                    showMessage: true,
-                    successMessage: true,
-                    queryResponseTable: <QueryResponseTable tableArray={ response.data.result } />
-                });
+                if (response.data.warning) { // Warning detected => Success Message with warning
+                    this.showWarning(response.data.warning, response.data.result);
+                } else {
+                    this.showSuccess("Die Query wurde erfolgreich hinzugefügt.", response.data.result);
+                }
             }).catch(error => {
                 let data = error.data;
                 this.setState({
                     messageTitle: "Fehler",
                     messageContent: data.join("\n"),    // in case there are more than one error message in that array
                     showMessage: true,
-                    successMessage: false
+                    successMessage: false,
+                    warningMessage: false
                 })
             }).finally(() => {
                 this.updatePanes();
@@ -181,20 +193,19 @@ class CRUDQueryViewComponent extends React.Component {
             API.updateQuery(queryId, this.state.localQueryMap.get(queryId))
             .then(response => {
                 this.state.context.updateQuery(queryId, this.state.localQueryMap.get(queryId));
-                this.setState({
-                    messageTitle: "Erfolg",
-                    messageContent: "Änderungen erfolgreich übernommen.",
-                    showMessage: true,
-                    successMessage: true,
-                    queryResponseTable: <QueryResponseTable tableArray={ response.data.result } />
-                })
+                if (response.data.warning) {
+                    this.showWarning(response.data.warning, response.data.result);
+                } else {
+                    this.showSuccess("Änderungen erfolgreich übernommen", response.data.result);
+                }
             }).catch(error => {
                 let data = error.data;
                 this.setState({
                     messageTitle: "Fehler",
                     messageContent: data.join("\n"),
                     showMessage: true,
-                    successMessage: false
+                    successMessage: false,
+                    warningMessage: false
                 })
             }).finally(() => {
                 this.setState({
@@ -202,6 +213,28 @@ class CRUDQueryViewComponent extends React.Component {
                 })
             })
         }
+    }
+
+    showWarning = (warning, tableArray) => {
+        this.setState({
+            messageTitle: "Erfolg - Achtung",
+            messageContent: warning,
+            showMessage: true,
+            successMessage: false,
+            warningMessage: true,
+            queryResponseTable: <QueryResponseTable tableArray={ tableArray } />
+        });
+    }
+
+    showSuccess = (messageContent, tableArray) => {
+        this.setState({
+            messageTitle: "Erfolg",
+            messageContent: messageContent,
+            showMessage: true,
+            successMessage: true,
+            showWarning: false,
+            queryResponseTable: <QueryResponseTable tableArray={ tableArray } />
+        })
     }
 
     deleteQuery = (queryId) => {
@@ -228,9 +261,7 @@ class CRUDQueryViewComponent extends React.Component {
                 // This technically cannot happen
                 console.error(error);
             })
-        }<Table.Row>
-        
-        </Table.Row> 
+        }
     }
 
     hideMessage = () => {

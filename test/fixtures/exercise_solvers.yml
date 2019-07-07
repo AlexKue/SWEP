@@ -2,3 +2,22 @@ one:
   user: Mark
   exercise: one
   solved: true
+  query: "SELECT * FROM studenten"
+  
+two: 
+  user: Matthias
+  exercise: two
+  query: "SELECT * FROM assistenten"
+  solved: null
+
+three: 
+  user: Mark
+  exercise: two
+  solved: true
+  query: "SELECT name FROM studenten"
+
+two: 
+  user: Mark
+  exercise: three
+  solved: true
+  query: "SELECT name FROM assistenten"
