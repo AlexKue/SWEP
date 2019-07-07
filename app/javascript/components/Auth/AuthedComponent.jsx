@@ -15,6 +15,7 @@ import ExerciseView from './ExerciseSeries/Exercise/ExerciseView.jsx';
 import CRUDExerciseView from './ExerciseSeries/Exercise/CRUDExerciseView.jsx';
 import ScoreboardView from './Scoreboard/ScoreboardView.jsx'
 import TestComponent from '../TestComponent.jsx';
+import UncertainQueryView from './ExerciseSeries/Query/UncertainQueryView.jsx';
 import { __404 } from './Components/errors.jsx';
 
 export const AuthedWrapper = (props) => {
@@ -51,6 +52,7 @@ class AuthedComponent extends React.Component {
               <Route exact path="/category-:categoryId/create-exercise" render={(props) => <CRUDExerciseView {...props} /> } />
               <Route exact path="/spielwiese" render={(props) => <ExerciseView type="spielwiese" {...props} /> } />
               <Route exact path="/scoreboard" render={(props) => <ScoreboardView {...props} /> } />
+              <Route exact path="/uncertain-solutions" render={(props) => <UncertainQueryView {...props} /> } />
               <Route exact path="/test" component={TestComponent} />
               <Route component={__404} />
             </Switch>
