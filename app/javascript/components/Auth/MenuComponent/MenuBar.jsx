@@ -65,9 +65,9 @@ class MenuBarComponent extends React.Component {
               to="/scoreboard" />
             { this.props.context.isUserAdmin() ?
               <Menu.Item
-                name="uncertain-solutions"
+                name="validate-uncertain-solutions"
                 as={ Link }
-                to="/uncertain-solutions">Lösungen Validieren</Menu.Item>
+                to="/validate-uncertain-solutions">Lösungen Validieren</Menu.Item>
             : null}
             <Menu.Menu position="right">
               <Dropdown item simple text={"Eingeloggt als: " + this.props.context.getUserName() }>
