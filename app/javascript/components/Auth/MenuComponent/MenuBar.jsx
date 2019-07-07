@@ -59,6 +59,10 @@ class MenuBarComponent extends React.Component {
               name="Spielwiese"
               as={ Link }
               to="/spielwiese" />
+            <Menu.Item
+              name="Rangliste"
+              as={ Link }
+              to="/scoreboard" />
             { this.props.context.isUserAdmin() ?
               <Menu.Item
                 name="uncertain-solutions"

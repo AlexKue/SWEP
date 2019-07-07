@@ -2,8 +2,12 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'main#index'
   
-  namespace :api, defaults: { format: 'json'} do    
+  namespace :api, defaults: { format: 'json'} do
+    get    "/users/ranking",  to: "users#ranking" 
+    post   "/auth",           to: "sessions#create"
+    delete "/logout",         to: "sessions#destroy"
     get 'exercises/index-uncertain-solutions', to: 'exercises#index_uncertain'
+
     resources :users, except: [:new, :edit]
     resources :categories, except: [:new, :edit] do
       resources :exercises, except: [:new, :edit], shallow: true do
@@ -13,9 +17,6 @@ Rails.application.routes.draw do
         get 'uncertain-solutions', on: :member, to: 'exercises#show_uncertain'
       end
     end
-  
-    post       "/auth",    to: "sessions#create"
-    delete     "/logout",  to: "sessions#destroy"
   end
 
   get '*path', to: 'main#index', contraints: ->(req) do
