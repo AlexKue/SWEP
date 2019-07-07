@@ -232,6 +232,14 @@ export default class TestComponent extends React.Component {
       console.error(error);
     })
   }
+  getscoreboardtest = () => {
+    API.getScoreboard()
+    .then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.error(error);
+    })
+  }
 
   updateName(event) {
     this.setState({
@@ -355,6 +363,9 @@ export default class TestComponent extends React.Component {
         <br/>
         <button onClick={this.getuserbyidtest}>Get User Info</button>
         <button onClick={this.deleteuserbyidtest}>Delete User</button>
+        <br/>
+        <br/>
+        <button onClick={this.getscoreboardtest}>Get Scoreboard</button>
         <br/>
         <br/>
         <h1>Fehlerliste:</h1>

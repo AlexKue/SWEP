@@ -59,6 +59,10 @@ class MenuBarComponent extends React.Component {
               name="Spielwiese"
               as={ Link }
               to="/spielwiese" />
+            <Menu.Item
+              name="Rangliste"
+              as={ Link }
+              to="/scoreboard" />
             <Menu.Menu position="right">
               <Dropdown item simple text={"Eingeloggt als: " + this.props.context.getUserName() }>
                 <Dropdown.Menu>
