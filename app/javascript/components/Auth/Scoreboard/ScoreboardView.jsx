@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import {
-    Table, Loader, Icon, Button, Segment
+    Table, Loader, Icon, Button, Segment, Header
 } from "semantic-ui-react"
 
 import AuthedContext from '../AuthedContext.jsx';
@@ -21,7 +21,7 @@ class ScoreboardViewComponent extends React.Component {
         this.state = {
             context: props.context,
             initialized: false,
-            loadingText: "Lade Scoreboard",
+            loadingText: "Lade Scoreboard...",
             scoreboardEntries: []
         }
     }
@@ -66,36 +66,39 @@ class ScoreboardViewComponent extends React.Component {
     }
 
     reload = () => {
-        this.setState({loading: true});
+        this.setState({loading: true, loadingText: ""});
         this.initialize(true);
     }
 
     render() {
-        if (this.state.initialized) {
-            return (
-                <Segment basic loading={ this.state.loading }>
-                        { this.state.scoreboardEntries.length > 0 ?
-                            <Table celled>
-                                <Table.Header>
-                                    <Table.Row>
-                                        <Table.HeaderCell collapsing>Platz</Table.HeaderCell>
-                                        <Table.HeaderCell>Name</Table.HeaderCell>
-                                        <Table.HeaderCell collapsing textAlign="center">Punkte</Table.HeaderCell>
-                                    </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                    { this.state.scoreboardEntries }
-                                </Table.Body>
-                            </Table>
-                            :
-                            <p>Es gibt derzeit keine Einträge in der Rangliste.</p>
-                        }
-                    <Button content="Aktualisieren" icon="refresh" labelPosition="left" color="green" onClick={ this.reload } />
-                </Segment>
-            );
-        } else {
-            return <Loader active inline="centered">{ this.state.loadingText }</Loader>;
-        }
+        return (
+            <Segment basic loading={ this.state.loading || !this.state.initialized }>
+                <Header as="h2">
+                    <Icon name="trophy" />
+                    <Header.Content>
+                        Rangliste
+                        <Header.Subheader>In den Benutzereinstellungen kann festgelegt werden, ob man in der Rangliste angezeigt werden möchte.</Header.Subheader>
+                    </Header.Content>
+                </Header>
+                    { this.state.scoreboardEntries.length > 0 ?
+                        <Table celled>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell collapsing>Platz</Table.HeaderCell>
+                                    <Table.HeaderCell>Name</Table.HeaderCell>
+                                    <Table.HeaderCell collapsing textAlign="center">Punkte</Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                { this.state.scoreboardEntries }
+                            </Table.Body>
+                        </Table>
+                        :
+                        <p>Es gibt derzeit keine Einträge in der Rangliste.</p>
+                    }
+                <Button content="Aktualisieren" icon="refresh" labelPosition="left" color="green" onClick={ this.reload } />
+            </Segment>
+        );
     }
 }
 
