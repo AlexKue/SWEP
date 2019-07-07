@@ -13,6 +13,7 @@ export default class API {
 
   static getErrorList(error) {
     let errorData = error.response.data;
+    if (!errorData) return <p>Fehler: Irgendetwas ist schief gelaufen.</p>; // return if there's no data to avoid null exception
     return (
       <List bulleted>
         {errorData.map((message) => <List.Item key={message}>{message}</List.Item>)}

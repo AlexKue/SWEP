@@ -175,10 +175,12 @@ class CRUDQueryViewComponent extends React.Component {
                     this.showSuccess("Die Query wurde erfolgreich hinzugefügt.", response.data.result);
                 }
             }).catch(error => {
-                let data = error.data;
+                let unjoinedData = error.data;
+                let data = <p>Fehler - Keine Daten über den Fehler erhalten.</p>;
+                if (unjoinedData) data = unjoinedData.join("\n");   // Avoid null; Join, in case there are more than one error message
                 this.setState({
                     messageTitle: "Fehler",
-                    messageContent: data.join("\n"),    // in case there are more than one error message in that array
+                    messageContent: data,
                     showMessage: true,
                     successMessage: false,
                     warningMessage: false
@@ -199,10 +201,12 @@ class CRUDQueryViewComponent extends React.Component {
                     this.showSuccess("Änderungen erfolgreich übernommen", response.data.result);
                 }
             }).catch(error => {
-                let data = error.data;
+                let unjoinedData = error.data;
+                let data = <p>Fehler - Keine Daten über den Fehler erhalten.</p>;
+                if (unjoinedData) data = unjoinedData.join("\n");   // Avoid null; Join, in case there are more than one error message
                 this.setState({
                     messageTitle: "Fehler",
-                    messageContent: data.join("\n"),
+                    messageContent: data,
                     showMessage: true,
                     successMessage: false,
                     warningMessage: false
