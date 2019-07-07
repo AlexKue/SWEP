@@ -26,45 +26,57 @@ class UncertainQueryViewComponent extends React.Component {
         this.state = {
             context: props.context,
             initialized: false,
-            panes: []
+            panes: [],
+            loading: false
         }
     }
 
     componentDidMount() {
-        API.getUncertainSolutionList()
-        .then(response => {
-            let exerciseIdList = response.data.exercises.sort(intComparator);
-            let panes = [];
-            for (let exerciseId of exerciseIdList) {
-                panes.push({
-                    menuItem: this.state.context.getExerciseById(exerciseId).title,
-                    render: () => {
-                        return (
-                            <Tab.Pane>
-                                <UncertainQueryViewTabComponent key={ "ucqvtc_" + exerciseId }exerciseId={ exerciseId } context={ this.state.context }/>
-                            </Tab.Pane>
-                        );
-                    }
-                });
-            }
-            this.setState({ panes: panes });
-        }).catch(error => {
-            console.error(error);
-        }).finally(() => {
-            this.setState({ initialized: true });
-        })
+        this.initialize(false);
+    }
+
+    initialize = (refresh) => {
+        if (!this.state.initialized || refresh)
+        {
+            API.getUncertainSolutionList()
+            .then(response => {
+                let exerciseIdList = response.data.exercises.sort(intComparator);
+                let panes = [];
+                for (let exerciseId of exerciseIdList) {
+                    panes.push({
+                        menuItem: this.state.context.getExerciseById(exerciseId).title,
+                        render: () => {
+                            return (
+                                <Tab.Pane>
+                                    <UncertainQueryViewTabComponent key={ "ucqvtc_" + exerciseId }exerciseId={ exerciseId } context={ this.state.context }/>
+                                </Tab.Pane>
+                            );
+                        }
+                    });
+                }
+                this.setState({ panes: panes });
+            }).catch(error => {
+                console.error(error);
+            }).finally(() => {
+                if (refresh) this.setState({loading: false});
+                else this.setState({ initialized: true });
+            })
+        }
+    }
+
+    reload = () => {
+        this.setState({loading: true});
+        this.initialize(true);
     }
 
     render() {
-        if (!this.state.initialized) {
-            return <Loader active inline="centered">Lade Aufgaben mit unsicheren Queries...</Loader> 
-        } else {
-            if (this.state.panes.length > 0) {
-                return <Tab menu={{fluid: true, vertical: true}} panes={ this.state.panes } />
-            } else {
-                return <p>Es gibt derzeit keine zu validierenden Lösungen.</p>
-            }
-        }
+        return (
+            <Segment basic loading={ this.state.loading || !this.state.initialized }>
+                { this.state.panes.length > 0 ? <Tab menu={{fluid: true, vertical: true}} panes={ this.state.panes } /> 
+                : <p>Es gibt derzeit keine zu validierenden Lösungen.</p>}
+                <Button content="Aktualisieren" icon="refresh" labelPosition="left" color="green" onClick={ this.reload } />
+            </Segment>
+        );
     }
 }
 
