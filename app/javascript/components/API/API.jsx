@@ -388,4 +388,15 @@ export default class API {
       })
     })
   }
+  static getScoreboard() {
+    console.log("Get Scoreboard called");
+    return new Promise((resolve, reject) => {
+      this.service.get("users/ranking")
+      .then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  }
 }
