@@ -88,7 +88,18 @@ class ExerciseViewComponent extends React.Component {
         });
         // Implement logic for sending, receiving and updating
         if (this.props.type == "spielwiese") {
-            // TODO
+            API.sendQueryToPlayground(this.state.storedQuery)
+            .then(response => {
+                this.setState({
+                    queryResult: <QueryResponseTable tableArray={ response.data } />
+                })
+            }).catch(error => {
+                console.error(error);
+            }).finally(() => {
+                this.setState({
+                    queryLoading: false
+                })
+            })
         } else { // this is a proper exercise
             API.solveExercise(this.props.exerciseId, this.state.storedQuery)
             .then(response => {
@@ -192,11 +203,13 @@ class ExerciseViewComponent extends React.Component {
                             <LineBreakComponent text={ this.state.description } />
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column>
-                            { this.solutionIndicator() }
-                        </Grid.Column>
-                    </Grid.Row>
+                    { this.props.type != "spielwiese" ?
+                        <Grid.Row>
+                            <Grid.Column>
+                                { this.solutionIndicator() }
+                            </Grid.Column>
+                        </Grid.Row>
+                        : null }
                     <Grid.Row>
                         <Grid.Column>
                             <CodeMirror

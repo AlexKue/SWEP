@@ -423,4 +423,17 @@ export default class API {
       })
     })
   }
+  static sendQueryToPlayground(query) {
+    console.log("Send Query to Playground called");
+    return new Promise((resolve, reject) => {
+      this.service.post("playground", {
+        query: query,
+        authenticity_token: window._token
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  }
 }

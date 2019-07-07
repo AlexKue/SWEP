@@ -3,10 +3,11 @@ Rails.application.routes.draw do
   root 'main#index'
   
   namespace :api, defaults: { format: 'json'} do
-    get    "/users/ranking",  to: "users#ranking" 
-    post   "/auth",           to: "sessions#create"
-    delete "/logout",         to: "sessions#destroy"
-    get 'exercises/index-uncertain-solutions', to: 'exercises#index_uncertain'
+    post    "/playground",                         to: "static_pages#playground" 
+    get     "/users/ranking",                      to: "users#ranking" 
+    post    "/auth",                               to: "sessions#create"
+    delete  "/logout",                             to: "sessions#destroy"
+    get     'exercises/index-uncertain-solutions', to: 'exercises#index_uncertain'
 
     resources :users, except: [:new, :edit]
     resources :categories, except: [:new, :edit] do
