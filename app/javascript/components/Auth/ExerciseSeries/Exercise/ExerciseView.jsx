@@ -129,7 +129,6 @@ class ExerciseViewComponent extends React.Component {
                 this.setState(prevState => ({
                     queryResult: <QueryResponseTable tableArray={ response.data.result } />
                 }));
-                // TODO: Update in Context
             }).catch(error => {
                 // Shouldn't happen
                 console.error(error);

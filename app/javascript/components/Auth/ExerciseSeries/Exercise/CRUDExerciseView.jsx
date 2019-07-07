@@ -192,7 +192,7 @@ class CRUDExerciseViewComponent extends React.Component {
                 points: exercise.totalExercisePoints,
                 initialized: true,                      
             });
-        } else { // We have to fetch everything <=> Initialize this exercise
+        } else { // We have to fetch everything <=> Initialize this exercise; Queries will be fetched by CRUDQuery
             this.state.context.fetchExerciseInformation(exerciseId)
             .then(response => {
                 let exercise = this.state.context.getExerciseById(exerciseId);
@@ -201,7 +201,6 @@ class CRUDExerciseViewComponent extends React.Component {
                     description: exercise.description,
                     points: exercise.totalExercisePoints
                 });
-                // TODO: Fetch Queries
             }).catch(error => {
                 console.error(error);
             }).finally(() => {

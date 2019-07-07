@@ -200,7 +200,7 @@ export default class API {
     })
   }
   static updateCategory(id, title, description) {
-    console.log("updateCateogry called: TODO, this function is currently not implemented!");
+    console.log("updateCateogry called");
     return new Promise((resolve, reject) => {
       this.service.patch("categories/" + id, {
         category: {

@@ -127,7 +127,7 @@ export class AuthedContextProvider extends React.Component {
                 ));
                 exercise = this.getExerciseById(exerciseId);    // Override by now created exercise from context storage
                 if (this.isUserStudent()) {         // if student => Process the sent query and solved state
-                    exercise.setUserQuery(response.data.query);      // TODO: Replace by response
+                    exercise.setUserQuery(response.data.query);
                     resolve(response);
                 } else {                                // else => must be admin => add stored queries
                     API.getQueries(exerciseId)

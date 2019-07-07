@@ -168,7 +168,6 @@ class CRUDCategoryViewComponent extends React.Component {
                 this.state.context.removeCategory(this.state.id);
                 this.state.history.push("/");
             }).catch(error => {
-                // TODO optional - In theory this shouldn't happen
                 console.log("Error in deleting category");
             })
         }

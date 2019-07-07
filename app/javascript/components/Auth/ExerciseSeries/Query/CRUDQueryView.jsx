@@ -65,7 +65,7 @@ class CRUDQueryViewComponent extends React.Component {
                     // Fetch query, put in context and local
                     let queryPromiseResult = await API.getQuery(queryId);
                     let queryResult = queryPromiseResult.data;
-                    // TODO: If error (shouldn't happen)
+                    
                     this.state.localQueryMap.set(queryResult.id, queryResult.query);
                     this.state.context.addQuery(queryResult.id, queryResult.query);
                 }

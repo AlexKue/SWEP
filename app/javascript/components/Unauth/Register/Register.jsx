@@ -24,7 +24,8 @@ export default class Register extends React.Component {
       showErrorMessage: false,
       errorMessage: "",
       showSuccessMessage: false,
-      successMessage: ""
+      successMessage: "",
+      loading: false
     }
 
     this.toggleRegisterButton = this.toggleRegisterButton.bind(this);
@@ -68,6 +69,7 @@ export default class Register extends React.Component {
     });
   }
   registerUser() {
+    this.setState({loading: true});
     API.registerUser(
       this.state.userNick,
       this.state.userMail,
@@ -85,6 +87,8 @@ export default class Register extends React.Component {
         showErrorMessage: true,
         errorMessage: error
       })
+    }).finally(() => {
+      this.setState({loading: false});
     })
   }
 
@@ -149,7 +153,8 @@ export default class Register extends React.Component {
                 id="registerbutton"
                 type="submit"
                 content="Registrieren"
-                disabled={ this.toggleRegisterButton() }
+                loading={ this.state.loading }
+                disabled={ this.toggleRegisterButton() || this.state.loading }
                 onClick={ this.registerUser }
                 primary/>
             </Grid.Column>
