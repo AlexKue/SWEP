@@ -37,9 +37,10 @@ class ScoreboardViewComponent extends React.Component {
                 let scoreboardDataArray = response.data;
                 let scoreboardEntries = [];
                 if (scoreboardDataArray.length > 0) {
+                    let inc = 0;
                     for (let scoreboardEntry of scoreboardDataArray) {  
                         scoreboardEntries.push(
-                            <Table.Row key={"scb_" + scoreboardEntry.rank }>
+                            <Table.Row key={"scb_" + inc + "_" + scoreboardEntry.rank }>
                                 <Table.Cell collapsing textAlign="center">
                                     { scoreboardEntry.rank < 4 ? (
                                         scoreboardEntry.rank == 1 ? <Icon name="trophy" style={{color: "#FFD700"}} /> :
@@ -53,6 +54,7 @@ class ScoreboardViewComponent extends React.Component {
                                 <Table.Cell collapsing textAlign="center">{ scoreboardEntry.sum }</Table.Cell>
                             </Table.Row>
                         );
+                        inc++;
                     }
                     this.setState({scoreboardEntries: scoreboardEntries});
                 }
