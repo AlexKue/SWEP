@@ -11,10 +11,14 @@ require('codemirror/mode/sql/sql');
 
 import API from '../../../API/API.jsx';
 import AuthedContext from '../../AuthedContext.jsx';
+import { __403 } from "../../Components/errors.jsx";
 
 const UncertainQueryView = (props) => {
     let context = useContext(AuthedContext);
 
+    if (!context.isUserAdmin()) {
+        return < __403 />;
+    }
     return <UncertainQueryViewComponent context={ context } {...props} />;
 }
 
