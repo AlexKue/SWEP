@@ -74,8 +74,7 @@ class CategoryViewComponent extends React.Component {
         return (
             <ThreeColumnTable
                 withDescription={true}
-                title={this.props.title}
-                description={this.props.description}>
+                markdownText={"# " + this.props.title + "\n\n" + this.props.description }>
                     { exerciseListItems }
             </ThreeColumnTable>
         );

@@ -1,18 +1,10 @@
-import React, { useContext} from "react";
-import { Link } from "react-router-dom";
-import TextareaAutosize from "react-textarea-autosize";
-import {
-    Segment,
-    Form,
-    Divider,
-    Loader,
-    Message,
-    Grid
-} from "semantic-ui-react";
+import React, { useContext } from "react";
+import { Divider, Form, Grid, Loader, Message, Segment } from "semantic-ui-react";
 
 import API from '../../../API/API.jsx';
 import AuthedContext from '../../AuthedContext.jsx';
 import CRUDQueryView from '../Query/CRUDQueryView.jsx';
+import MarkdownEditor from "../../Components/MarkdownEditor.jsx";
 import { __403 } from '../../Components/errors.jsx';
 
 const CRUDExerciseView = (props) => {
@@ -69,9 +61,12 @@ class CRUDExerciseViewComponent extends React.Component {
             title: event.target.value
         });
     }
-    updateDescription = (event) => {
+    updateDescription = (value) => {
+        // As we're passing the title, cut the first 2 lines
+        // '# <TITLE>\n\n" has <TITLE>.length + 4 ('# \n\n', where '\n' counts as 1)
+        // Therefore: Cut off the first 2 lines using only the substring
         this.setState({
-            description: event.target.value
+            description: value.substring(this.state.title.length + 4)
         });
     }
     updatePoints = (event) => {
@@ -225,14 +220,16 @@ class CRUDExerciseViewComponent extends React.Component {
                             value={ this.state.title }
                             onChange={ this.updateTitle }
                             />
+                        <Divider />
                         <Form.Field>
                             <label>Beschreibung</label>
-                            <TextareaAutosize
-                                placeholder="Beschreibung"
-                                value={ this.state.description }
-                                onChange={ this.updateDescription }
-                                />
+                            <p>Achtung: Die Beschreibung erfolgt in Markdown. Zeilenumbrüche müssen deshalb <b>doppelt</b> gemacht werden.</p>
+                            <MarkdownEditor
+                                source={ "# " + this.state.title + "\n\n" + this.state.description }
+                                onChange={ this.updateDescription } 
+                                allowEditFromLine={2}/> {/* First line is 0*/}
                         </Form.Field>
+                        <Divider />
                         <Form.Input
                             label="Punkte"
                             placeholder="1"

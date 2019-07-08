@@ -15,7 +15,7 @@ require('codemirror/mode/sql/sql');
 import AuthedContext from '../../AuthedContext.jsx';
 import API from "../../../API/API.jsx";
 import QueryResponseTable from '../../Components/QueryResponseTable.jsx';
-import LineBreakComponent from "../../Components/LineBreakComponent.jsx";
+import { MarkdownRenderer } from '../../Components/MarkdownEditor.jsx';
 
 const ExerciseView = (props) => {
     let context = useContext(AuthedContext);
@@ -198,8 +198,7 @@ class ExerciseViewComponent extends React.Component {
                 <Grid divided="vertically" id="exerciseGrid">
                     <Grid.Row>
                         <Grid.Column>
-                            <Header as="h2" dividing>{ this.state.title }</Header>
-                            <LineBreakComponent text={ this.state.description } />
+                            <MarkdownRenderer text={ "# " + this.state.title + "\n\n" + this.state.description } />
                         </Grid.Column>
                     </Grid.Row>
                     { this.props.type != "spielwiese" ?

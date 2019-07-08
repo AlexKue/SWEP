@@ -5,7 +5,7 @@ import {
     Icon
 } from "semantic-ui-react";
 
-import LineBreakComponent from './LineBreakComponent.jsx';
+import { MarkdownRenderer } from "./MarkdownEditor.jsx";
 
 export default class ThreeColumnTable extends React.Component {
 
@@ -15,12 +15,12 @@ export default class ThreeColumnTable extends React.Component {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell colSpan="3">
-                        { this.props.title }
-                        { this.props.withDescription ? 
-                        <Segment style={{fontWeight: "normal"}}>
-                            <LineBreakComponent text={this.props.description} />
-                        </Segment>
-                        : null}
+                        { this.props.withDescription ?
+                            <Segment>
+                                <MarkdownRenderer
+                                    text={ this.props.markdownText } />
+                            </Segment>
+                        : this.props.title }
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
