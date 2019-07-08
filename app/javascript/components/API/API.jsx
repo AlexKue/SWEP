@@ -7,12 +7,13 @@ import {
 export default class API {
 
   static service = axios.create({
-    baseURL: "http://localhost:3000/api/",
+    baseURL: window.location.origin + "/api/",
     responseType: "json"
   });
 
   static getErrorList(error) {
     let errorData = error.response.data;
+    if (!errorData) return <p>Fehler: Irgendetwas ist schief gelaufen.</p>; // return if there's no data to avoid null exception
     return (
       <List bulleted>
         {errorData.map((message) => <List.Item key={message}>{message}</List.Item>)}
@@ -73,14 +74,11 @@ export default class API {
       });
     });
   }
-  static getUserList(offset = 0, limit = 30) {
+  static getUserList(offset = 0, limit = Number.MAX_SAFE_INTEGER) {
     console.log("getUserList called");
     return new Promise((resolve, reject) => {
-      this.service.get("users", {
-        offset: offset,
-        limit: limit,
-        authenticity_token: window._token
-      }).then(response => {
+      this.service.get("users?offset=" + offset + "&limit=" + limit)
+      .then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
@@ -159,14 +157,11 @@ export default class API {
       })
     });
   }
-  static getCategories(offset = 0, limit = 30) {
+  static getCategories(offset = 0, limit = Number.MAX_SAFE_INTEGER) {
     console.log("getCategories called");
     return new Promise((resolve, reject) => {
-      this.service.get("categories", {
-        offset: offset,
-        limit: limit,
-        authenticity_token: window._token
-      }).then(response => {
+      this.service.get("categories?offset=" + offset + "&limit=" + limit)
+      .then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
@@ -206,7 +201,7 @@ export default class API {
     })
   }
   static updateCategory(id, title, description) {
-    console.log("updateCateogry called: TODO, this function is currently not implemented!");
+    console.log("updateCateogry called");
     return new Promise((resolve, reject) => {
       this.service.patch("categories/" + id, {
         category: {
@@ -223,13 +218,10 @@ export default class API {
       })
     });
   }
-  static getExercisesForCategory(id, offset = 0, limit = 30) {
+  static getExercisesForCategory(id, offset = 0, limit = Number.MAX_SAFE_INTEGER) {
     return new Promise((resolve, reject) => {
-      this.service.get("categories/" + id + "/exercises", {
-        offset: offset,
-        limit: limit,
-        authenticity_token: window._token
-      }).then(response => {
+      this.service.get("categories/" + id + "/exercises?offset=" + offset + "&limit=" + limit)
+      .then(response => {
         /* IMPLEMENT LOGIC FOR PROCESSING DATA HERE */
         resolve(response);
       }).catch(error => {
@@ -348,11 +340,8 @@ export default class API {
   static getQueries(exerciseId, offset = 0, limit = 30) {
     console.log("Get Queries called");
     return new Promise((resolve, reject) => {
-      this.service.get("exercises/" + exerciseId + "/queries", {
-        offset: offset,
-        limit: limit,
-        authenticity_token: window._token
-      }).then(response => {
+      this.service.get("exercises/" + exerciseId + "/queries?offset=" + offset + "&limit=" + limit)
+      .then(response => {
         resolve(response);
       }).catch(error => {
         reject(error);
@@ -381,6 +370,66 @@ export default class API {
         data: {
           authenticity_token: window._token
         }
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  }
+  static getScoreboard(offset = 0, limit = Number.MAX_SAFE_INTEGER) {
+    console.log("Get Scoreboard called");
+    return new Promise((resolve, reject) => {
+      this.service.get("users/ranking?offset=" + offset + "&limit=" + limit)
+      .then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    });
+  }
+  static getUncertainSolutionList(offset = 0, limit = 30) {
+    console.log("Get Uncertain Solution List called");
+    return new Promise((resolve, reject) => {
+      this.service.get("exercises/index-uncertain-solutions")
+      .then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  }
+  static getUncertainSolutionListForExercise(exerciseId) {
+    console.log("Get Uncertain Solution List for exercise called");
+    return new Promise((resolve, reject) => {
+      this.service.get("exercises/" + exerciseId + "/uncertain-solutions")
+      .then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  }
+  static updateUncertainSolution(userId, exerciseId, solved) {
+    console.log("Update Uncertaion Solution called");
+    return new Promise((resolve, reject) => {
+      this.service.patch("exercises/" + exerciseId + "/uncertain-solutions", {
+        authenticity_token: window._token,
+        user_id: userId,
+        solved: solved
+      }).then(response => {
+        resolve(response);
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  }
+  static sendQueryToPlayground(query) {
+    console.log("Send Query to Playground called");
+    return new Promise((resolve, reject) => {
+      this.service.post("playground", {
+        query: query,
+        authenticity_token: window._token
       }).then(response => {
         resolve(response);
       }).catch(error => {

@@ -48,7 +48,7 @@ class Login extends React.Component {
     })
   }
   loginUser() {
-    // TODO Enhancement: Set button loading (may need refactor)
+    this.setState({loading: true});
     API.loginUser(this.state.userID, this.state.userPass)
     .then(response => {
       let data = response.data;
@@ -57,7 +57,8 @@ class Login extends React.Component {
       console.log(error);
       this.setState({
         showErrorMessage: true,
-        errorMessage: "Die Kombination aus E-Mail und Passwort wurde nicht gefunden."
+        errorMessage: "Die Kombination aus E-Mail und Passwort wurde nicht gefunden.",
+        loading: false
       })
     })
   }
@@ -91,7 +92,7 @@ class Login extends React.Component {
           <Grid columns={2}>
             <Grid.Column>
               <Button type="submit"
-                disabled={ this.toggleLoginButton() }
+                disabled={ this.toggleLoginButton() || this.state.loading }
                 loading={ this.state.loading }
                 onClick={ this.loginUser }
                 primary>Einloggen</Button>

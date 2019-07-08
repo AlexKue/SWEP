@@ -5,6 +5,8 @@ import {
     Icon
 } from "semantic-ui-react";
 
+import { MarkdownRenderer } from "./MarkdownEditor.jsx";
+
 export default class ThreeColumnTable extends React.Component {
 
     render() {
@@ -13,10 +15,12 @@ export default class ThreeColumnTable extends React.Component {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell colSpan="3">
-                        { this.props.title }
-                        { this.props.withDescription ? 
-                        <Segment style={{fontWeight: "normal"}}>{ this.props.description }</Segment>
-                        : null}
+                        { this.props.withDescription ?
+                            <Segment style={{fontWeight: "initial"}}>
+                                <MarkdownRenderer
+                                    text={ this.props.markdownText } />
+                            </Segment>
+                        : this.props.title }
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -32,7 +36,7 @@ export class ThreeColumnTableRow extends React.Component {
     
     render() {
         return (
-            <Table.Row positive={ this.props.status === true } negative={ this.props.status === false } warning={ this.props.status === null }>
+            <Table.Row positive={ this.props.status === true } negative={ this.props.status === false && this.props.student } warning={ this.props.status === null }>
                 <Table.Cell>
                     { this.props.status === true ?
                         <Icon color="green" name="checkmark" />

@@ -6,19 +6,20 @@ import {
     Segment,
     Button,
     Message,
-    Icon,
-    Grid
+    Grid,
+    Divider
 } from "semantic-ui-react";
 
 import AuthedContext from '../../AuthedContext.jsx';
 import API from '../../../API/API.jsx';
+import MarkdownEditor from "../../Components/MarkdownEditor.jsx";
 import { __403 } from '../../Components/errors.jsx';
 
 const CRUDCategoryView = (props) => {
 
     const context = useContext(AuthedContext);
 
-    if (context.getUserRole() != "admin") {
+    if (!context.isUserAdmin()) {
         return < __403 />
     }
 
@@ -90,9 +91,9 @@ class CRUDCategoryViewComponent extends React.Component {
             title: event.target.value
         });
     }
-    updateDescription(event) {
+    updateDescription(value) {
         this.setState({
-            description: event.target.value
+            description: value
         });
     }
     crudCategory() {
@@ -168,7 +169,6 @@ class CRUDCategoryViewComponent extends React.Component {
                 this.state.context.removeCategory(this.state.id);
                 this.state.history.push("/");
             }).catch(error => {
-                // TODO optional - In theory this shouldn't happen
                 console.log("Error in deleting category");
             })
         }
@@ -193,14 +193,17 @@ class CRUDCategoryViewComponent extends React.Component {
                             onChange={ this.updateTitle }
                             />
                     </Form.Field>
+                    <Divider />
                     <Form.Field>
-                        <label>Beschreibung</label>
-                        <TextareaAutosize
-                            placeholder="Beschreibung"
-                            value={ this.state.description } 
-                            onChange={ this.updateDescription }
-                            />
+                            <label>Beschreibung</label>
+                            <p>Achtung: Die Beschreibung erfolgt in Markdown. Zeilenumbrüche müssen deshalb <b>doppelt</b> gemacht werden</p>
+                            <MarkdownEditor
+                                prefixRender={ "# " + this.state.title + "\n\n"}
+                                source={ this.state.description }
+                                onChange={ this.updateDescription } 
+                                allowEditFromLine={2}/> {/* First line is 0*/}
                     </Form.Field>
+                    <Divider />
                     <Grid columns={2}>
                         <Grid.Column>
                             <Button 

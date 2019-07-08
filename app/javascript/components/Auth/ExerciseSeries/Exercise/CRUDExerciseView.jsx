@@ -1,25 +1,17 @@
-import React, { useContext} from "react";
-import { Link } from "react-router-dom";
-import TextareaAutosize from "react-textarea-autosize";
-import {
-    Segment,
-    Form,
-    Divider,
-    Loader,
-    Message,
-    Grid
-} from "semantic-ui-react";
+import React, { useContext } from "react";
+import { Divider, Form, Grid, Loader, Message, Segment } from "semantic-ui-react";
 
 import API from '../../../API/API.jsx';
 import AuthedContext from '../../AuthedContext.jsx';
 import CRUDQueryView from '../Query/CRUDQueryView.jsx';
+import MarkdownEditor from "../../Components/MarkdownEditor.jsx";
 import { __403 } from '../../Components/errors.jsx';
 
 const CRUDExerciseView = (props) => {
 
     const context = useContext(AuthedContext);
     
-    if (context.getUserRole() != "admin") {
+    if (!context.isUserAdmin()) {
         return <__403 />;
     }
 
@@ -45,7 +37,6 @@ class CRUDExerciseViewComponent extends React.Component {
             description: "",
             id: props.exerciseId ? parseInt(props.exerciseId) : null,                   // set null if this is a new exercise
             history: props.history,
-            queriesInitialized: props.exerciseId ? false : true,    // It's initialized if it's new
             crudExerciseLoading: false,
             points: 1,
             error: false,
@@ -70,9 +61,9 @@ class CRUDExerciseViewComponent extends React.Component {
             title: event.target.value
         });
     }
-    updateDescription = (event) => {
+    updateDescription = (value) => {
         this.setState({
-            description: event.target.value
+            description: value
         });
     }
     updatePoints = (event) => {
@@ -185,16 +176,15 @@ class CRUDExerciseViewComponent extends React.Component {
             this.props.history.push("/404");
             return;
         }
-        if (this.state.context.getExerciseById(exerciseId).description) {
+        if (this.state.context.isExerciseInitialized(exerciseId)) { // If the exercise is initialized
             let exercise = this.state.context.getExerciseById(exerciseId);
             this.setState({
                 title: exercise.title,
                 description: exercise.description,
                 points: exercise.totalExercisePoints,
-                initialized: true,                      // TODO:
-                queriesInitialized: true                // QUERIES
+                initialized: true,                      
             });
-        } else { // We have to fetch everything <=> Initialize this exercise
+        } else { // We have to fetch everything <=> Initialize this exercise; Queries will be fetched by CRUDQuery
             this.state.context.fetchExerciseInformation(exerciseId)
             .then(response => {
                 let exercise = this.state.context.getExerciseById(exerciseId);
@@ -203,13 +193,11 @@ class CRUDExerciseViewComponent extends React.Component {
                     description: exercise.description,
                     points: exercise.totalExercisePoints
                 });
-                // TODO: Fetch Queries
             }).catch(error => {
                 console.error(error);
             }).finally(() => {
                 this.setState({
-                    initialized: true,
-                    queriesInitialized: true
+                    initialized: true
                 });
             });
         }
@@ -229,14 +217,17 @@ class CRUDExerciseViewComponent extends React.Component {
                             value={ this.state.title }
                             onChange={ this.updateTitle }
                             />
+                        <Divider />
                         <Form.Field>
                             <label>Beschreibung</label>
-                            <TextareaAutosize
-                                placeholder="Beschreibung"
-                                value={ this.state.description }
-                                onChange={ this.updateDescription }
-                                />
+                            <p>Achtung: Die Beschreibung erfolgt in Markdown. Zeilenumbrüche müssen deshalb <b>doppelt</b> gemacht werden.</p>
+                            <MarkdownEditor
+                                prefixRender={ "# " + this.state.title + "\n\n" }
+                                source={ this.state.description }
+                                onChange={ this.updateDescription } 
+                                allowEditFromLine={2}/> {/* First line is 0*/}
                         </Form.Field>
+                        <Divider />
                         <Form.Input
                             label="Punkte"
                             placeholder="1"

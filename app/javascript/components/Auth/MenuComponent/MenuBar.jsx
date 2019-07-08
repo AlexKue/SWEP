@@ -59,6 +59,16 @@ class MenuBarComponent extends React.Component {
               name="Spielwiese"
               as={ Link }
               to="/spielwiese" />
+            <Menu.Item
+              name="Rangliste"
+              as={ Link }
+              to="/scoreboard" />
+            { this.props.context.isUserAdmin() ?
+              <Menu.Item
+                name="validate-uncertain-solutions"
+                as={ Link }
+                to="/validate-uncertain-solutions">Lösungen Validieren</Menu.Item>
+            : null}
             <Menu.Menu position="right">
               <Dropdown item simple text={"Eingeloggt als: " + this.props.context.getUserName() }>
                 <Dropdown.Menu>
@@ -119,7 +129,7 @@ class ExercisesMenuEntryRender extends React.Component {
         <Dropdown.Item 
           key={"exc" + exerciseId} 
           as={Link} 
-          to={this.props.context.getUserRole() === "admin" ?
+          to={this.props.context.isUserAdmin() ?
             "/category-" + this.props.categoryId + "/exercise-" + exerciseId + "/edit"
             : "/category-" + this.props.categoryId + "/exercise-" + exerciseId}>
           { this.props.context.getExerciseById(exerciseId).title }

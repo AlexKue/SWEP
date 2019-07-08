@@ -6,7 +6,7 @@ import {
 const QueryResponseTable = (props) => {
     let tableArray = [...props.tableArray]; // as it's in-place edition, we have to copy it
 
-    if (tableArray.length == 0) {
+    if (tableArray == null || tableArray.length == 0) { // shortcut pipe operator => Doesn't crash if zero
         return "Es wurden keine Einträge gefunden.";
     } else { // Process data
         // array[0] = table head
