@@ -66,5 +66,5 @@ Rails.application.configure do
   config.logger = ActiveSupport::TaggedLogging.new(logger)
 
   # force ssl
-  config.force_ssl = true
+  #config.force_ssl = true
 end
