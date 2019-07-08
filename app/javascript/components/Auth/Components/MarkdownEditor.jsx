@@ -51,11 +51,7 @@ class CodeBlock extends PureComponent {
                                     lineNumbers: true}}
                                 value={ props.source }
                                 onBeforeChange={ (editor, data, value) => {
-                                    if (props.allowEditFromLine) {
-                                        if (data.from.line >= props.allowEditFromLine) props.onChange(value);
-                                    } else {
-                                        props.onChange(value);
-                                    }
+                                    props.onChange(value);
                                 }} />
                         );
                     }
@@ -66,7 +62,7 @@ class CodeBlock extends PureComponent {
                         if ( props.source != "" ) {
                             return (
                                 <MarkdownRenderer
-                                    text={ props.source } />
+                                    text={ (props.prefixRender ? props.prefixRender : "") + props.source + (props.suffixRender ? props.suffixRender : "") } />
                             );
                         } else {
                             return <p>Es wurde noch keine Beschreibung eingegeben.</p>

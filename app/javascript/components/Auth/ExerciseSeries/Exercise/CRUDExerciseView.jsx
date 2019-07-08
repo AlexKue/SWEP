@@ -62,11 +62,8 @@ class CRUDExerciseViewComponent extends React.Component {
         });
     }
     updateDescription = (value) => {
-        // As we're passing the title, cut the first 2 lines
-        // '# <TITLE>\n\n" has <TITLE>.length + 4 ('# \n\n', where '\n' counts as 1)
-        // Therefore: Cut off the first 2 lines using only the substring
         this.setState({
-            description: value.substring(this.state.title.length + 4)
+            description: value
         });
     }
     updatePoints = (event) => {
@@ -223,9 +220,10 @@ class CRUDExerciseViewComponent extends React.Component {
                         <Divider />
                         <Form.Field>
                             <label>Beschreibung</label>
-                            <p>Achtung: Die Beschreibung erfolgt in Markdown. Zeilenumbrüche müssen deshalb <b>doppelt</b> gemacht werden. Zudem kann erst ab Zeile 3 editiert werden, da Zeile 1 und 2 für den Titel "readonly" sind.</p>
+                            <p>Achtung: Die Beschreibung erfolgt in Markdown. Zeilenumbrüche müssen deshalb <b>doppelt</b> gemacht werden.</p>
                             <MarkdownEditor
-                                source={ "# " + this.state.title + "\n\n" + this.state.description }
+                                prefixRender={ "# " + this.state.title + "\n\n" }
+                                source={ this.state.description }
                                 onChange={ this.updateDescription } 
                                 allowEditFromLine={2}/> {/* First line is 0*/}
                         </Form.Field>
