@@ -96,25 +96,14 @@ class Api::ExercisesController < ApplicationController
         query = params[:query]
 
         result_table = []
-        
         # Always set solutions for exercises without references to uncertain
         if @exercise.queries.empty?
             correct = nil
         else
-            correct = true
-            
             result_table = get_result_table query
 
-            # check each reference
-            @exercise.queries.each do |reference|
-                result = @checker.correct?(query, reference.query)
-                # Only set to nil if previously not marked as false
-                if result.nil? && correct
-                    correct = nil
-                elsif result == false
-                    correct = false
-                end
-            end
+            correct = (@exercise.queries.map do |reference| @checker.correct?(query, reference.query) end).reduce do |x,y| custom_or(x,y) end
+            
         end
 
         result = ExerciseSolver.where(user_id: current_user.id, exercise_id: @exercise.id).first_or_create(user_id: current_user.id, exercise_id: @exercise.id, solved: correct, query: query)
@@ -122,6 +111,15 @@ class Api::ExercisesController < ApplicationController
             result.update_attributes({query: query, solved: correct})
         end
         render json: {solved: correct, result: result_table}, status: :ok
+    end
+
+    ##
+    # Custom 'or' function that return for which false||nil == nil||false == nil
+    def custom_or a,b
+      if a.nil? && b==false || a==false && b.nil?
+        return nil
+      end
+      a || b
     end
 
     # index of uncertain student-query solutions 
