@@ -11,6 +11,7 @@ require('codemirror/mode/sql/sql');
 
 import API from '../../../API/API.jsx';
 import AuthedContext from '../../AuthedContext.jsx';
+import { MarkdownRenderer } from '../../Components/MarkdownEditor.jsx';
 import { __403 } from "../../Components/errors.jsx";
 
 const UncertainQueryView = (props) => {
@@ -145,7 +146,8 @@ class UncertainQueryViewTabComponent extends React.Component {
         } else {
             return (
                 <React.Fragment>
-                    <p>{ this.state.context.getExerciseById(this.state.exerciseId).description }</p>
+                    <MarkdownRenderer
+                        text={ this.state.context.getExerciseById(this.state.exerciseId).description } />
                     { this.state.queryList.length > 0 ? 
                         <List divided items={ this.state.queryList } />
                         :
