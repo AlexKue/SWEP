@@ -173,7 +173,7 @@ class ExerciseViewComponent extends React.Component {
                 <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visibleRed }>
                     <Icon name={ this.state.solved === false ? 'times circle' : 'circle outline' } size="big" color="red"/>
                 </Transition>
-                <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visibleYello }>
+                <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visibleYellow }>
                     <Icon name={ this.state.solved === null ? 'question circle' : 'circle outline' } size="big" color="yellow"/>
                 </Transition>
                 <Transition animation={ this.state.animation } duration={ this.state.duration } visible={ this.state.visibleGreen }>
