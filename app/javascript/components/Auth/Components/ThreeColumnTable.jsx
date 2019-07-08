@@ -16,7 +16,7 @@ export default class ThreeColumnTable extends React.Component {
                     <Table.Row>
                         <Table.HeaderCell colSpan="3">
                         { this.props.withDescription ?
-                            <Segment>
+                            <Segment style={{fontWeight: "initial"}}>
                                 <MarkdownRenderer
                                     text={ this.props.markdownText } />
                             </Segment>
