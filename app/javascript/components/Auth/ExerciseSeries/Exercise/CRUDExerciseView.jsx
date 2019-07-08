@@ -223,7 +223,7 @@ class CRUDExerciseViewComponent extends React.Component {
                         <Divider />
                         <Form.Field>
                             <label>Beschreibung</label>
-                            <p>Achtung: Die Beschreibung erfolgt in Markdown. Zeilenumbrüche müssen deshalb <b>doppelt</b> gemacht werden.</p>
+                            <p>Achtung: Die Beschreibung erfolgt in Markdown. Zeilenumbrüche müssen deshalb <b>doppelt</b> gemacht werden. Zudem kann erst ab Zeile 3 editiert werden, da Zeile 1 und 2 für den Titel "readonly" sind.</p>
                             <MarkdownEditor
                                 source={ "# " + this.state.title + "\n\n" + this.state.description }
                                 onChange={ this.updateDescription } 
