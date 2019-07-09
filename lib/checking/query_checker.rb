@@ -1,7 +1,12 @@
 class QueryChecker
 
-  def initialize ()
+  attr_reader :result
+  attr_reader :threshold
+
+  def initialize (threshold=0)
     @hierarchy = []
+    @result = nil
+    @threshold = threshold
   end
 
   def get checker_type
@@ -17,14 +22,14 @@ class QueryChecker
   # +true+ indicates that this method is convinced the query is correct.
   # +false+ means that the query is incorrect.
   # +nil+ means that there is no consens about the correctness.
-  # The non-negative parameter +confidence+ determines how big the uncertainity intervall is.
+  # The non-negative parameter +threshold+ determines how big the uncertainity intervall is.
   # Higher values result in this method returning +nil+ more often.
-  def correct? (query, reference, confidence=0)
-    result = check query, reference
+  def correct? (query, reference, threshold=@threshold)
+    check query, reference
     
-    if result[:score] > confidence
+    if @result[:score] > threshold
       true
-    elsif result[:score] < -confidence
+    elsif @result[:score] < -threshold
       false
     else 
       nil
@@ -41,7 +46,7 @@ class QueryChecker
       result[:checkers].append({checker.class.to_s.to_sym => checker_result})
       result[:score] += checker_result[:score]
     end
-    result
+    @result = result
   end
 
   def add_checker checker

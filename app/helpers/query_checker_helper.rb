@@ -6,8 +6,8 @@ require 'checking/execution_based_checker'
 
 module QueryCheckerHelper
 
-  def init_query_checker
-    query_checker = QueryChecker.new
+  def init_query_checker(threshold=0)
+    query_checker = QueryChecker.new(threshold)
     query_checker.add_checker WhitespaceChecker.new
     query_checker.add_checker SyntaxChecker.new
     query_checker.add_checker ExplainBasedChecker.new
