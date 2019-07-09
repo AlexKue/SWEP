@@ -1,3 +1,3 @@
 #!/bin/bash
 
-thin start -C config/thin.yml -V
+thin start -C config/thin.yml
