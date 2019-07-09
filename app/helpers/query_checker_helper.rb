@@ -2,6 +2,7 @@ require 'checking/query_checker'
 require 'checking/whitespace_checker'
 require 'checking/syntax_checker'
 require 'checking/execution_based_checker'
+require 'pg'
 
 module QueryCheckerHelper
 
@@ -16,15 +17,13 @@ module QueryCheckerHelper
   ##
   # Returns the SQL table containing the result of the given query as a (2D) list.
   # In case the query was incorrect or there is no data for this query, the return value is an empty list.
-  def get_result_table query
+  def get_result_table query, dbname = "unidb"
     execution_checker = ExecutionBasedChecker.new
-    checking_result = execution_checker.check query, query
-    if checking_result[:debug].has_key? :query
-      result_table = checking_result[:debug][:query]
-    else
-      result_table = []
+    begin
+      return execution_checker.entries (execution_checker.execute query, dbname)
+    rescue PG::Error => e
+      return []
     end
-    result_table
   end
 
   def check_admin_query query
