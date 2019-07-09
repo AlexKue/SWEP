@@ -1,16 +1,4 @@
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
-\usepackage{listings}
-\lstset{language=Ruby}
-\usepackage{caption}
-\newcommand{\source}[1]{\par\vskip-.5\baselineskip{\scriptsize Quelle: #1}\par}%{\caption*{Quelle: {#1}} }
-
-% Counters for delivery items
-\newcounter{requirementc}
-\newcounter{subrequirementc}
-\newcounter{subsubrequirementc}
-\counterwithin*{subrequirementc}{requirementc}
-\counterwithin*{subsubrequirementc}{subrequirementc}
-\newcommand{\requirement}[1]{\stepcounter{requirementc}\textbf{\Alph{requirementc} {#1}}}
-\newcommand{\subrequirement}{\stepcounter{subrequirementc}\Alph{requirementc}.\arabic{subrequirementc}}
-\newcommand{\subsubrequirement}{\stepcounter{subsubrequirementc}\Alph{requirementc}.\arabic{subrequirementc}.\arabic{subsubrequirementc}}
+\usepackage{pifont}
+\newcommand{\done}{\ding{51}}
