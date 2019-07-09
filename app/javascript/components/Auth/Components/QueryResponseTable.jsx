@@ -24,7 +24,8 @@ const QueryResponseTable = (props) => {
 
 const QueryResponseTableHeader = (props) => {
     let headers = props.headers;
-    let headerComponents = headers.map((header) => <Table.HeaderCell key={ "rsp_h_" + header }>{ header }</Table.HeaderCell>)
+    let headerCellId = 0;
+    let headerComponents = headers.map((header) => <Table.HeaderCell key={ "rsp_h_" + header + "_" + headerCellId++ }>{ header }</Table.HeaderCell>)
     return (
         <Table.Header>
             <Table.Row>
@@ -36,12 +37,14 @@ const QueryResponseTableHeader = (props) => {
 
 const QueryResponseTableBody = (props) => {
     let rows = props.rows;
+    let rowId = 0;
+    let cellId = 0;
     let rowComponents = rows.map((row) => {
         return (
-            <Table.Body key={ "rsp_r_" + row }>
+            <Table.Body key={ "rsp_r_" + row + "_" + rowId++ }>
                 <Table.Row>
                     {row.map((cell) => {
-                        return <Table.Cell key={ "rsp_c_" + cell} >{ cell }</Table.Cell>
+                        return <Table.Cell key={ "rsp_c_" + cell + "_" + rowId + "_" + cellId++ } >{ cell }</Table.Cell>
                     })}
                 </Table.Row>
             </Table.Body>
