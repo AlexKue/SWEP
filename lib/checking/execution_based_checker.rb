@@ -30,8 +30,8 @@ class ExecutionBasedChecker
     
     # result tables must not have any different elements
     query_diff_reference = query_result.filter do |row| !reference_result.include? row end
-    reference_diff_query = reference_result.filter do |row| !query_result.include? row end
     return false if not query_diff_reference.empty?
+    reference_diff_query = reference_result.filter do |row| !query_result.include? row end
     return false if not reference_diff_query.empty?
   
     true
