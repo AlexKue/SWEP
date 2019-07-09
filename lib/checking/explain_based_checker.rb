@@ -14,13 +14,25 @@ class ExplainBasedChecker
   ##
   # Checks +query+ against +reference+ by comapring the +Node Type+ and the +Filter+ attributes.
   def check (query, reference, dbname='unidb')
-    score = -1
+    score = 0
+    all_equal = true
     begin
       query_explanation = explain query, dbname
       reference_explanation = explain reference, dbname
-      score = 1 if query_explanation["Node Type"].eql?(reference_explanation["Node Type"]) && query_explanation["Filter"].eql?(reference_explanation["Filter"])
+
+      node_type_equal = query_explanation["Node Type"].eql?(reference_explanation["Node Type"])
+      score += node_type_equal ? 1: -3
+      all_equal &= node_type_equal
+      
+      filter_equal = query_explanation["Filter"].eql?(reference_explanation["Filter"])
+      score += filter_equal ? 1 : -3
+      all_equal &= filter_equal
+
+      score *= 2 if all_equal
+
       debug = {:query => query_explanation, :reference => reference_explanation, :aim => :equality, :dbname => dbname}
     rescue PG::Error => e
+      score -= Float::INFINITY
       debug = {:error => e.message}
     end
     {:score => score, :debug => debug}
