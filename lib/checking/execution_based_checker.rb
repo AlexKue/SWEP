@@ -5,16 +5,19 @@ class ExecutionBasedChecker
   # A problem is that the results could come in any order.
   # This method needs to be insensitive to that while respecting the order if ORDER BY statements are part of any query.
   # TODO cache reference results
+  # The score is 3 + 1 for each 5 expected result rows if the student's query yields the same result table, or -Inf if not.
   def check query, reference, dbname='unidb'
-    score = - Float::INFINITY
+    score = 0
 
     begin
       query_result = execute query, dbname
       reference_result = execute reference, dbname
-      score = 0 if result_eql? query_result, reference_result
+      tables_equal = result_eql? query_result, reference_result
+      score = 3 + reference_result.ntuples/5 if tables_equal
       debug = {:query => entries(query_result), :reference => entries(reference_result), :aim => :equality}
     rescue PG::Error => e
-      debug = {:error => e}
+      score -= Float::INFINITY
+      debug = {:error => e.message}
     end
 
     {:score => score, :debug => debug}
