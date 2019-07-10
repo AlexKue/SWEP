@@ -1,0 +1,43 @@
+% arara: lualatex
+% arara: lualatex
+
+\documentclass[utf8,18pt]{beamer}
+
+\input{preamble}
+\input{names}
+
+\usetheme{Boadilla}
+\usecolortheme[named=\primarycolor]{structure}
+\setbeamercolor{background canvas}{bg=\secondarycolor!10}
+
+\author[Döpmann, Kühnle, Umnus]{\authornames}
+\title{\projectname}
+\subtitle{Web-Applikation zum Üben von SQL}
+\date{10.~Juli~2019}
+
+\begin{document}
+
+\begin{frame}[plain,label=titleframe]
+  \begin{center}
+    \includegraphics[height=.4\textheight]{resources/SQRRL_LOGO.png}
+  \end{center}
+  \maketitle
+\end{frame}
+
+
+\begin{frame}
+  \tableofcontents
+\end{frame}
+
+\section{Herausforderung}
+\input{components/content}
+\input{components/stakeholder}
+
+\section{Erreichtes}
+\input{components/progress}
+\againframe{titleframe}
+\input{components/presentation}
+
+\againframe{titleframe}
+
+\end{document}
