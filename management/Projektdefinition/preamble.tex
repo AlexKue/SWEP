@@ -1,0 +1,38 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{xcolor} % für Fragen, Anmerkungen
+\usepackage{tabularx}
+\usepackage{enumitem}%for list item separation
+\usepackage{pifont}
+\usepackage[hidelinks]{hyperref}
+\usepackage{luacode}
+\usepackage[german=guillemets]{csquotes}
+
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Counters for delivery items
+\newcounter{requirementc}
+\newcounter{subrequirementc}
+\newcounter{subsubrequirementc}
+\counterwithin*{subrequirementc}{requirementc}
+\counterwithin*{subsubrequirementc}{subrequirementc}
+\newcommand{\requirement}[1]{\stepcounter{requirementc}\textbf{\Alph{requirementc} {#1}}}
+\newcommand{\subrequirement}{\stepcounter{subrequirementc}\Alph{requirementc}.\arabic{subrequirementc}}
+\newcommand{\subsubrequirement}{\stepcounter{subsubrequirementc}\Alph{requirementc}.\arabic{subrequirementc}.\arabic{subsubrequirementc}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Markup
+\newcommand{\askadvisor}[1]{\textcolor{red}{#1}}
+\newcommand{\askourself}[1]{\textcolor{purple}{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Symbols
+\renewcommand{\check}{\ding{51}}
+\newcommand{\finished}{\textcolor{green}{\ding{108}}}
+\newcommand{\inprogress}{\textcolor{yellow}{\ding{110}}}
+\newcommand{\haserror}{\textcolor{red}{\ding{116}}}
+\newcommand{\notstarted}{\ding{111}}

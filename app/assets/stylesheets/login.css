@@ -1,0 +1,9 @@
+#loginform {
+  max-width: 600px;
+}
+#toRegisterButton {
+  float: right;
+}
+#bottomLoginColumn {
+  width: calc(100% - 190px);
+}

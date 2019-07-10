@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Swep</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <!-- application.html.erb in Head tag below turbolinks -->
+    <%= javascript_pack_tag 'application' %>
+    <!-- add authenticity token to app-->
+    <% window_vars = "" %>
+    <% if logged_in? %>
+      <% window_vars =  "window._userMail = "       + "\'#{current_user.email}\';" +
+                        "window._userNick = "      + "\'#{current_user.name}\';" +
+                        "window._userRole = "      + "\'#{current_user.role}\';" + 
+                        "window._userId = "        + "\'#{current_user.id}\';" +
+                        "window._hideInRanking = " + "\'#{current_user.hide_in_ranking}\';"%>
+    <% end %>
+    <%= javascript_tag "window._token = '#{form_authenticity_token}'; 
+                        window._isLoggedIn = #{logged_in?};" + window_vars %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>

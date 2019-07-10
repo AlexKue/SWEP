@@ -1,0 +1,67 @@
+\section{Liefergegenstände}\label{sec:deliveryitems}
+
+In Tabelle \ref{tab:deliveryitems} auf Seite \pageref{tab:deliveryitems} sind all jene Liefergegenstände aufgeführt, die vom Betreuer bestätigt wurden.
+Die IDs in dieser Tabelle gehören zu entsprechenden Git-Branches.
+In der Tabelle sind zudem Status aufgezeigt, die dem Format \notstarted -- \enquote{noch nicht gestartet}, \inprogress -- \enquote{in Bearbeitung}, \finished -- \enquote{abgeschlossen} und \haserror -- \enquote{hier liegt ein Fehler vor} folgen.
+
+\begin{table}
+
+\caption{Liefergegenstände}\label{tab:deliveryitems}
+
+\begin{tabularx}{\textwidth}{llXc}
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\multicolumn{3}{l}{\requirement{Benutzerverwaltung}}\\
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ID                   & Liefergegenstand                         & Erläuterung                       & Status\\
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subrequirement{}    & Allgemeines                              &                                   & \inprogress\\
+\subsubrequirement{} & ~Registrierung                           &                                   & \finished\\
+\subsubrequirement{} & ~Nutzername                              &                                   & \finished\\
+\subsubrequirement{} & ~Passwort                                &                                   & \finished\\
+\subsubrequirement{} & ~E-Mail-Adresse                          &                                   & \finished\\
+\subsubrequirement{} & ~Einloggen                               &                                   & \finished\\
+\subsubrequirement{} & ~Ausloggen                               &                                   & \finished\\
+\subsubrequirement{} & ~Account löschen                         &                                   & \finished\\
+\subsubrequirement{} & ~Passwortwiederherstellung               & per E-Mail                        & \notstarted\\
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subrequirement{}    & Studierendenaccounts                     &                                   & \inprogress\\
+\subsubrequirement{} & ~Aufgabenliste                           & Markierung für Bearbeitungsstand  & \finished\\
+\subsubrequirement{} & ~Abzeichenliste                          &                                   & \notstarted\\
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subrequirement{}    & Dozentenaccounts                         &                                   & \inprogress\\
+\subsubrequirement{} & ~Aufgabenverwaltung                      & CRUD-Operationen                  & \finished\\
+\subsubrequirement{} & ~Benutzerverwaltung                      & CRUD-Operationen, Rechtezuweisung & \finished\\
+\subsubrequirement{} & ~Abzeichenverwaltung                     & CRUD-Operationen                  & \notstarted\\
+
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\multicolumn{3}{l}{\requirement{Interface}}\\
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ID                   & Liefergegenstand                         & Erläuterung                       & Status\\
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subrequirement{}    & Einstellungen                            & Privatsphäre, Benachrichtigungen  & \finished\\
+\subrequirement{}    & Aufgabenübersicht                        & nach Kategorien geordnet          & \finished\\
+\subsubrequirement{} & ~Aufgabenname                            &                                   & \finished\\ 
+\subsubrequirement{} & ~Statusindikator                         & neu, begonnen, abgeschlossen      & \finished\\
+\subrequirement{}    & Spielwiese                               &                                   & \finished\\
+\subrequirement{}    & Leaderboard                              &                                   & \inprogress\\
+
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\multicolumn{3}{l}{\requirement{Aufgabenbearbeitung}}\\
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ID                   & Liefergegenstand                         & Erläuterung                       & Status\\
+\hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subrequirement{}    & Aufgabenstellung durch Dozenten          & in natürlicher Sprache            & \finished\\
+\subsubrequirement{} & ~Hinterlegen mind. einer Musterlösung    &                                   & \finished\\
+\subrequirement{}    & Eingeben einer Query durch Studenten     &                                   & \finished\\
+\subrequirement{}    & Prüfen der Query durch System            & mit Timeout                       & \finished\\
+\subsubrequirement{} & ~Ausarbeiten eines Verfahrens            &                                   & \finished\\
+\subsubrequirement{} & ~Testen des Verfahrens                   &                                   & \finished\\
+\subrequirement{}    & Anwenden der Query durch System          &                                   & \finished\\
+\subrequirement{}    & Anzeige der Ergebnisse durch System      &                                   & \finished\\
+\subrequirement{}    & Meldung an Dozenten durch System         & im Fehlerfall                     & \notstarted\\
+\subrequirement{}    & Vergabe von Belohnungen durch System     & Punkte, Abzeichen                 & \inprogress\\
+\end{tabularx}
+\end{table}

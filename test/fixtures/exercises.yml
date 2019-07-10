@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: "test"
+  points: 1.5
+  text: MyText
+  category: sfw_queries
+
+two:
+  title: "test2"
+  points: 1.5
+  text: MyText2
+  category: sfw_queries
+
+three:
+  title: "test3"
+  points: 3
+  text: MyText3
+  category: sfw_queries

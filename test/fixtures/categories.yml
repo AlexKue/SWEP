@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+sfw_queries:
+  title: "Select-From-Where Queries"
+  text: "These exercise train your capabilities to write simple queries."
+
+recursive_queries:
+  title: "Recursice Queries"
+  text: "Here are exercises where you will practice writing recursive queries"
