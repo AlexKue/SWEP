@@ -13,7 +13,7 @@ class Api::StaticPagesControllerTest < ActionDispatch::IntegrationTest
     params: {
       query: "\\dt"
     }
-    assert response.body.eql? "[]", response.body
+    assert response.body.eql?("[]"), response.body
   end
 
   test "should not be able to use \\du" do
@@ -22,6 +22,6 @@ class Api::StaticPagesControllerTest < ActionDispatch::IntegrationTest
     params: {
       query: "\\du"
     }
-    assert response.body.eql? "[]", response.body
+    assert response.body.eql?("[]"), response.body
   end
 end
