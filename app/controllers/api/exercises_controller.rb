@@ -116,7 +116,7 @@ class Api::ExercisesController < ApplicationController
             result.update_attributes({query: query, solved: correct})
         end
         answer[:solved] = correct
-        render json: answer, status: :ok
+        render json: answer, status: answer.has_key?(:error)? :unprocessable_entity : :ok
     end
 
     ##
