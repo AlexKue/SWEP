@@ -94,23 +94,29 @@ class Api::ExercisesController < ApplicationController
         @checker = init_query_checker
         @exercise = Exercise.find(params[:id])
         query = params[:query]
+        answer = {}
 
         result_table = []
         # Always set solutions for exercises without references to uncertain
         if @exercise.queries.empty?
             correct = nil
         else
-            result_table = get_result_table query
-
-            correct = (@exercise.queries.map do |reference| @checker.correct?(query, reference.query) end).reduce do |x,y| custom_or(x,y) end
-            
+            result = get_result_table(query, "unidb", indicate_error=true)
+            if result.has_key? :error
+              answer[:error] = result[:error]
+              correct = false
+            else
+              answer[:result] = result[:result]
+              correct = (@exercise.queries.map do |reference| @checker.correct?(query, reference.query) end).reduce do |x,y| custom_or(x,y) end
+            end
         end
 
         result = ExerciseSolver.where(user_id: current_user.id, exercise_id: @exercise.id).first_or_create(user_id: current_user.id, exercise_id: @exercise.id, solved: correct, query: query)
         if correct || @exercise.queries.empty? # if this exercise is free text
             result.update_attributes({query: query, solved: correct})
         end
-        render json: {solved: correct, result: result_table}, status: :ok
+        answer[:solved] = correct
+        render json: answer, status: :ok
     end
 
     ##

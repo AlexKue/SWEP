@@ -17,12 +17,21 @@ module QueryCheckerHelper
   ##
   # Returns the SQL table containing the result of the given query as a (2D) list.
   # In case the query was incorrect or there is no data for this query, the return value is an empty list.
-  def get_result_table query, dbname = "unidb"
+  def get_result_table query, dbname = "unidb", indicate_error=false
     execution_checker = ExecutionBasedChecker.new
     begin
-      return execution_checker.entries (execution_checker.execute query, dbname)
+      entries = execution_checker.entries (execution_checker.execute query, dbname)
+      if indicate_error
+        return {:result => entries}
+      else
+        return entries
+      end
     rescue PG::Error => e
-      return []
+      if indicate_error
+        return {:error => e.message}
+      else
+        return []
+      end
     end
   end
 
