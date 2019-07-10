@@ -7,7 +7,7 @@ import {
 
 const QueryResponseTable = (props) => {
     const [activeIndex, setActiveIndex] = useState(0);
-    let tableArray = [...props.tableArray]; // as it's in-place edition, we have to copy it
+    let tableArray = props.tableArray.length > 0 ? [...props.tableArray] : null; // as it's in-place edition, we have to copy it
     let displayPerPage = 20;
 
     if (tableArray == null || tableArray.length == 0) { // shortcut pipe operator => Doesn't crash if zero

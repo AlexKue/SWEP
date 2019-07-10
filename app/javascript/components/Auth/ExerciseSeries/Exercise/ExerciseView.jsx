@@ -92,15 +92,14 @@ class ExerciseViewComponent extends React.Component {
             API.sendQueryToPlayground(this.state.storedQuery)
             .then(response => {
                 this.setState({
-                    queryResult: <QueryResponseTable tableArray={ response.data } />,
+                    queryResult: <QueryResponseTable tableArray={ response.data.result } />,
                     error: false
                 });
             }).catch(error => {
                 this.setState({
                     error: true,
                     queryResult: error.response.data.error,
-                    solved: false,
-                    visibleRed: !prevState.visibleRed
+                    solved: false
                 });
             }).finally(() => {
                 this.setState({
