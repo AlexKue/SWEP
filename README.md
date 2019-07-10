@@ -1,24 +1,8 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Dieses Projekt entstand im Rahmen des Softwareentwicklungsprojektes an der Friedrich-Schiller-Universität Jena.
 
-Things you may want to cover:
+Viele wichtige Informationen zur Aufgabenstellung und zu verwendeten Technologien werden in PDF-Dateien unter management/ bereitgestellt, also ist dies einen Blick wert.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Im Kern ging es darum, eine Webapplikation zum Üben von SQL für Studierende zu erstellen.
+Dazu sollten Dozenten Aufgaben erstellen und Musterlösungen hinterlegen können, die Studenten dann lösen.
