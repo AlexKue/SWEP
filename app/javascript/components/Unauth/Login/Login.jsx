@@ -5,8 +5,10 @@ import {
   Button,
   Input,
   Form,
-  Message
+  Message,
+  Image
 } from "semantic-ui-react";
+import SQRRL_logo from "images/SQRRL_LOGO.png";
 
 import FormWrapper from '../FormWrapper/FormWrapper.jsx';
 import API from '../../API/API.jsx';
@@ -67,43 +69,51 @@ class Login extends React.Component {
     return (
       <FormWrapper>
         <Form id="loginform" error={ this.state.showErrorMessage }>
-          <Form.Field>
-            <Input
-              icon="user"
-              placeholder="E-Mail Adresse"
-              iconPosition="left"
-              onChange={ this.updateUserID }
-              error={ this.state.errorNameInput }
-              value={ this.state.userID }/>
-          </Form.Field>
-          <Form.Field>
-            <Input icon="key"
-              placeholder="Passwort"
-              iconPosition="left"
-              type="password"
-              onChange={ this.updateUserPass }
-              error={ this.state.errorPasswordInput }
-              value={ this.state.userPass }/>
-          </Form.Field>
-          <Message
-            header="Login Fehler"
-            content={ this.state.errorMessage }
-            error/>
           <Grid columns={2}>
-            <Grid.Column>
-              <Button type="submit"
-                disabled={ this.toggleLoginButton() || this.state.loading }
-                loading={ this.state.loading }
-                onClick={ this.loginUser }
-                primary>Einloggen</Button>
+            <Grid.Column style={{ maxWidth: "188px", padding: "8px"}} verticalAlign="middle">
+              <Image src={ SQRRL_logo } style={{maxHeight: "250px"}} />
             </Grid.Column>
-            <Grid.Column>
-              <Button id="toRegisterButton"
-                as={Link} to="/register"
-                icon="right arrow"
-                labelPosition="right"
-                content="Registrieren"
-                secondary/>
+            <Grid.Column id="bottomLoginColumn" verticalAlign="middle">
+              <h1>SQRRL-Login</h1>
+              <Form.Field>
+                <Input
+                  icon="user"
+                  placeholder="E-Mail Adresse"
+                  iconPosition="left"
+                  onChange={ this.updateUserID }
+                  error={ this.state.errorNameInput }
+                  value={ this.state.userID }/>
+              </Form.Field>
+              <Form.Field>
+                <Input icon="key"
+                  placeholder="Passwort"
+                  iconPosition="left"
+                  type="password"
+                  onChange={ this.updateUserPass }
+                  error={ this.state.errorPasswordInput }
+                  value={ this.state.userPass }/>
+              </Form.Field>
+              <Message
+                header="Login Fehler"
+                content={ this.state.errorMessage }
+                error/>
+              <Grid columns={2}>
+                <Grid.Column>
+                  <Button type="submit"
+                    disabled={ this.toggleLoginButton() || this.state.loading }
+                    loading={ this.state.loading }
+                    onClick={ this.loginUser }
+                    primary>Einloggen</Button>
+                </Grid.Column>
+                <Grid.Column>
+                  <Button id="toRegisterButton"
+                    as={Link} to="/register"
+                    icon="right arrow"
+                    labelPosition="right"
+                    content="Registrieren"
+                    secondary/>
+                </Grid.Column>
+              </Grid>
             </Grid.Column>
           </Grid>
         </Form>

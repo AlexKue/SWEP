@@ -4,3 +4,6 @@
 #toRegisterButton {
   float: right;
 }
+#bottomLoginColumn {
+  width: calc(100% - 190px);
+}
