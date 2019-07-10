@@ -42,8 +42,6 @@ class UserSettingsComponent extends React.Component {
             context: context
         }
 
-        console.log(context.getHideInRanking());
-
         this.updateUserNick = this.updateUserNick.bind(this);
         this.updateUserMail = this.updateUserMail.bind(this);
         this.updateUserPass = this.updateUserPass.bind(this);
@@ -138,7 +136,7 @@ class UserSettingsComponent extends React.Component {
             this.setState({
                 loading: true
             });
-            API.deleteUser(this.state.getUserId())
+            API.deleteUser(this.state.context.getUserId())
             .then(response => {
                 this.props.context.setUserLoggedOut();
             }).catch(error => {
