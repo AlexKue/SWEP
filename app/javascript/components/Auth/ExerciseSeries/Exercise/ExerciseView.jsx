@@ -58,7 +58,8 @@ class ExerciseViewComponent extends React.Component {
             duration: 500,
             visibleRed: true,
             visibleYellow: true,
-            visibleGreen: true
+            visibleGreen: true,
+            error: false
         }
 
         if (props.type == "spielwiese") {
@@ -91,10 +92,16 @@ class ExerciseViewComponent extends React.Component {
             API.sendQueryToPlayground(this.state.storedQuery)
             .then(response => {
                 this.setState({
-                    queryResult: <QueryResponseTable tableArray={ response.data } />
-                })
+                    queryResult: <QueryResponseTable tableArray={ response.data } />,
+                    error: false
+                });
             }).catch(error => {
-                console.error(error);
+                this.setState({
+                    error: true,
+                    queryResult: error.response.data.error,
+                    solved: false,
+                    visibleRed: !prevState.visibleRed
+                });
             }).finally(() => {
                 this.setState({
                     queryLoading: false
@@ -127,11 +134,16 @@ class ExerciseViewComponent extends React.Component {
                     }));
                 }
                 this.setState(prevState => ({
+                    error: false,
                     queryResult: <QueryResponseTable tableArray={ response.data.result } />
                 }));
             }).catch(error => {
-                // Shouldn't happen
-                console.error(error);
+                this.setState(prevState => ({
+                    error: true,
+                    queryResult: error.response.data.error,
+                    solved: false,
+                    visibleRed: !prevState.visibleRed
+                }));
             }).finally(() => {
                 this.setState({
                     queryLoading: false
@@ -222,7 +234,13 @@ class ExerciseViewComponent extends React.Component {
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column>
-                            { this.state.queryResult }
+                            { this.state.error ? 
+                                <CodeMirror
+                                    options={{ readOnly: true, mode: "sql" }}
+                                    value={ this.state.queryResult } />
+                                :
+                                this.state.queryResult 
+                            }
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
