@@ -55,3 +55,8 @@ management/**/*.snm
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# SSL key & cert (obtain by https://letsencrypt.org/docs/certificates-for-localhost/ ; scroll to bottom
+# needs to enable 'trust localhost' in Chrome (https://stackoverflow.com/questions/7580508/getting-chrome-to-accept-self-signed-localhost-certificate
+localhost.crt
+localhost.key
